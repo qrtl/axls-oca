@@ -46,6 +46,9 @@ class ReportCSVAbstract(models.AbstractModel):
         file = csv.DictWriter(file_data, **self.csv_report_options())
         self.generate_csv_report(file, data, objs)
         file_data.seek(0)
+        encoding = self._context.get("encoding")
+        if encoding:
+            return file_data.read().encode(encoding), "csv"
         return file_data.read(), "csv"
 
     def csv_report_options(self):

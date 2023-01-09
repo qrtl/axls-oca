@@ -10,6 +10,9 @@ class ReportAction(models.Model):
     report_type = fields.Selection(
         selection_add=[("csv", "csv")], ondelete={"csv": "set default"}
     )
+    encoding = fields.Char(help="Encoding to be applied to the generated CSV file. "
+        "e.g. cp932"
+    )
 
     @api.model
     def _render_csv(self, report_ref, docids, data):
@@ -17,7 +20,7 @@ class ReportAction(models.Model):
         report_model_name = "report.%s" % report_sudo.report_name
         report_model = self.env[report_model_name]
         return report_model.with_context(
-            active_model=report_sudo.model
+            active_model=report_sudo.model, encoding=self.encoding
         ).create_csv_report(docids, data)
 
     @api.model
