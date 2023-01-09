@@ -3,6 +3,7 @@
 # Copyright 2016 OpenSynergy Indonesia
 # Copyright 2017 ForgeFlow S.L.
 # Copyright 2018 Hibou Corp.
+# Copyright 2023 Quartile Limited
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 {
     "name": "Stock Analytic",

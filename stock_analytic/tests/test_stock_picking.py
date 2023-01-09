@@ -7,6 +7,7 @@
 
 from datetime import datetime
 
+from odoo.exceptions import ValidationError
 from odoo.tests.common import TransactionCase
 
 
@@ -54,6 +55,14 @@ class TestStockPicking(TransactionCase):
         )
         self.analytic_distribution = dict(
             {str(self.env.ref("analytic.analytic_agrolait").id): 100.0}
+        )
+        # analytic.analytic_agrolait belongs to analytic.analytic_plan_projects
+        self.analytic_applicability = self.env["account.analytic.applicability"].create(
+            {
+                "business_domain": "stock_move",
+                "applicability": "optional",
+                "analytic_plan_id": self.env.ref("analytic.analytic_plan_projects").id,
+            }
         )
         self.warehouse = self.env.ref("stock.warehouse0")
         self.location = self.warehouse.lot_stock_id
@@ -161,7 +170,7 @@ class TestStockPicking(TransactionCase):
         self._check_account_move_no_error(picking)
         self._check_analytic_account_no_error(picking)
 
-    def test_outgoing_picking_without_analytic(self):
+    def test_outgoing_picking_without_analytic_optional(self):
         picking = self._create_picking(
             self.location,
             self.dest_location,
@@ -172,6 +181,18 @@ class TestStockPicking(TransactionCase):
         self._picking_done_no_error(picking)
         self._check_account_move_no_error(picking)
         self._check_no_analytic_account(picking)
+
+    def test_outgoing_picking_without_analytic_mandatory(self):
+        self.analytic_applicability.write({"applicability": "mandatory"})
+        picking = self._create_picking(
+            self.location,
+            self.dest_location,
+            self.outgoing_picking_type,
+        )
+        self.__update_qty_on_hand_product(self.product, 1)
+        self._confirm_picking_no_error(picking)
+        with self.assertRaises(ValidationError):
+            self._picking_done_no_error(picking)
 
     def test_incoming_picking_with_analytic(self):
         picking = self._create_picking(
