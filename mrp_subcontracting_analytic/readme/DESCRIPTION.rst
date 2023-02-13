@@ -1,4 +1,4 @@
 Propagates the analytic distribution of the subcontracting receipt stock move to
-the the corresponding field of related manufacturing order.
+the corresponding field of related manufacturing order.
 
 This module depends on other OCA modules, stock_analytic and mrp_production_analytic.

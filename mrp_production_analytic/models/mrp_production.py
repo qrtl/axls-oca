@@ -18,12 +18,13 @@ class MrpProduction(models.Model):
     )
 
     def _inverse_analytic_distribution(self):
-        """If analytic distribution is set on production, write it on all moves"""
+        """If analytic distribution is set on production, write it on all component
+        moves.
+        """
         for production in self:
-            if production.analytic_distribution:
-                production.move_raw_ids.write(
-                    {"analytic_distribution": production.analytic_distribution}
-                )
+            production.move_raw_ids.write(
+                {"analytic_distribution": production.analytic_distribution}
+            )
 
     def button_mark_done(self):
         self = self.with_context(validate_analytic=True)

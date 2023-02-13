@@ -10,7 +10,6 @@
     "depends": [
         "mrp_subcontracting",
         "mrp_production_analytic",
-        "stock_analytic",
     ],
     "installable": True,
 }

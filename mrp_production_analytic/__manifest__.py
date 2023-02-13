@@ -7,7 +7,7 @@
     "website": "https://github.com/OCA/account-analytic",
     "category": "Manufacturing/Manufacturing",
     "license": "AGPL-3",
-    "depends": ["stock_analytic"],
+    "depends": ["mrp_account","stock_analytic"],
     "data": [
         "views/mrp_production_views.xml",
     ],

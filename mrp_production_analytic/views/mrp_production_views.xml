@@ -6,7 +6,11 @@
         <field name="inherit_id" ref="mrp.mrp_production_form_view" />
         <field name="arch" type="xml">
             <xpath expr="//group[@name='group_extra_info']" position="inside">
-                <field name="analytic_distribution" widget="analytic_distribution" groups="analytic.group_analytic_accounting" />
+                <field
+                    name="analytic_distribution"
+                    widget="analytic_distribution"
+                    groups="analytic.group_analytic_accounting"
+                />
             </xpath>
         </field>
     </record>
