@@ -8,7 +8,7 @@ class StockMove(models.Model):
     _inherit = "stock.move"
 
     analytic_distribution = fields.Json(inverse="_inverse_analytic_distribution")
-    
+
     def _inverse_analytic_distribution(self):
         for move in self:
             if not move.is_subcontract:
