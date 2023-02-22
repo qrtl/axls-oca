@@ -6,7 +6,7 @@ from odoo.tests import Form
 from odoo.addons.stock_analytic.tests.test_stock_picking import TestStockPicking
 
 
-class TestMrpProductionAnalytic(TestStockPicking):
+class TestMrpStockAnalytic(TestStockPicking):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
