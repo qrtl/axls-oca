@@ -48,14 +48,17 @@ class ReportCSVAbstract(models.AbstractModel):
         self.generate_csv_report(file, data, objs)
         file_data.seek(0)
         encoding = self._context.get("encoding")
-        if encoding:
-            try:
-                return file_data.read().encode(encoding), "csv"
-            except Exception:
-                raise UserError(
-                    _("Failed to encode the data with the encoding set in the report.")
-                )
-        return file_data.read(), "csv"
+        if not encoding:
+            return file_data.read(), "csv"
+        error_handling = self._context.get("encode_error_handling")
+        if error_handling:
+            return file_data.read().encode(encoding, errors=error_handling), "csv"
+        try:
+            return file_data.read().encode(encoding), "csv"
+        except Exception:
+            raise UserError(
+                _("Failed to encode the data with the encoding set in the report.")
+            )
 
     def csv_report_options(self):
         """
