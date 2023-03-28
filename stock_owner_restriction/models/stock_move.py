@@ -9,6 +9,15 @@ from odoo import models
 class StockMove(models.Model):
     _inherit = "stock.move"
 
+    def _skip_assign(self):
+        #TODO: check if this can be integrated to _get_dict_key_partner() method. i.e. just return False for finished product.
+        """This method is expected to be extended as necessary."""
+        return False
+    
+    def _get_dict_key_partner(self):
+        self.ensure_one()
+        return self.picking_id.owner_id or self.picking_id.partner_id
+    
     def _action_assign(self, force_qty=False):
         # Split moves by picking type owner behavior restriction to process
         # moves depending of their owners
@@ -20,8 +29,12 @@ class StockMove(models.Model):
         for move in self - moves:
             if move.picking_type_id.owner_restriction == "unassigned_owner":
                 dict_key[False] |= move
-            else:
-                dict_key[move.picking_id.owner_id or move.picking_id.partner_id] |= move
+            elif not move._skip_assign():
+            # # elif not move.production_id:
+            # else:
+                partner = move._get_dict_key_partner()
+                dict_key[partner] |= move
+                # dict_key[move.picking_id.owner_id or move.picking_id.partner_id] |= move
         for owner_id, moves_to_assign in dict_key.items():
             super(
                 StockMove,
