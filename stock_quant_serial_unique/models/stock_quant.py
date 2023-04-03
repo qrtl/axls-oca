@@ -14,14 +14,13 @@ class StockQuant(models.Model):
         when stock is being created (e.g. a purchase receipt is being processed),
         to avoid duplicates.
         """
-        location = self.env.context.get("location_dest_id")
-        if not location:
-            location = self.location_id
+        if self.env.context.get("skip_check_serial_number"):
+            return
         for record in self:
             if (
                 record.lot_id
                 and record.product_id.tracking == "serial"
-                and location.usage in ("internal", "transit")
+                and record.location_id.usage in ("internal", "transit")
             ):
                 message, dummy = self._check_serial_number(
                     record.product_id,
