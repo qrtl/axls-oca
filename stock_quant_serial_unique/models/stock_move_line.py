@@ -27,9 +27,9 @@ class StockMoveLine(models.Model):
                 if not record.lot_id:
                     lot_id = self.env["stock.lot"].search(
                         [
-                            ("product_id", "=", self.product_id.id),
-                            ("name", "=", self.lot_name),
-                            ("company_id", "=", self.company_id.id),
+                            ("product_id", "=", record.product_id.id),
+                            ("name", "=", record.lot_name),
+                            ("company_id", "=", record.company_id.id),
                         ]
                     )
                 quant = self.env["stock.quant"]
@@ -40,4 +40,3 @@ class StockMoveLine(models.Model):
                 )
                 if message:
                     raise ValidationError(_(message))
-        return super()._onchange_serial_number()
