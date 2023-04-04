@@ -7,17 +7,17 @@ from odoo import models
 class StockMove(models.Model):
     _inherit = "stock.move"
 
-    def _skip_assign(self):
-        """Finished product should be """
-        self.ensure_one()
-        if self.production_id:
-            return True
-        return super()._skip_assign()
-
-    def _get_dict_key_partner(self):
+    def _get_owner_for_assign(self):
         self.ensure_one()
         if self.raw_material_production_id:
             return self.raw_material_production_id.owner_id
-        # if self.production_id:
-        #     return self.production_id.owner_id
-        return super()._get_dict_key_partner()
+        # Manufactured product should not consider the owner for assignment, or the
+        # result might be messed up (e.g. tries to move stock from the internal location
+        # instead of the production location).
+        if self.production_id:
+            return False
+        # For chained origin moves for production component moves.
+        partner = self.move_dest_ids.raw_material_production_id.owner_id
+        if partner:
+            return partner
+        return super()._get_owner_for_assign()
