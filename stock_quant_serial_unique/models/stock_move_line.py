@@ -8,20 +8,19 @@ from odoo.exceptions import ValidationError
 class StockMoveLine(models.Model):
     _inherit = "stock.move.line"
 
-    def _action_done(self):
-        self = self.with_context(skip_check_serial_number=True)
-        return super(StockMoveLine, self)._action_done()
 
     @api.constrains("lot_name", "lot_id")
     def _check_serial_number(self):
+        """This method intends to check whether the stock for specifield serial already exists
+        when stock is being created (e.g. a purchase receipt is being processed),
+        to avoid duplicates.
+        """
         for record in self:
             if (
                 (record.lot_id or record.lot_name)
                 and record.product_id.tracking == "serial"
-                and (
-                    record.location_dest_id.usage in ("internal", "transit")
-                    and record.location_id.usage not in ("internal", "transit")
-                )
+                # Run this method when using option to create a new lot number.
+                and record.picking_type_id.use_create_lots
             ):
                 lot_id = record.lot_id
                 if not record.lot_id:
