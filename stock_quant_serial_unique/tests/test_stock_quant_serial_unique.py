@@ -10,10 +10,18 @@ class TestStockQuantSerialUnique(TransactionCase):
         super(TestStockQuantSerialUnique, self).setUp()
         self.stock_location = self.env.ref("stock.stock_location_stock")
         self.warehouse = self.env.ref("stock.warehouse0")
+        # self.company = self.env.ref('base.main_company')
         self.shelf1_location = self.env["stock.location"].create(
             {
                 "name": "Test location",
                 "usage": "internal",
+                "location_id": self.stock_location.id,
+            }
+        )
+        self.vendor_location = self.env["stock.location"].create(
+            {
+                "name": "Test vendor location",
+                "usage": "supplier",
                 "location_id": self.stock_location.id,
             }
         )
@@ -36,19 +44,41 @@ class TestStockQuantSerialUnique(TransactionCase):
             {
                 "company_id": self.warehouse.company_id.id,
                 "product_id": self.product1.id,
-                "name": "Lot 1",
+                "name": "Lot1",
             }
         )
+        print(self.lot1.id)
         self.owner1 = self.env["res.partner"].create({"name": "Test Company"})
-
-    def test_stock_quant_serial_unique_with_serial(self):
-        with self.assertRaises(ValidationError):
-            self.quant2 = self.env["stock.quant"].create(
+        self.picking_type1 = self.env["stock.picking.type"].search([("use_create_lots","=",True)])
+        self.quant1 = self.env["stock.quant"].create(
+            {
+                "company_id": self.warehouse.company_id.id,
+                "product_id": self.product1.id,
+                "location_id": self.shelf1_location.id,
+                "lot_id": self.lot1.id,
+                "quantity": 1,
+            }
+        )
+        self.moveline1 = self.env["stock.move.line"].create(
                 {
+                    "company_id": self.warehouse.company_id.id,
                     "product_id": self.product1.id,
-                    "location_id": self.shelf1_location.id,
-                    "lot_id": self.lot1.id,
+                    "location_dest_id": self.shelf1_location.id,
+                    "location_id": self.vendor_location.id,
                     "owner_id": self.owner1.id,
-                    "quantity": 1,
+                    "picking_type_id": self.picking_type1.id,
+                    "qty_done" : 1,
                 }
             )
+        print(self.moveline1)
+    def test_stock_quant_serial_unique_with_serial(self):
+        with self.assertRaises(ValidationError):
+            self.moveline1.write(
+                {
+                    "lot_id": self.lot1.id,
+                    "lot_name": "Lot1",
+                }
+            )
+            print(self.moveline1.lot_id.id)
+            print(self.moveline1.lot_name)
+            print(self.moveline1)
