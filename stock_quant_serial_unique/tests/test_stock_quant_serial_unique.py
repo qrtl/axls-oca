@@ -47,9 +47,8 @@ class TestStockQuantSerialUnique(TransactionCase):
                 "name": "Lot1",
             }
         )
-        print(self.lot1.id)
         self.owner1 = self.env["res.partner"].create({"name": "Test Company"})
-        self.picking_type1 = self.env["stock.picking.type"].search([("use_create_lots","=",True)])
+        self.picking_type1 = self.env["stock.picking.type"].search([("use_create_lots","=",True)], limit=1)
         self.quant1 = self.env["stock.quant"].create(
             {
                 "company_id": self.warehouse.company_id.id,
@@ -59,18 +58,23 @@ class TestStockQuantSerialUnique(TransactionCase):
                 "quantity": 1,
             }
         )
+        self.picking = self.env["stock.picking"].create(
+            {
+                "picking_type_id": self.picking_type1.id,
+                "location_dest_id": self.shelf1_location.id,
+                "location_id": self.vendor_location.id,
+                "owner_id": self.owner1.id,
+                "partner_id": self.env.ref("base.res_partner_1").id,
+            }
+        )
         self.moveline1 = self.env["stock.move.line"].create(
                 {
                     "company_id": self.warehouse.company_id.id,
                     "product_id": self.product1.id,
-                    "location_dest_id": self.shelf1_location.id,
-                    "location_id": self.vendor_location.id,
-                    "owner_id": self.owner1.id,
-                    "picking_type_id": self.picking_type1.id,
+                    "picking_id": self.picking.id,
                     "qty_done" : 1,
                 }
             )
-        print(self.moveline1)
     def test_stock_quant_serial_unique_with_serial(self):
         with self.assertRaises(ValidationError):
             self.moveline1.write(
@@ -79,6 +83,3 @@ class TestStockQuantSerialUnique(TransactionCase):
                     "lot_name": "Lot1",
                 }
             )
-            print(self.moveline1.lot_id.id)
-            print(self.moveline1.lot_name)
-            print(self.moveline1)
