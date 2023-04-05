@@ -5,12 +5,11 @@ from odoo.exceptions import ValidationError
 from odoo.tests.common import TransactionCase
 
 
-class TestStockQuantSerialUnique(TransactionCase):
+class TestStockMoveLineSerialUnique(TransactionCase):
     def setUp(self):
-        super(TestStockQuantSerialUnique, self).setUp()
+        super(TestStockMoveLineSerialUnique, self).setUp()
         self.stock_location = self.env.ref("stock.stock_location_stock")
         self.warehouse = self.env.ref("stock.warehouse0")
-        # self.company = self.env.ref('base.main_company')
         self.shelf1_location = self.env["stock.location"].create(
             {
                 "name": "Test location",
@@ -75,7 +74,7 @@ class TestStockQuantSerialUnique(TransactionCase):
                     "qty_done" : 1,
                 }
             )
-    def test_stock_quant_serial_unique_with_serial(self):
+    def test_stock_move_line_serial_unique_with_serial(self):
         with self.assertRaises(ValidationError):
             self.moveline1.write(
                 {
