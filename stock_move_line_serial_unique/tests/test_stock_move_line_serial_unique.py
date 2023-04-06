@@ -5,80 +5,100 @@ from odoo.exceptions import ValidationError
 from odoo.tests.common import TransactionCase
 
 
-class TestStockMoveLineSerialUnique(TransactionCase):
-    def setUp(self):
-        super(TestStockMoveLineSerialUnique, self).setUp()
-        self.stock_location = self.env.ref("stock.stock_location_stock")
-        self.warehouse = self.env.ref("stock.warehouse0")
-        self.shelf1_location = self.env["stock.location"].create(
-            {
-                "name": "Test location",
-                "usage": "internal",
-                "location_id": self.stock_location.id,
-            }
-        )
-        self.vendor_location = self.env["stock.location"].create(
-            {
-                "name": "Test vendor location",
-                "usage": "supplier",
-                "location_id": self.stock_location.id,
-            }
-        )
-
-        self.product1 = self.env["product.product"].create(
+class TestStockQuantSerialUnique(TransactionCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.company = cls.env.ref("base.main_company")
+        cls.stock_location = cls.env.ref("stock.stock_location_stock")
+        cls.vendor_location = cls.env.ref("stock.stock_location_suppliers")
+        cls.product1 = cls.env["product.product"].create(
             {
                 "name": "Product A",
                 "type": "product",
                 "tracking": "serial",
             }
         )
-        self.product2 = self.env["product.product"].create(
+        lot1 = cls.env["stock.lot"].create(
             {
-                "name": "Product B",
-                "type": "product",
-                "tracking": "serial",
-            }
-        )
-        self.lot1 = self.env["stock.lot"].create(
-            {
-                "company_id": self.warehouse.company_id.id,
-                "product_id": self.product1.id,
+                "company_id": cls.company.id,
+                "product_id": cls.product1.id,
                 "name": "Lot1",
             }
         )
-        self.owner1 = self.env["res.partner"].create({"name": "Test Company"})
-        self.picking_type1 = self.env["stock.picking.type"].search([("use_create_lots","=",True)], limit=1)
-        self.quant1 = self.env["stock.quant"].create(
+        cls.env["stock.quant"].create(
             {
-                "company_id": self.warehouse.company_id.id,
-                "product_id": self.product1.id,
-                "location_id": self.shelf1_location.id,
-                "lot_id": self.lot1.id,
+                "company_id": cls.company.id,
+                "product_id": cls.product1.id,
+                "location_id": cls.stock_location.id,
+                "lot_id": lot1.id,
                 "quantity": 1,
             }
         )
-        self.picking = self.env["stock.picking"].create(
-            {
-                "picking_type_id": self.picking_type1.id,
-                "location_dest_id": self.shelf1_location.id,
-                "location_id": self.vendor_location.id,
-                "owner_id": self.owner1.id,
-                "partner_id": self.env.ref("base.res_partner_1").id,
-            }
+        cls.owner1 = cls.env["res.partner"].create({"name": "Test Company"})
+
+    def _create_moveline(
+        self,
+        location_id,
+        location_dest_id,
+        picking_type_id,
+        owner_id,
+    ):
+        picking_data = {
+            "picking_type_id": picking_type_id.id,
+            "location_id": location_id.id,
+            "location_dest_id": location_dest_id.id,
+            "owner_id": owner_id.id,
+        }
+        picking = self.env["stock.picking"].create(picking_data)
+        move_line_data = {
+            "company_id": self.company.id,
+            "product_id": self.product1.id,
+            "picking_id": picking.id,
+            "qty_done": 1,
+        }
+        moveline = self.env["stock.move.line"].create(move_line_data)
+        return moveline
+
+    def test_stock_quant_serial_unique_with_duplicate_serial(self):
+        picking_type1 = self.env["stock.picking.type"].search(
+            [("use_create_lots", "=", True)], limit=1
         )
-        self.moveline1 = self.env["stock.move.line"].create(
-                {
-                    "company_id": self.warehouse.company_id.id,
-                    "product_id": self.product1.id,
-                    "picking_id": self.picking.id,
-                    "qty_done" : 1,
-                }
-            )
-    def test_stock_move_line_serial_unique_with_serial(self):
+        moveline = self._create_moveline(
+            self.stock_location, self.vendor_location, picking_type1, self.owner1
+        )
+
         with self.assertRaises(ValidationError):
-            self.moveline1.write(
+            moveline.write(
                 {
-                    "lot_id": self.lot1.id,
                     "lot_name": "Lot1",
                 }
             )
+
+    def test_stock_quant_serial_unique_with_no_duplicate_serial(self):
+        picking_type1 = self.env["stock.picking.type"].search(
+            [("use_create_lots", "=", True)], limit=1
+        )
+        moveline = self._create_moveline(
+            self.stock_location, self.vendor_location, picking_type1, self.owner1
+        )
+        moveline.write(
+            {
+                "lot_name": "Lot2",
+            }
+        )
+
+        self.assertEqual(moveline.product_id.id, self.product1.id)
+        self.assertEqual(moveline.lot_name, "Lot2")
+
+    def test_stock_quant_serial_unique_no_create_lot_picking_type(self):
+        picking_type2 = self.env["stock.picking.type"].search(
+            [("use_create_lots", "!=", True)], limit=1
+        )
+        moveline = self._create_moveline(
+            self.stock_location, self.vendor_location, picking_type2, self.owner1
+        )
+        moveline.write({"lot_name": "Lot1"})
+
+        self.assertEqual(moveline.product_id.id, self.product1.id)
+        self.assertEqual(moveline.lot_name, "Lot1")

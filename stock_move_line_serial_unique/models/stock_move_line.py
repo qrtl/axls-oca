@@ -8,13 +8,14 @@ from odoo.exceptions import ValidationError
 class StockMoveLine(models.Model):
     _inherit = "stock.move.line"
 
-
     @api.constrains("lot_name", "lot_id")
     def _check_serial_number(self):
-        """This method intends to check and make sure that the stock for specified serial does not exist.
+        """This method intends to check and make sure that the stock
+        for specified serial does not exist.
         The check is expected to be triggered when:
         - user inputs serial (in lot_name) in purchase receipt / manufacturing order
-        - serial record (stock.lot) is being created in _action_done()"""
+        - serial record (stock.lot) is being created in _action_done()
+        """
         for record in self:
             if (
                 (record.lot_id or record.lot_name)
