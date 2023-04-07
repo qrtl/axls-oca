@@ -24,6 +24,13 @@ class TestStockQuantSerialUnique(TransactionCase):
                 "name": "001",
             }
         )
+        cls.serial2 = cls.env["stock.lot"].create(
+            {
+                "company_id": cls.env.company.id,
+                "product_id": cls.product.id,
+                "name": "002",
+            }
+        )
         cls.env["stock.quant"].create(
             {
                 "product_id": cls.product.id,
@@ -34,60 +41,56 @@ class TestStockQuantSerialUnique(TransactionCase):
         )
 
     def _create_picking(self, location, location_dest, picking_type, owner):
-        picking_val = {
+        picking_vals = {
             "picking_type_id": picking_type.id,
             "location_id": location.id,
             "location_dest_id": location_dest.id,
             "owner_id": owner.id,
         }
-        return self.env["stock.picking"].create(picking_val)
+        return self.env["stock.picking"].create(picking_vals)
 
     def _create_moveline(self, product, picking):
-        move_line_val = {
+        move_line_vals = {
             "product_id": product.id,
             "picking_id": picking.id,
             "qty_done": 1,
         }
-        return self.env["stock.move.line"].create(move_line_val)
+        return self.env["stock.move.line"].create(move_line_vals)
 
-    def test_duplicate_serial(self):
+    def test_duplicate_serial_with_existing_serial(self):
         self.assertEqual(self.picking_type_in.use_create_lots, True)
         picking_in = self._create_picking(
             self.vendor_location, self.stock_location, self.picking_type_in, self.owner
         )
         moveline = self._create_moveline(self.product, picking_in)
+        # Stock exists for serial '001'.
         with self.assertRaises(ValidationError):
             moveline.write({"lot_name": "001"})
 
-    def test_no_duplicate_serial(self):
+    def test_create_new_serial_and_check_deplicates(self):
         picking_in = self._create_picking(
             self.vendor_location, self.stock_location, self.picking_type_in, self.owner
         )
         moveline = self._create_moveline(self.product, picking_in)
+        # Stock does not exist for serial '002'.
         moveline.write({"lot_name": "002"})
-        serial2 = self.env["stock.lot"].create(
-            {
-                "company_id": self.env.company.id,
-                "product_id": self.product.id,
-                "name": "002",
-            }
-        )
         self.env["stock.quant"].create(
             {
                 "product_id": self.product.id,
                 "location_id": self.stock_location.id,
-                "lot_id": serial2.id,
+                "lot_id": self.serial2.id,
                 "quantity": 1,
             }
         )
-        with self.assertRaises(ValidationError):
-            picking_in.action_confirm()
-            picking_in.button_validate()
-        moveline.write({"lot_name": "003"})
         picking_in.action_confirm()
+        # Now stock exists for serial '002'.
+        with self.assertRaises(ValidationError):
+            picking_in.button_validate()
+        # Stock does not exist for serial '003'.
+        moveline.write({"lot_name": "003"})
         picking_in.button_validate()
 
-    def test_picking_type_out(self):
+    def test_picking_type_out_with_existing_serial(self):
         self.assertEqual(self.picking_type_out.use_create_lots, False)
         picking_out = self._create_picking(
             self.stock_location,
@@ -96,6 +99,7 @@ class TestStockQuantSerialUnique(TransactionCase):
             self.owner,
         )
         moveline = self._create_moveline(self.product, picking_out)
+        # Stock exists for serial '001' but no check should be done for outgoing/internal moves.
         moveline.write({"lot_id": self.serial1.id})
         picking_out.action_confirm()
         picking_out.button_validate()
