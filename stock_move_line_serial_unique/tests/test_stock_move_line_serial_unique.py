@@ -31,6 +31,7 @@ class TestStockQuantSerialUnique(TransactionCase):
                 "name": "002",
             }
         )
+        # Create stock for serial '001'.
         cls.env["stock.quant"].create(
             {
                 "product_id": cls.product.id,
@@ -57,7 +58,7 @@ class TestStockQuantSerialUnique(TransactionCase):
         }
         return self.env["stock.move.line"].create(move_line_vals)
 
-    def test_duplicate_serial_with_existing_serial(self):
+    def test_picking_in_serial_with_stock(self):
         self.assertEqual(self.picking_type_in.use_create_lots, True)
         picking_in = self._create_picking(
             self.vendor_location, self.stock_location, self.picking_type_in, self.owner
@@ -67,7 +68,7 @@ class TestStockQuantSerialUnique(TransactionCase):
         with self.assertRaises(ValidationError):
             moveline.write({"lot_name": "001"})
 
-    def test_create_new_serial_and_check_deplicates(self):
+    def test_picking_in_serials_with_and_without_stock(self):
         picking_in = self._create_picking(
             self.vendor_location, self.stock_location, self.picking_type_in, self.owner
         )
@@ -90,7 +91,7 @@ class TestStockQuantSerialUnique(TransactionCase):
         moveline.write({"lot_name": "003"})
         picking_in.button_validate()
 
-    def test_picking_type_out_with_existing_serial(self):
+    def test_picking_out_serial_with_stock(self):
         self.assertEqual(self.picking_type_out.use_create_lots, False)
         picking_out = self._create_picking(
             self.stock_location,
