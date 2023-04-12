@@ -11,6 +11,6 @@ class StockMoveLine(models.Model):
         for line in self:
             owner = line.move_id.production_id.owner_id
             if owner:
-                line.move_id.write({'restrict_partner_id': owner.id})
-                line.write({'owner_id': owner.id})
+                line.move_id.write({"restrict_partner_id": owner.id})
+                line.write({"owner_id": owner.id})
         return super()._action_done()

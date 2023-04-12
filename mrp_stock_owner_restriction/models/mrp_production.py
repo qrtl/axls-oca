@@ -13,5 +13,6 @@ class MrpProduction(models.Model):
         readonly=True,
         states={"draft": [("readonly", False)], "confirmed": [("readonly", False)]},
         check_company=True,
-        help="Produced products will be assigned to this owner.")
+        help="Produced products will be assigned to this owner.",
+    )
     owner_restriction = fields.Selection(related="picking_type_id.owner_restriction")
