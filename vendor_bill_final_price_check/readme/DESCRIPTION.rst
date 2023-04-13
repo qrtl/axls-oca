@@ -1,5 +1,5 @@
 This module does the following-
- - Add confirm_final_price and is_change_price field in account.move
+ - Add confirm_final_price and is_update_svl field in account.move
  - Add menuitem for account manager to allow confirm for the bills that change the price.
 
 This module restricts the user to confirm the vendor bills if the price in account.move.line is changed.

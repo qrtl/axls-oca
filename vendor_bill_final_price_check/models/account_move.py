@@ -1,17 +1,18 @@
 # Copyright 2023 Quartile Limited
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo import _, fields, models
-from odoo.exceptions import ValidationError
+from odoo import api, fields, models
 
 
 class AccountMove(models.Model):
     _inherit = "account.move"
 
-    confirm_final_price = fields.Boolean()
-    is_change_price = fields.Boolean()
+    confirm_final_price = fields.Boolean(tracking=True)
+    is_update_svl = fields.Boolean(
+        compute="_compute_svl_check", store=True, readonly=False
+    )
 
-    def _post(self, soft=True):
-        if not self.confirm_final_price and self.is_change_price:
-            raise ValidationError(_("This document is needed to confirm by manager."))
-        return super()._post(soft)
+    @api.depends("date")
+    def _compute_svl_check(self):
+        for line in self.filtered(lambda move: move.state != "posted").invoice_line_ids:
+            line._check_svl_create()
