@@ -1,0 +1,40 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* purchase_order_restriction
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 16.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-05-16 10:01+0000\n"
+"PO-Revision-Date: 2023-05-16 10:01+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: purchase_order_restriction
+#: model:ir.model.fields,help:purchase_order_restriction.field_purchase_order__is_restricted
+msgid ""
+"If selected, this purchase order can only be accessed by the assigned buyer "
+"or purchase managers."
+msgstr "選択した場合、この購買オーダーは割り当てられた担当者または購買マネジャーのみがアクセスできます。"
+
+#. module: purchase_order_restriction
+#: model:ir.model,name:purchase_order_restriction.model_purchase_order
+msgid "Purchase Order"
+msgstr "購買オーダ"
+
+#. module: purchase_order_restriction
+#: model:ir.model.fields,field_description:purchase_order_restriction.field_purchase_order__is_restricted
+msgid "Restrict Access"
+msgstr "アクセス制限"
+
+#. module: purchase_order_restriction
+#. odoo-python
+#: code:addons/purchase_order_restriction/models/purchase.py:0
+#, python-format
+msgid "You do not have the right to change Restrict Access setting."
+msgstr "アクセス制限設定を変更する権限がありません。"
