@@ -6,7 +6,7 @@
         <field name="inherit_id" ref="base.view_model_form" />
         <field name="arch" type="xml">
             <xpath expr="//field[@name='transient']" position="after">
-                <field name="add_open_tab_field_in_list" />
+                <field name="add_open_tab_field" />
             </xpath>
         </field>
     </record>

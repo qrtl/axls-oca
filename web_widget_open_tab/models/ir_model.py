@@ -7,4 +7,4 @@ from odoo import fields, models
 class IrModel(models.Model):
     _inherit = "ir.model"
 
-    add_open_tab_field_in_list = fields.Boolean()
+    add_open_tab_field = fields.Boolean(help="Adds open-tab field in list views.")
