@@ -10,4 +10,5 @@
     "depends": ["purchase_stock", "purchase_reception_status"],
     "data": ["views/purchase_order.xml"],
     "installable": True,
+    "auto_install": True,
 }
