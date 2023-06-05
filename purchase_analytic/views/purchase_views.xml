@@ -36,8 +36,8 @@
         <field name="inherit_id" ref="purchase.purchase_order_form" />
         <field name="arch" type="xml">
             <field name="partner_ref" position="after">
-                <!-- The 'groups="analytic.group_analytic_accounting"' element has been removed from the field.
-                This is due to an error it would cause when this field is passed as a context. -->
+                <!-- The 'groups="analytic.group_analytic_accounting"' attribute has been removed from the field,
+                since it would cause an error when the value of this field is passed as a context. -->
                 <field
                     name="analytic_distribution"
                     widget="analytic_distribution"
