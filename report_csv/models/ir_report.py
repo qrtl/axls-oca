@@ -10,8 +10,8 @@ class ReportAction(models.Model):
     report_type = fields.Selection(
         selection_add=[("csv", "csv")], ondelete={"csv": "set default"}
     )
-    encoding = fields.Char(help="Encoding to be applied to the generated CSV file. "
-        "e.g. cp932"
+    encoding = fields.Char(
+        help="Encoding to be applied to the generated CSV file. " "e.g. cp932"
     )
     encode_error_handling = fields.Selection(
         selection=[("ignore", "Ignore"), ("replace", "Replace")],
@@ -27,7 +27,7 @@ class ReportAction(models.Model):
         return report_model.with_context(
             active_model=report_sudo.model,
             encoding=self.encoding,
-            encode_error_handling=self.encode_error_handling
+            encode_error_handling=self.encode_error_handling,
         ).create_csv_report(docids, data)
 
     @api.model

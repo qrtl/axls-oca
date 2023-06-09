@@ -39,7 +39,12 @@
                 <field name="owner_id" string="Owner" />
             </xpath>
             <xpath expr="//group/filter[@name='order_date']" position="after">
-                <filter string="Owner" name="owner" domain="[]" context="{'group_by': 'owner_id'}" />
+                <filter
+                    string="Owner"
+                    name="owner"
+                    domain="[]"
+                    context="{'group_by': 'owner_id'}"
+                />
             </xpath>
         </field>
     </record>
@@ -52,7 +57,12 @@
                 <field name="owner_id" string="Owner" />
             </xpath>
             <xpath expr="//group/filter[@name='order_date']" position="after">
-                <filter string="Owner" name="owner" domain="[]" context="{'group_by': 'owner_id'}" />
+                <filter
+                    string="Owner"
+                    name="owner"
+                    domain="[]"
+                    context="{'group_by': 'owner_id'}"
+                />
             </xpath>
         </field>
     </record>

@@ -3,7 +3,7 @@
 {
     "name": "Stock Picking Accounting Date",
     "version": "16.0.1.0.0",
-    "author": "Quartile Limited",
+    "author": "Quartile Limited, Odoo Community Association (OCA)",
     "website": "https://www.quartile.co",
     "category": "Stock",
     "license": "AGPL-3",

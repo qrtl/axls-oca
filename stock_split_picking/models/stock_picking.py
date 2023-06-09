@@ -82,8 +82,8 @@ class StockPicking(models.Model):
         )
         self.message_post(
             body=_(
-                'The backorder %s has been created.'
-            , backorder_picking._get_html_link())
+                "The backorder %s has been created.", backorder_picking._get_html_link()
+            )
         )
         return backorder_picking
 
