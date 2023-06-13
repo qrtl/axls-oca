@@ -234,7 +234,7 @@ msgstr "最終更新日"
 #. module: purchase_invoice_plan
 #: model:ir.model.fields,help:purchase_invoice_plan.field_purchase_invoice_plan__last
 msgid "Last installment will create invoice use remaining amount"
-msgstr "最終分割払いは残額で"請求書を作成します。
+msgstr "最終分割払いは残額で請求書を作成します。"
 
 #. module: purchase_invoice_plan
 #: model:ir.model.fields.selection,name:purchase_invoice_plan.selection__purchase_create_invoice_plan__interval_type__month
