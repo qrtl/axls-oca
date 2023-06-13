@@ -19,10 +19,20 @@ class StockPicking(models.Model):
             "cancel": [("readonly", True)],
         },
     )
+    # Assign a dummy search arg to the field to avoid triggering the warning.
+    # Without this, use of move_ids_without_package in @api.depends() of the compute
+    # method would trigger a warning from
+    # https://github.com/odoo/odoo/blob/ae94f14a844352f66490ec326fe2d1a716023891/odoo/fields.py#L808-L812  # noqa
+    move_ids_without_package = fields.One2many(search="[]")
 
-    @api.depends("move_ids.analytic_distribution", "original_analytic_distribution")
+    # We use move_ids_without_package instead of move_ids throughout this method to
+    # guarantee consistent behavior. i.e. the value of move_ids is available only after
+    # the record has been saved.
+    @api.depends(
+        "move_ids_without_package.analytic_distribution",
+        "original_analytic_distribution",
+    )
     def _compute_analytic_distribution(self):
-        """Get analytic distribution from first move and put it on picking"""
         for picking in self:
             analytic_distribution = picking.original_analytic_distribution
             if picking.move_ids_without_package:
