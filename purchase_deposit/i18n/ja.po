@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-11 01:56+0000\n"
-"PO-Revision-Date: 2023-05-11 01:56+0000\n"
+"POT-Creation-Date: 2023-06-12 03:59+0000\n"
+"PO-Revision-Date: 2023-06-12 03:59+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -51,13 +51,13 @@ msgstr "コンフィグ設定"
 
 #. module: purchase_deposit
 #: model_terms:ir.ui.view,arch_db:purchase_deposit.view_purchase_advance_payment_inv
-msgid "Create and View bills"
-msgstr "請求書作成して表示"
+msgid "Create Bill"
+msgstr "請求書作成"
 
 #. module: purchase_deposit
 #: model_terms:ir.ui.view,arch_db:purchase_deposit.view_purchase_advance_payment_inv
-msgid "Create deposit"
-msgstr "前払作成"
+msgid "Create and View bills"
+msgstr "請求書作成して表示"
 
 #. module: purchase_deposit
 #: model:ir.model.fields,field_description:purchase_deposit.field_purchase_advance_payment_inv__create_uid
@@ -103,6 +103,11 @@ msgid "Deposit payment (fixed amount)"
 msgstr "前払(定額)"
 
 #. module: purchase_deposit
+#: model:ir.model.fields.selection,name:purchase_deposit.selection__purchase_advance_payment_inv__advance_payment_method__percentage
+msgid "Deposit payment (percentage)"
+msgstr "前払(%)"
+
+#. module: purchase_deposit
 #: model:ir.model.fields,help:purchase_deposit.field_purchase_order_line__is_deposit
 msgid ""
 "Deposit payments are made when creating bills from a purhcase order. They "
@@ -115,11 +120,6 @@ msgstr ""
 #: model:ir.model.fields,field_description:purchase_deposit.field_purchase_advance_payment_inv__display_name
 msgid "Display Name"
 msgstr "表示名"
-
-#. module: purchase_deposit
-#: model:ir.model.fields.selection,name:purchase_deposit.selection__purchase_advance_payment_inv__advance_payment_method__percentage
-msgid "Down payment (percentage)"
-msgstr "前払(%)"
 
 #. module: purchase_deposit
 #: model:ir.model.fields,field_description:purchase_deposit.field_purchase_advance_payment_inv__deposit_account_id
@@ -259,7 +259,8 @@ msgstr "前払額はプラスでなければなりません。"
 msgid ""
 "There is no purchase account defined for this product: %s.\n"
 "You may have to install a chart of account from Accounting app, settings menu."
-msgstr "プロダクトに費用勘定が設定されていません：%s\n"
+msgstr ""
+"プロダクトに費用勘定が設定されていません：%s\n"
 "会計アプリの設定メニューより、勘定科目表をインストールする必要があるかもしれません。"
 
 #. module: purchase_deposit
