@@ -7,8 +7,7 @@
     "website": "https://github.com/OCA/purchase-workflow",
     "license": "AGPL-3",
     "author": "Quartile Limited, Odoo Community Association (OCA)",
-    "depends": ["purchase_stock", "purchase_reception_status"],
+    "depends": ["purchase_stock"],
     "data": ["views/purchase_order.xml"],
     "installable": True,
-    "auto_install": True,
 }

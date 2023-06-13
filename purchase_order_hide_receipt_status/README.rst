@@ -25,13 +25,9 @@ Purchase Order Hide Receipt Status
 
 |badge1| |badge2| |badge3| |badge4| |badge5| 
 
-This custom module is designed to enhance the user experience within the Odoo 
-by preventing confusion between two similar field names. Upon installation, 
-this module will remove the 'receipt_status' field from both the form and tree view 
-within the purchase order section. 
-
-This action is specifically implemented to avoid any misunderstanding with the 'reception_status' field, 
-which becomes visible once the 'purchase_reception_status' module is installed.
+This module is designed to enhance the user experience by hiding the "receipt_status" field
+in purchase order form view and tree view. The purpose is to avoid any confusion that may arise
+when 'reception_status' field becomes visible once the 'purchase_reception_status' module is installed.
 
 **Table of contents**
 
