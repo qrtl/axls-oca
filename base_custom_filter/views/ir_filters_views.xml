@@ -27,7 +27,7 @@
                     name="group_id"
                     domain="[('model_id', '=', model_id), ('type', '=', type)]"
                     context="{'default_model_id': model_id, 'default_type': type}"
-                    attrs="{'invisible': [('type', '=', 'favorite')]}"
+                    attrs="{'invisible': [('type', 'in', ['favorite', 'search'])]}"
                 />
             </field>
             <field name="domain" position="attributes">

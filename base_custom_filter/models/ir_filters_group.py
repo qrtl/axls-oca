@@ -11,7 +11,7 @@ class IrFiltersGroup(models.Model):
     _order = "sequence, name, id"
 
     def _selection_type(self):
-        return [("search", "Search"), ("filter", "Filter"), ("groupby", "Group By")]
+        return [("filter", "Filter"), ("groupby", "Group By")]
 
     sequence = fields.Integer()
     model_id = fields.Selection(
