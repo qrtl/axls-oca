@@ -25,20 +25,18 @@ class Test(TransactionCase):
         filters_group = filters_group.save()
 
     def test_get_view_content_search(self):
-        with Form(self.filters_group_obj) as filters_group:
-            filters_group.name = "Test Search"
-            filters_group.type = "search"
-            filters_group.model_id = "ir.filters.group"
-            with filters_group.filter_ids.new() as line:
-                line.name = "Test Search Field"
-                line.search_field_id = self.env.ref(
-                    "base_custom_filter.field_ir_filters_group__display_name"
-                )
-                line.filter_domain = "['display_name', 'ilike', self]"
-                line.group_ids.add(self.env.ref("base.group_system"))
+        with Form(self.filters_obj) as filters_search:
+            filters_search.name = "Test Search Field"
+            filters_search.type = "search"
+            filters_search.model_id = "ir.filters.group"
+            filters_search.search_field_id = self.env.ref(
+                "base_custom_filter.field_ir_filters_group__display_name"
+            )
+            filters_search.filter_domain = "['display_name', 'ilike', self]"
+            filters_search.group_ids.add(self.env.ref("base.group_system"))
 
-        filter_group = self.filters_group_obj.search([("name", "=", "Test Search")])
-        self.assertEqual(filter_group.name, "Test Search")
+        filter_search = self.filters_obj.search([("name", "=", "Test Search Field")])
+        self.assertEqual(filter_search.name, "Test Search Field")
 
         # Test get_view() content
         view_dict = self.filters_group_obj.get_view(view_type="search")
