@@ -71,7 +71,6 @@ class Test(TransactionCase):
             view_content,
             "The string is not in the returned view",
         )
-        filter_group.unlink()
 
     def test_get_view_content_groupby(self):
         with Form(self.filters_group_obj) as filters_group:
