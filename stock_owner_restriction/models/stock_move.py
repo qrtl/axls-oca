@@ -18,18 +18,17 @@ class StockMove(models.Model):
         return self.filtered(
             lambda m: m.picking_type_id.owner_restriction == "standard_behavior"
         )
-    
+
     def _get_owner_for_assign(self):
         """This method is expected to be extended as necessary. e.g. different logic
         needs to be applied for moves in manufacturing orders.
         """
         self.ensure_one()
         partner = self.move_dest_ids.picking_id.owner_id
-        # partner = self.move_dest_ids.picking_id.owner_id or self.move_dest_ids.picking_id.partner_id
         if not partner:
             partner = self.picking_id.owner_id or self.picking_id.partner_id
         return partner
-    
+
     def _action_assign(self, force_qty=False):
         # Split moves by picking type owner behavior restriction to process
         # moves depending of their owners
