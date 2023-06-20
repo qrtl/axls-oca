@@ -41,7 +41,7 @@ class Test(TransactionCase):
         # Test get_view() content
         view_dict = self.filters_group_obj.get_view(view_type="search")
         view_content = view_dict.get("arch", b"").decode("utf-8")
-        search_string = '<field name="display_name" filter_domain="[\'display_name\', \'ilike\', self]" domain="[]"/>'  # noqa: B950
+        search_string = "<field name=\"display_name\" filter_domain=\"['display_name', 'ilike', self]\"/>"  # noqa: B950
         self.assertIn(
             search_string, view_content, "The string is not in the returned view"
         )
@@ -55,7 +55,9 @@ class Test(TransactionCase):
                 line.name = "Test filter line"
                 line.domain = '[["id","=",1]]'
 
-        filter_group = self.filters_group_obj.search([("name", "=", "Test filters group")])
+        filter_group = self.filters_group_obj.search(
+            [("name", "=", "Test filters group")]
+        )
         self.assertEqual(filter_group.name, "Test filters group")
 
         view_dict = self.filters_group_obj.get_view(view_type="search")
@@ -83,7 +85,9 @@ class Test(TransactionCase):
                     "base_custom_filter.field_ir_filters_group__name"
                 )
 
-        filter_group = self.filters_group_obj.search([("name", "=", "Test groupby group")])
+        filter_group = self.filters_group_obj.search(
+            [("name", "=", "Test groupby group")]
+        )
         self.assertEqual(filter_group.name, "Test groupby group")
 
         view_dict = self.filters_group_obj.get_view(view_type="search")
