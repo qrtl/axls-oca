@@ -12,6 +12,7 @@ class IrFilters(models.Model):
     def _selection_type(self):
         return [
             ("favorite", "Favorite"),
+            ("search", "Search"),
             ("filter", "Standard Filter"),
             ("groupby", "Standard Group By"),
         ]
@@ -22,9 +23,18 @@ class IrFilters(models.Model):
         required=True,
         default="favorite",
     )
+    search_field_id = fields.Many2one(
+        comodel_name="ir.model.fields",
+        ondelete="cascade",
+    )
     groupby_field = fields.Many2one(
         comodel_name="ir.model.fields",
         string="Group By Field",
         ondelete="cascade",
     )
+    filter_domain = fields.Text(
+        help="""Enter a filter domain expression if necessary.
+        Example: [('default_code', 'ilike', self)]"""
+    )
+    group_ids = fields.Many2many("res.groups", string="User Groups")
     group_id = fields.Many2one(comodel_name="ir.filters.group", string="Filter Group")
