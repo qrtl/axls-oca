@@ -33,9 +33,4 @@ class IrFiltersGroup(models.Model):
 
     @api.model
     def _list_all_models(self):
-        lang = self.env.lang or "en_US"
-        self._cr.execute(
-            "SELECT model, COALESCE(name->>%s, name->>'en_US') FROM ir_model ORDER BY 2",
-            [lang],
-        )
-        return self._cr.fetchall()
+        return self.env["ir.filters"]._list_all_models()
