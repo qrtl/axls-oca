@@ -13,11 +13,13 @@ github_enforce_dev_status_compatibility: false
 include_wkhtmltopdf: false
 odoo_version: 16.0
 org_name: Odoo Community Association (OCA)
-org_slug: OCA
-rebel_module_groups: []
+org_slug: qrtl
+rebel_module_groups:
+- stock_owner_restriction
 repo_description: null
 repo_name: null
-repo_slug: null
+repo_slug: axls-oca
 repo_website: ''
 travis_apt_packages: []
 travis_apt_sources: []
+
