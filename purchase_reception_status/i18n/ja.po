@@ -35,8 +35,8 @@ msgid ""
 "first lock the order."
 msgstr ""
 "チェックを付けた場合、未受領の明細が有ったとしても受領ステータスは強制的に完"
-"全受領済みとなります。この項目を編集するためにはオーダーのロックを解除する必"
-"要があります。"
+"全受領済みとなります。この項目を編集するためにはオーダーをロックする必要が"
+"あります。"
 
 #. module: purchase_reception_status
 #: model_terms:ir.ui.view,arch_db:purchase_reception_status.view_purchase_order_filter
