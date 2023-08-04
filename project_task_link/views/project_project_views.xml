@@ -12,11 +12,16 @@
                     class="oe_stat_button"
                     icon="fa-tasks"
                 >
-                    <div class="o_field_widget o_stat_info">
-                        <span class="o_stat_value">
+                    <div
+                        class="o_field_widget o_stat_info"
+                        style="display: inline-flex;"
+                    >
+                        <span class="o_stat_value mr4">
                             <field name="task_count" />
                         </span>
-                        <span class="o_stat_text">Tasks</span>
+                        <span class="o_label">
+                            <field name="label_tasks" readonly="1" />
+                        </span>
                     </div>
                 </button>
             </xpath>
