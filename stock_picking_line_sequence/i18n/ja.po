@@ -23,7 +23,7 @@ msgstr "<strong>No.</strong>"
 #. module: stock_picking_line_sequence
 #: model:ir.model.fields,field_description:stock_picking_line_sequence.field_stock_move__sequence
 msgid "HiddenSequence"
-msgstr "非表化示シーケンス"
+msgstr "非表示シーケンス"
 
 #. module: stock_picking_line_sequence
 #: model:ir.model.fields,field_description:stock_picking_line_sequence.field_stock_picking__max_line_sequence
