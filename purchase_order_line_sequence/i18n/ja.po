@@ -34,7 +34,7 @@ msgstr "購買オーダーを表示する際に明細行の連番を割り当て
 #. module: purchase_order_line_sequence
 #: model:ir.model.fields,field_description:purchase_order_line_sequence.field_purchase_order_line__sequence
 msgid "Hidden Sequence"
-msgstr "非表化示シーケンス"
+msgstr "非表示シーケンス"
 
 #. module: purchase_order_line_sequence
 #: model:ir.model,name:purchase_order_line_sequence.model_account_move_line
