@@ -283,7 +283,7 @@ msgid ""
 "Plan quantity: %(plan)s, exceed invoiceable quantity: %(qty)s\n"
 "Product should be delivered before invoice"
 msgstr ""
-"プランの数量： %(plan),請求可能な数量を超えました：%(qty)\n"
+"プランの数量： %(plan)s,請求可能な数量を超えました：%(qty)s\n"
 "プロダクトは請求する前に配送する必要があります。"
 
 #. module: purchase_invoice_plan
