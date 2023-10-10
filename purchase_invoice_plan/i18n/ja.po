@@ -1,0 +1,435 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* purchase_invoice_plan
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 16.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-06-13 04:15+0000\n"
+"PO-Revision-Date: 2023-06-13 04:15+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: purchase_invoice_plan
+#: model:ir.model.fields,field_description:purchase_invoice_plan.field_purchase_invoice_plan__amount
+#: model_terms:ir.ui.view,arch_db:purchase_invoice_plan.view_purchase_invoice_plan_tree
+#: model_terms:ir.ui.view,arch_db:purchase_invoice_plan.view_purchase_invoice_plan_tree_readonly
+msgid "Amount"
+msgstr "金額"
+
+#. module: purchase_invoice_plan
+#: model:ir.model.fields,field_description:purchase_invoice_plan.field_purchase_invoice_plan__amount_invoiced
+msgid "Amount Invoiced"
+msgstr "請求額"
+
+#. module: purchase_invoice_plan
+#: model_terms:ir.ui.view,arch_db:purchase_invoice_plan.purchase_order_form
+msgid "Are you sure to remove this invoice plan?"
+msgstr "本当にこの請求書プランを削除しますか？"
+
+#. module: purchase_invoice_plan
+#: model:ir.model.fields,help:purchase_invoice_plan.field_purchase_order__ip_invoice_plan
+msgid "At least one invoice plan line pending to create invoice"
+msgstr "請求書を作成するには少なくとも1つの待機中の請求書プランラインが必要です"
+
+#. module: purchase_invoice_plan
+#: model_terms:ir.ui.view,arch_db:purchase_invoice_plan.view_purchase_make_planned_invoice
+msgid "Bill Purchase Order"
+msgstr "購買オーダーを請求する"
+
+#. module: purchase_invoice_plan
+#: model_terms:ir.ui.view,arch_db:purchase_invoice_plan.view_purchase_invoice_plan_filter
+msgid "Bills Received"
+msgstr "請求書受領"
+
+#. module: purchase_invoice_plan
+#: model_terms:ir.ui.view,arch_db:purchase_invoice_plan.view_purchase_make_planned_invoice
+msgid ""
+"Bills will be created in draft for this installment\n"
+"                        so that you can review them before validation."
+msgstr ""
+"請求書を確定する前に内容を確認できるのため、このプランに対してドラフトの請求書が作成されます。"
+
+#. module: purchase_invoice_plan
+#: model_terms:ir.ui.view,arch_db:purchase_invoice_plan.view_purchase_create_invoice_plan
+#: model_terms:ir.ui.view,arch_db:purchase_invoice_plan.view_purchase_make_planned_invoice
+msgid "Cancel"
+msgstr "破棄"
+
+#. module: purchase_invoice_plan
+#: model_terms:ir.ui.view,arch_db:purchase_invoice_plan.view_purchase_make_planned_invoice
+msgid "Create All Remaining Bills"
+msgstr "残りの請求書を全て一括で作成する"
+
+#. module: purchase_invoice_plan
+#: model_terms:ir.ui.view,arch_db:purchase_invoice_plan.purchase_order_form
+msgid "Create Bill by Plan"
+msgstr "プランで請求書作成"
+
+#. module: purchase_invoice_plan
+#: model:ir.actions.act_window,name:purchase_invoice_plan.action_purchase_create_invoice_plan
+#: model_terms:ir.ui.view,arch_db:purchase_invoice_plan.view_purchase_create_invoice_plan
+msgid "Create Invoice Plan"
+msgstr "請求書プラン作成"
+
+#. module: purchase_invoice_plan
+#: model_terms:ir.ui.view,arch_db:purchase_invoice_plan.view_purchase_make_planned_invoice
+msgid "Create Next Bill"
+msgstr "次の請求書を作成する"
+
+#. module: purchase_invoice_plan
+#: model:ir.model.fields,field_description:purchase_invoice_plan.field_purchase_create_invoice_plan__create_uid
+#: model:ir.model.fields,field_description:purchase_invoice_plan.field_purchase_invoice_plan__create_uid
+#: model:ir.model.fields,field_description:purchase_invoice_plan.field_purchase_make_planned_invoice__create_uid
+msgid "Created by"
+msgstr "作成者"
+
+#. module: purchase_invoice_plan
+#: model:ir.model.fields,field_description:purchase_invoice_plan.field_purchase_create_invoice_plan__create_date
+#: model:ir.model.fields,field_description:purchase_invoice_plan.field_purchase_invoice_plan__create_date
+#: model:ir.model.fields,field_description:purchase_invoice_plan.field_purchase_make_planned_invoice__create_date
+msgid "Created on"
+msgstr "作成日"
+
+#. module: purchase_invoice_plan
+#: model:ir.model.fields.selection,name:purchase_invoice_plan.selection__purchase_create_invoice_plan__interval_type__day
+msgid "Day"
+msgstr "日"
+
+#. module: purchase_invoice_plan
+#: model:ir.model.fields,field_description:purchase_invoice_plan.field_purchase_create_invoice_plan__display_name
+#: model:ir.model.fields,field_description:purchase_invoice_plan.field_purchase_invoice_plan__display_name
+#: model:ir.model.fields,field_description:purchase_invoice_plan.field_purchase_make_planned_invoice__display_name
+msgid "Display Name"
+msgstr "表示名"
+
+#. module: purchase_invoice_plan
+#: model:ir.model,name:purchase_invoice_plan.model_purchase_create_invoice_plan
+msgid "Fillig invoice planning criteria"
+msgstr "請求書計画基準入力"
+
+#. module: purchase_invoice_plan
+#: model_terms:ir.ui.view,arch_db:purchase_invoice_plan.view_purchase_invoice_plan_filter
+msgid "Group By"
+msgstr "グループ化"
+
+#. module: purchase_invoice_plan
+#: model:ir.model.fields,field_description:purchase_invoice_plan.field_purchase_create_invoice_plan__id
+#: model:ir.model.fields,field_description:purchase_invoice_plan.field_purchase_invoice_plan__id
+#: model:ir.model.fields,field_description:purchase_invoice_plan.field_purchase_make_planned_invoice__id
+msgid "ID"
+msgstr "ID"
+
+#. module: purchase_invoice_plan
+#: model:ir.model.fields,help:purchase_invoice_plan.field_purchase_invoice_plan__invoiced
+msgid "If this line already invoiced"
+msgstr "このラインが請求された場合"
+
+#. module: purchase_invoice_plan
+#: model:ir.model.fields,help:purchase_invoice_plan.field_purchase_invoice_plan__to_invoice
+msgid "If this line is ready to create new invoice"
+msgstr "このラインが請求可能になった場合"
+
+#. module: purchase_invoice_plan
+#: model:ir.model.fields,field_description:purchase_invoice_plan.field_purchase_invoice_plan__installment
+#: model:ir.model.fields.selection,name:purchase_invoice_plan.selection__purchase_invoice_plan__invoice_type__installment
+#: model_terms:ir.ui.view,arch_db:purchase_invoice_plan.view_purchase_invoice_plan_filter
+msgid "Installment"
+msgstr "分割払込"
+
+#. module: purchase_invoice_plan
+#. odoo-python
+#: code:addons/purchase_invoice_plan/models/purchase.py:0
+#, python-format
+msgid ""
+"Installment %s: already used and not allowed to delete.\n"
+"Please discard changes."
+msgstr ""
+"分割払込 %s: 使用済みの為、削除できません。変更内容を破棄してください。"
+
+#. module: purchase_invoice_plan
+#: model:ir.model.fields,field_description:purchase_invoice_plan.field_purchase_create_invoice_plan__installment_date
+msgid "Installment Date"
+msgstr "支払日"
+
+#. module: purchase_invoice_plan
+#: model:ir.model.fields,field_description:purchase_invoice_plan.field_purchase_create_invoice_plan__interval
+msgid "Interval"
+msgstr "間隔"
+
+#. module: purchase_invoice_plan
+#: model:ir.model.fields,field_description:purchase_invoice_plan.field_purchase_create_invoice_plan__interval_type
+msgid "Interval Type"
+msgstr "間隔タイプ"
+
+#. module: purchase_invoice_plan
+#: model:ir.model.fields,field_description:purchase_invoice_plan.field_purchase_invoice_plan__invoiced
+msgid "Invoice Created"
+msgstr "請求済"
+
+#. module: purchase_invoice_plan
+#: model:ir.actions.act_window,name:purchase_invoice_plan.action_view_purchase_make_planned_invoice
+msgid "Invoice Order"
+msgstr "オーダーを請求する"
+
+#. module: purchase_invoice_plan
+#: model:ir.model.fields,field_description:purchase_invoice_plan.field_purchase_order__invoice_plan_ids
+#: model_terms:ir.ui.view,arch_db:purchase_invoice_plan.purchase_order_form
+msgid "Invoice Plan"
+msgstr "請求書プラン"
+
+#. module: purchase_invoice_plan
+#: model:ir.model.fields,field_description:purchase_invoice_plan.field_purchase_order__ip_invoice_plan
+msgid "Invoice Plan In Process"
+msgstr "進行中の請求書"
+
+#. module: purchase_invoice_plan
+#: model:ir.model,name:purchase_invoice_plan.model_purchase_invoice_plan
+msgid "Invoice Planning Detail"
+msgstr "請求書プラン明細"
+
+#. module: purchase_invoice_plan
+#. odoo-python
+#: code:addons/purchase_invoice_plan/models/purchase.py:0
+#, python-format
+msgid "Invoice plan total percentage must not exceed 100%"
+msgstr "請求書プランの合計額が100%を超えないようにしてください。"
+
+#. module: purchase_invoice_plan
+#: model:ir.model.fields,field_description:purchase_invoice_plan.field_purchase_invoice_plan__invoice_ids
+msgid "Invoices"
+msgstr "請求書"
+
+#. module: purchase_invoice_plan
+#: model:ir.model.fields,field_description:purchase_invoice_plan.field_purchase_invoice_plan__last
+msgid "Last Installment"
+msgstr "最終分割払い"
+
+#. module: purchase_invoice_plan
+#: model:ir.model.fields,field_description:purchase_invoice_plan.field_purchase_create_invoice_plan____last_update
+#: model:ir.model.fields,field_description:purchase_invoice_plan.field_purchase_invoice_plan____last_update
+#: model:ir.model.fields,field_description:purchase_invoice_plan.field_purchase_make_planned_invoice____last_update
+msgid "Last Modified on"
+msgstr "最終更新日"
+
+#. module: purchase_invoice_plan
+#: model:ir.model.fields,field_description:purchase_invoice_plan.field_purchase_create_invoice_plan__write_uid
+#: model:ir.model.fields,field_description:purchase_invoice_plan.field_purchase_invoice_plan__write_uid
+#: model:ir.model.fields,field_description:purchase_invoice_plan.field_purchase_make_planned_invoice__write_uid
+msgid "Last Updated by"
+msgstr "最終更新者"
+
+#. module: purchase_invoice_plan
+#: model:ir.model.fields,field_description:purchase_invoice_plan.field_purchase_create_invoice_plan__write_date
+#: model:ir.model.fields,field_description:purchase_invoice_plan.field_purchase_invoice_plan__write_date
+#: model:ir.model.fields,field_description:purchase_invoice_plan.field_purchase_make_planned_invoice__write_date
+msgid "Last Updated on"
+msgstr "最終更新日"
+
+#. module: purchase_invoice_plan
+#: model:ir.model.fields,help:purchase_invoice_plan.field_purchase_invoice_plan__last
+msgid "Last installment will create invoice use remaining amount"
+msgstr "最終分割払いは残額で請求書を作成します。"
+
+#. module: purchase_invoice_plan
+#: model:ir.model.fields.selection,name:purchase_invoice_plan.selection__purchase_create_invoice_plan__interval_type__month
+msgid "Month"
+msgstr "月"
+
+#. module: purchase_invoice_plan
+#: model:ir.model.fields,field_description:purchase_invoice_plan.field_purchase_invoice_plan__to_invoice
+msgid "Next Invoice"
+msgstr "次の請求書"
+
+#. module: purchase_invoice_plan
+#: model:ir.model.fields,field_description:purchase_invoice_plan.field_purchase_invoice_plan__no_edit
+msgid "No Edit"
+msgstr "編集不可"
+
+#. module: purchase_invoice_plan
+#. odoo-python
+#: code:addons/purchase_invoice_plan/wizard/purchase_create_invoice_plan.py:0
+#, python-format
+msgid "Number Installment must greater than 1"
+msgstr "分割払込回数は１以上でしてください。"
+
+#. module: purchase_invoice_plan
+#: model:ir.model.fields,field_description:purchase_invoice_plan.field_purchase_create_invoice_plan__num_installment
+msgid "Number of Installment"
+msgstr "分割払込回数"
+
+#. module: purchase_invoice_plan
+#: model:ir.model.fields,field_description:purchase_invoice_plan.field_purchase_invoice_plan__percent
+#: model:ir.model.fields,field_description:purchase_invoice_plan.field_purchase_order__ip_total_percent
+#: model_terms:ir.ui.view,arch_db:purchase_invoice_plan.view_purchase_invoice_plan_tree_readonly
+msgid "Percent"
+msgstr "%"
+
+#. module: purchase_invoice_plan
+#: model:ir.model.fields,field_description:purchase_invoice_plan.field_purchase_invoice_plan__plan_date
+msgid "Plan Date"
+msgstr "プラン日"
+
+#. module: purchase_invoice_plan
+#. odoo-python
+#: code:addons/purchase_invoice_plan/models/purchase.py:0
+#, python-format
+msgid ""
+"Plan quantity: %(plan)s, exceed invoiceable quantity: %(qty)s\n"
+"Product should be delivered before invoice"
+msgstr ""
+"プランの数量： %(plan)s,請求可能な数量を超えました：%(qty)s\n"
+"プロダクトは請求する前に配送する必要があります。"
+
+#. module: purchase_invoice_plan
+#. odoo-python
+#: code:addons/purchase_invoice_plan/models/purchase.py:0
+#, python-format
+msgid "Please fill percentage for all invoice plan lines"
+msgstr "全ての請求書プランラインのパーセンテージを記入してください。"
+
+#. module: purchase_invoice_plan
+#: model:ir.actions.act_window,name:purchase_invoice_plan.action_purchase_invoice_plan
+#: model:ir.ui.menu,name:purchase_invoice_plan.menu_purchase_invoice_plan
+msgid "Purchase Invoice Plan"
+msgstr "購買請求書プラン"
+
+#. module: purchase_invoice_plan
+#: model:ir.model,name:purchase_invoice_plan.model_purchase_order
+#: model_terms:ir.ui.view,arch_db:purchase_invoice_plan.view_purchase_invoice_plan_filter
+msgid "Purchase Order"
+msgstr "購買オーダ"
+
+#. module: purchase_invoice_plan
+#: model_terms:ir.ui.view,arch_db:purchase_invoice_plan.view_purchase_invoice_plan_filter
+msgid "Purchase Orders"
+msgstr "購買オーダー"
+
+#. module: purchase_invoice_plan
+#: model_terms:ir.ui.view,arch_db:purchase_invoice_plan.view_purchase_invoice_plan_filter
+msgid "Purchase orders that have been invoiced."
+msgstr "請求済みの購買オーダー"
+
+#. module: purchase_invoice_plan
+#: model_terms:ir.ui.view,arch_db:purchase_invoice_plan.view_purchase_invoice_plan_filter
+msgid "Purchase orders that include lines not invoiced."
+msgstr "未請求のラインが含む購買オーダー"
+
+#. module: purchase_invoice_plan
+#: model:ir.model.fields,field_description:purchase_invoice_plan.field_purchase_invoice_plan__purchase_id
+msgid "Purchases Order"
+msgstr "購買オーダー"
+
+#. module: purchase_invoice_plan
+#: model_terms:ir.ui.view,arch_db:purchase_invoice_plan.view_purchase_invoice_plan_filter
+msgid "Quotations"
+msgstr "お見積り"
+
+#. module: purchase_invoice_plan
+#: model_terms:ir.ui.view,arch_db:purchase_invoice_plan.view_purchase_invoice_plan_form
+msgid "Related Bills"
+msgstr "関連請求書"
+
+#. module: purchase_invoice_plan
+#: model_terms:ir.ui.view,arch_db:purchase_invoice_plan.view_purchase_invoice_plan_filter
+msgid "Search Purchase Invoice Plan Lines"
+msgstr "請求書プランライン検索"
+
+#. module: purchase_invoice_plan
+#: model:ir.model.fields,field_description:purchase_invoice_plan.field_purchase_invoice_plan__state
+#: model_terms:ir.ui.view,arch_db:purchase_invoice_plan.view_purchase_invoice_plan_filter
+msgid "Status"
+msgstr "ステータス"
+
+#. module: purchase_invoice_plan
+#: model:ir.model.fields,field_description:purchase_invoice_plan.field_purchase_invoice_plan__partner_id
+#: model_terms:ir.ui.view,arch_db:purchase_invoice_plan.view_purchase_invoice_plan_filter
+msgid "Supplier"
+msgstr "取引先"
+
+#. module: purchase_invoice_plan
+#: model:ir.model.fields,help:purchase_invoice_plan.field_purchase_invoice_plan__amount
+msgid "This amount will be used to calculate the percent"
+msgstr "この金額はパーセントを計算するために使用されます。"
+
+#. module: purchase_invoice_plan
+#: model:ir.model.fields,help:purchase_invoice_plan.field_purchase_invoice_plan__percent
+msgid "This percent will be used to calculate new quantity"
+msgstr "このパーセントは新規数量を計算するために使用されます。"
+
+#. module: purchase_invoice_plan
+#: model_terms:ir.actions.act_window,help:purchase_invoice_plan.action_purchase_invoice_plan
+msgid "This view show all available invoice plan line for reporting purposes"
+msgstr "このビューはレポートの為、全ての請求可能なプランラインを表示します。"
+
+#. module: purchase_invoice_plan
+#: model_terms:ir.ui.view,arch_db:purchase_invoice_plan.view_purchase_create_invoice_plan
+msgid "This wizard help you quickly create invoice plan."
+msgstr "このウィザードは、迅速に請求書プランを作成するのに役立ちます"
+
+#. module: purchase_invoice_plan
+#: model_terms:ir.ui.view,arch_db:purchase_invoice_plan.view_purchase_invoice_plan_filter
+msgid "To Approve"
+msgstr "承認待ち"
+
+#. module: purchase_invoice_plan
+#: model:ir.model.fields,field_description:purchase_invoice_plan.field_purchase_order__ip_total_amount
+msgid "Total Amount"
+msgstr "合計額"
+
+#. module: purchase_invoice_plan
+#: model:ir.model.fields,field_description:purchase_invoice_plan.field_purchase_invoice_plan__invoice_type
+msgid "Type"
+msgstr "タイプ"
+
+#. module: purchase_invoice_plan
+#: model:ir.model.fields,field_description:purchase_invoice_plan.field_purchase_order__use_invoice_plan
+msgid "Use Invoice Plan"
+msgstr "請求書プラン使用"
+
+#. module: purchase_invoice_plan
+#. odoo-python
+#: code:addons/purchase_invoice_plan/models/purchase.py:0
+#, python-format
+msgid "Use Invoice Plan selected, but no plan created"
+msgstr "「請求書プラン使用」は選択されましたが、プランが作成されていません。"
+
+#. module: purchase_invoice_plan
+#: model_terms:ir.actions.act_window,help:purchase_invoice_plan.action_purchase_invoice_plan
+msgid "View purchase invoice plan lines"
+msgstr "請求書プランライン表示"
+
+#. module: purchase_invoice_plan
+#: model_terms:ir.ui.view,arch_db:purchase_invoice_plan.view_purchase_invoice_plan_filter
+msgid "Waiting Bills"
+msgstr "請求待ち"
+
+#. module: purchase_invoice_plan
+#: model:ir.model,name:purchase_invoice_plan.model_purchase_make_planned_invoice
+msgid "Wizard when create invoice by plan"
+msgstr "プランで請求書を作成する時のウィザード"
+
+#. module: purchase_invoice_plan
+#: model:ir.model.fields.selection,name:purchase_invoice_plan.selection__purchase_create_invoice_plan__interval_type__year
+msgid "Year"
+msgstr "年"
+
+#. module: purchase_invoice_plan
+#: model:ir.model.fields,help:purchase_invoice_plan.field_purchase_invoice_plan__partner_id
+msgid "You can find a vendor by its Name, TIN, Email or Internal Reference."
+msgstr "社名・納税者番号・メール又は内部参照で取引先を検索することができます。"
+
+#. module: purchase_invoice_plan
+#: model_terms:ir.ui.view,arch_db:purchase_invoice_plan.purchase_order_form
+msgid "⇒ Create Invoice Plan"
+msgstr "⇒ 請求書プラン作成"
+
+#. module: purchase_invoice_plan
+#: model_terms:ir.ui.view,arch_db:purchase_invoice_plan.purchase_order_form
+msgid "⇒ Remove Invoice Plan"
+msgstr "⇒ 請求書プラン削除"
