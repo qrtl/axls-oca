@@ -18,7 +18,8 @@ class StockPicking(models.Model):
             pick.show_accounting_date = False
             if pick.picking_type_code not in ("incoming", "outgoing"):
                 continue
-            if pick.move_ids.with_company(pick.company_id).product_id.filtered(
+            products = pick.move_ids.with_company(pick.company_id).product_id
+            if products.filtered(
                 lambda x: x.detailed_type == "product" and x.valuation == "real_time"
-            ):
+            ) and not products.filtered(lambda x: x.detailed_type == "consu"):
                 pick.show_accounting_date = True
