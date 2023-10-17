@@ -21,4 +21,9 @@ class StockValuationLayer(models.Model):
             if account_move and account_move.state == "posted":
                 rec.accounting_date = account_move.date
                 continue
-            rec.accounting_date = rec.stock_move_id.accounting_date
+            if rec.stock_move_id:
+                rec.accounting_date = rec.stock_move_id.accounting_date
+                continue
+            rec.accounting_date = fields.Datetime.context_timestamp(
+                self, rec.create_date
+            )
