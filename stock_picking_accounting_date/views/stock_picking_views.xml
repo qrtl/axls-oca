@@ -9,7 +9,9 @@
                 <field name="show_accounting_date" invisible="1" />
                 <field
                     name="accounting_date"
-                    attrs="{'invisible': [('show_accounting_date', '=', False)]}"
+                    attrs="{'invisible': [('show_accounting_date', '=', False)],
+                    'readonly': [('show_accounting_date', '=', True),
+                    ('state', 'in', ('done', 'cancel'))]}"
                 />
             </xpath>
         </field>
