@@ -7,7 +7,7 @@
     "author": "Quartile Limited, Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/stock-logistics-warehouse",
     "license": "AGPL-3",
-    "depends": ["stock_account"],
+    "depends": ["stock_picking_accounting_date"],
     "data": [
         "views/stock_valuation_layer_views.xml",
         "wizard/stock_quantity_history.xml",
