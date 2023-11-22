@@ -16,20 +16,19 @@ class CrmLead(models.Model):
 
     def _rule_domain(self):
         base_rule_domain = super()._rule_domain()
-        if self.stage_id.exception_ids:
+        if self.stage_id:
             rule_domain = expression.AND(
-                [base_rule_domain, [("id", "in", self.stage_id.exception_ids.ids)]]
+                [
+                    base_rule_domain,
+                    [
+                        "|",
+                        ("stage_ids", "in", self.stage_id.ids),
+                        ("stage_ids", "=", False),
+                    ],
+                ]
             )
             return rule_domain
         return base_rule_domain
-
-    def _get_base_domain(self):
-        if self.stage_id:
-            return [
-                ("ignore_exception", "=", False),
-                ("stage_id.ignore_exception", "=", False),
-            ]
-        return super()._get_base_domain()
 
     @api.constrains("ignore_exception", "stage_id")
     def _check_quantity_positive(self):

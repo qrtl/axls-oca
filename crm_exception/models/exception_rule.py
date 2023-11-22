@@ -14,3 +14,4 @@ class ExceptionRule(models.Model):
         ],
         ondelete={"crm.lead": "cascade"},
     )
+    stage_ids = fields.Many2many(comodel_name="crm.stage")
