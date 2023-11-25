@@ -1,9 +1,9 @@
 
-[![Runboat](https://img.shields.io/badge/runboat-Try%20me-875A7B.png)](https://runboat.odoo-community.org/builds?repo=OCA/None&target_branch=16.0)
-[![Pre-commit Status](https://github.com/OCA/None/actions/workflows/pre-commit.yml/badge.svg?branch=16.0)](https://github.com/OCA/None/actions/workflows/pre-commit.yml?query=branch%3A16.0)
-[![Build Status](https://github.com/OCA/None/actions/workflows/test.yml/badge.svg?branch=16.0)](https://github.com/OCA/None/actions/workflows/test.yml?query=branch%3A16.0)
-[![codecov](https://codecov.io/gh/OCA/None/branch/16.0/graph/badge.svg)](https://codecov.io/gh/OCA/None)
-[![Translation Status](https://translation.odoo-community.org/widgets/None-16-0/-/svg-badge.svg)](https://translation.odoo-community.org/engage/None-16-0/?utm_source=widget)
+<!-- /!\ Non OCA Context : Set here the badge of your runbot / runboat instance. -->
+[![Pre-commit Status](https://github.com/qrtl/axls-oca/actions/workflows/pre-commit.yml/badge.svg?branch=16.0)](https://github.com/qrtl/axls-oca/actions/workflows/pre-commit.yml?query=branch%3A16.0)
+[![Build Status](https://github.com/qrtl/axls-oca/actions/workflows/test.yml/badge.svg?branch=16.0)](https://github.com/qrtl/axls-oca/actions/workflows/test.yml?query=branch%3A16.0)
+[![codecov](https://codecov.io/gh/qrtl/axls-oca/branch/16.0/graph/badge.svg)](https://codecov.io/gh/qrtl/axls-oca)
+<!-- /!\ Non OCA Context : Set here the badge of your translation instance. -->
 
 <!-- /!\ do not modify above this line -->
 
@@ -32,6 +32,4 @@ policy. Consult each module's `__manifest__.py` file, which contains a `license`
 that explains its license.
 
 ----
-OCA, or the [Odoo Community Association](http://odoo-community.org/), is a nonprofit
-organization whose mission is to support the collaborative development of Odoo features
-and promote its widespread use.
+<!-- /!\ Non OCA Context : Set here the full description of your organization. -->
