@@ -14,6 +14,21 @@ class CrmLead(models.Model):
     def _reverse_field(self):
         return "crm_lead_ids"
 
+    def _fields_trigger_check_exception(self):
+        return ["ignore_exception", "stage_id"]
+
+    def _check_crm_lead_check_exception(self, vals):
+        check_exceptions = any(
+            field in vals for field in self._fields_trigger_check_exception()
+        )
+        if check_exceptions:
+            self._check_exception()
+
+    def write(self, vals):
+        result = super().write(vals)
+        self._check_crm_lead_check_exception(vals)
+        return result
+
     def _rule_domain(self):
         base_rule_domain = super()._rule_domain()
         if self.stage_id:
@@ -29,8 +44,3 @@ class CrmLead(models.Model):
             )
             return rule_domain
         return base_rule_domain
-
-    @api.constrains("ignore_exception", "stage_id")
-    def _check_quantity_positive(self):
-        for record in self:
-            record._check_exception()

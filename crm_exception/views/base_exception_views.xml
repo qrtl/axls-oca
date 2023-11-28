@@ -10,7 +10,6 @@
                     name="stage_ids"
                     widget="many2many_tags"
                     attrs="{'invisible': [('model', '!=', 'crm.lead')]}"
-                    groups="base.group_system"
                 />
             </xpath>
         </field>

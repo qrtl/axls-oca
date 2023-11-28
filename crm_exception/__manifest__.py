@@ -8,6 +8,10 @@
     "website": "https://github.com/OCA/crm",
     "depends": ["crm", "base_exception"],
     "license": "AGPL-3",
-    "data": ["views/crm_lead_views.xml", "views/base_exception_views.xml"],
+    "data": [
+        "data/crm_exception_data.xml",
+        "views/crm_lead_views.xml",
+        "views/base_exception_views.xml",
+    ],
     "installable": True,
 }
