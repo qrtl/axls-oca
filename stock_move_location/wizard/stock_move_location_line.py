@@ -32,6 +32,12 @@ class StockMoveLocationWizardLine(models.TransientModel):
         comodel_name="stock.lot",
         domain="[('product_id','=',product_id)]",
     )
+    package_id = fields.Many2one(
+        string="Package Number",
+        comodel_name="stock.quant.package",
+        domain="[('location_id', '=', origin_location_id)]",
+    )
+    owner_id = fields.Many2one(comodel_name="res.partner", string="From Owner")
     move_quantity = fields.Float(
         string="Quantity to move", digits="Product Unit of Measure"
     )
@@ -68,6 +74,14 @@ class StockMoveLocationWizardLine(models.TransientModel):
             search_args.append(("lot_id", "=", self.lot_id.id))
         else:
             search_args.append(("lot_id", "=", False))
+        if self.package_id:
+            search_args.append(("package_id", "=", self.package_id.id))
+        else:
+            search_args.append(("package_id", "=", False))
+        if self.owner_id:
+            search_args.append(("owner_id", "=", self.owner_id.id))
+        else:
+            search_args.append(("owner_id", "=", False))
         res = self.env["stock.quant"].read_group(search_args, ["quantity"], [])
         max_quantity = res[0]["quantity"]
         return max_quantity
@@ -78,6 +92,21 @@ class StockMoveLocationWizardLine(models.TransientModel):
             if not self.env.context.get("planned") and values.get("qty_done") <= 0:
                 continue
             self.env["stock.move.line"].create(values)
+            if self.env.context.get("planned"):
+                available_quantity = self.env["stock.quant"]._get_available_quantity(
+                    line.product_id,
+                    line.origin_location_id,
+                    lot_id=line.lot_id,
+                    strict=False,
+                )
+                # Create stock.move.line
+                move._update_reserved_quantity(
+                    values.get("qty_done"),
+                    available_quantity,
+                    line.origin_location_id,
+                    lot_id=line.lot_id,
+                    strict=False,
+                )
         return True
 
     def _get_move_line_values(self, picking, move):
@@ -91,6 +120,9 @@ class StockMoveLocationWizardLine(models.TransientModel):
         return {
             "product_id": self.product_id.id,
             "lot_id": self.lot_id.id,
+            "package_id": self.package_id.id,
+            "result_package_id": self.package_id.id,
+            "owner_id": self.owner_id.id,
             "location_id": self.origin_location_id.id,
             "location_dest_id": location_dest_id,
             "qty_done": qty_done,
@@ -107,9 +139,6 @@ class StockMoveLocationWizardLine(models.TransientModel):
         self.ensure_one()
         if not self.product_id:
             return 0
-        if self.env.context.get("planned"):
-            # for planned transfer we don't care about the amounts at all
-            return self.move_quantity, 0
         search_args = [
             ("location_id", "=", self.origin_location_id.id),
             ("product_id", "=", self.product_id.id),
@@ -118,6 +147,14 @@ class StockMoveLocationWizardLine(models.TransientModel):
             search_args.append(("lot_id", "=", self.lot_id.id))
         else:
             search_args.append(("lot_id", "=", False))
+        if self.package_id:
+            search_args.append(("package_id", "=", self.package_id.id))
+        else:
+            search_args.append(("package_id", "=", False))
+        if self.owner_id:
+            search_args.append(("owner_id", "=", self.owner_id.id))
+        else:
+            search_args.append(("owner_id", "=", False))
         res = self.env["stock.quant"].read_group(search_args, ["quantity"], [])
         available_qty = res[0]["quantity"]
         if not available_qty:
