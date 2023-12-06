@@ -9,9 +9,11 @@
     "depends": ["crm", "base_exception"],
     "license": "AGPL-3",
     "data": [
-        "data/crm_exception_data.xml",
         "views/crm_lead_views.xml",
         "views/base_exception_views.xml",
+    ],
+    "demo": [
+        "demo/crm_exception_demo.xml",
     ],
     "installable": True,
 }

@@ -10,37 +10,29 @@ class CrmLead(models.Model):
     _name = "crm.lead"
     _order = "main_exception_id asc, name desc"
 
+    def write(self, vals):
+        result = super().write(vals)
+        # To avoid a recursive call, write()
+        if "exception_ids" in vals:
+            return result
+        self._check_exception()
+        return result
+
     @api.model
     def _reverse_field(self):
         return "crm_lead_ids"
 
-    def _fields_trigger_check_exception(self):
-        return ["ignore_exception", "stage_id"]
-
-    def _check_crm_lead_check_exception(self, vals):
-        check_exceptions = any(
-            field in vals for field in self._fields_trigger_check_exception()
-        )
-        if check_exceptions:
-            self._check_exception()
-
-    def write(self, vals):
-        result = super().write(vals)
-        self._check_crm_lead_check_exception(vals)
-        return result
-
     def _rule_domain(self):
-        base_rule_domain = super()._rule_domain()
+        rule_domain = super()._rule_domain()
         if self.stage_id:
             rule_domain = expression.AND(
                 [
-                    base_rule_domain,
+                    rule_domain,
                     [
                         "|",
-                        ("stage_ids", "in", self.stage_id.ids),
+                        ("stage_ids", "in", tuple(self.stage_id.ids)),
                         ("stage_ids", "=", False),
                     ],
                 ]
             )
-            return rule_domain
-        return base_rule_domain
+        return rule_domain

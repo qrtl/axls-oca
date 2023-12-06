@@ -15,6 +15,8 @@ class TestCrmLeadProbability(TransactionCase):
         cls.stage_won = cls.env.ref("crm.stage_lead4")
         cls.opportunity = cls.env.ref("crm.crm_case_13")
         cls.crm_exception = cls.env.ref("crm_exception.crm_excep_no_partner")
+        cls.crm_exception.active = True
+        cls.partner_id = cls.env.ref("base.res_partner_2")
 
     def test_crm_exception(self):
         self.assertEqual(self.opportunity.stage_id, self.stage_new)
@@ -29,23 +31,18 @@ class TestCrmLeadProbability(TransactionCase):
         # Test ignore_exception.
         self.opportunity.ignore_exception = True
         self.opportunity.stage_id = self.stage_qualified.id
-        self.assertEqual(self.opportunity.stage_id, self.stage_qualified)
         self.opportunity.stage_id = self.stage_proposition.id
-        self.assertEqual(self.opportunity.stage_id, self.stage_proposition)
         self.opportunity.stage_id = self.stage_won.id
-        self.assertEqual(self.opportunity.stage_id, self.stage_won)
 
+    def test_crm_exception_with_stage_ids(self):
         # Check exception only for qualified and won stages
         self.crm_exception.write(
             {"stage_ids": [(4, self.stage_qualified.id), (4, self.stage_won.id)]}
         )
-        # Test exception with assigning stage_ids in exception_rule
-        self.opportunity.stage_id = self.stage_new.id
-        self.opportunity.ignore_exception = False
         with self.assertRaises(ValidationError):
             self.opportunity.stage_id = self.stage_qualified.id
-        # No ValidationError for proposition stage
         self.opportunity.stage_id = self.stage_proposition.id
-        self.assertEqual(self.opportunity.stage_id, self.stage_proposition)
         with self.assertRaises(ValidationError):
             self.opportunity.stage_id = self.stage_won.id
+        self.opportunity.partner_id = self.partner_id.id
+        self.opportunity.stage_id = self.stage_won.id

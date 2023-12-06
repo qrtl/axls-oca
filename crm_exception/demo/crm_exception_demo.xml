@@ -7,6 +7,6 @@
         <field name="model">crm.lead</field>
         <field name="code">if not self.partner_id:
             failed=True</field>
-        <field name="active" eval="True" />
+        <field name="active" eval="False" />
     </record>
 </odoo>
