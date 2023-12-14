@@ -12,8 +12,6 @@
   show up
 - If "PLANNED TRANSFER" is used - the picking won't be validated
   automatically
-- When you choose specific lot/serial numbers to be moved in the wizard and opt for 'PLANNED TRANSFER,' 
-  the selected lot/serial will be reserved on the Picking.
 
 If you want to transfer a full quant:
 

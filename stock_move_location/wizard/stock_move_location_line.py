@@ -92,21 +92,6 @@ class StockMoveLocationWizardLine(models.TransientModel):
             if not self.env.context.get("planned") and values.get("qty_done") <= 0:
                 continue
             self.env["stock.move.line"].create(values)
-            if self.env.context.get("planned"):
-                available_quantity = self.env["stock.quant"]._get_available_quantity(
-                    line.product_id,
-                    line.origin_location_id,
-                    lot_id=line.lot_id,
-                    strict=False,
-                )
-                # Create stock.move.line
-                move._update_reserved_quantity(
-                    values.get("qty_done"),
-                    available_quantity,
-                    line.origin_location_id,
-                    lot_id=line.lot_id,
-                    strict=False,
-                )
         return True
 
     def _get_move_line_values(self, picking, move):
@@ -139,6 +124,9 @@ class StockMoveLocationWizardLine(models.TransientModel):
         self.ensure_one()
         if not self.product_id:
             return 0
+        if self.env.context.get("planned"):
+            # for planned transfer we don't care about the amounts at all
+            return self.move_quantity, 0
         search_args = [
             ("location_id", "=", self.origin_location_id.id),
             ("product_id", "=", self.product_id.id),
