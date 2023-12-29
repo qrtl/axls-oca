@@ -4,7 +4,7 @@
     "name": "Stock Picking Accounting Date",
     "version": "16.0.1.0.0",
     "author": "Quartile Limited, Odoo Community Association (OCA)",
-    "website": "https://www.quartile.co",
+    "website": "https://github.com/OCA/stock-logistics-warehouse",
     "category": "Stock",
     "license": "AGPL-3",
     "depends": ["stock_account"],

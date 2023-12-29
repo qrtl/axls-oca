@@ -7,9 +7,6 @@
         <field name="arch" type="xml">
             <xpath expr="//label[@for='scheduled_date']" position="before">
                 <field name="show_accounting_date" invisible="1" />
-                <!-- To Do: remove this updates and set the readonly as the original (on stock_picking.py)
-                    once the stock_picking_consumable has prepared the computed field to make accounting_date
-                    readonly when the item on transfer is consumable product -->
                 <field
                     name="accounting_date"
                     attrs="{'invisible': [('show_accounting_date', '=', False)],
