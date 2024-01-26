@@ -32,11 +32,6 @@ class StockMove(models.Model):
                 ):
                     raise UserError(_("To subcontract, use a planned transfer."))
                 subcontract_details_per_picking[move.picking_id].append((move, bom))
-                move.write(
-                    {
-                        "is_subcontract": True,
-                    }
-                )
                 move_to_not_merge |= move
             for picking, subcontract_details in subcontract_details_per_picking.items():
                 picking._subcontracted_produce_unbuild(subcontract_details)
