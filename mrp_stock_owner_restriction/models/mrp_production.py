@@ -16,3 +16,8 @@ class MrpProduction(models.Model):
         help="Produced products will be assigned to this owner.",
     )
     owner_restriction = fields.Selection(related="picking_type_id.owner_restriction")
+
+    def write(self, vals):
+        if "owner_id" in vals:
+            self.move_line_raw_ids.unlink()
+        return super().write(vals)
