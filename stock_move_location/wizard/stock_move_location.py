@@ -157,7 +157,7 @@ class StockMoveLocationWizard(models.TransientModel):
     def _get_locations_domain(self):
         return [
             "|",
-            ("company_id", "=", self.env.user.company_id.id),
+            ("company_id", "=", self.env.company.id),
             ("company_id", "=", False),
         ]
 
@@ -216,6 +216,8 @@ class StockMoveLocationWizard(models.TransientModel):
                     line.product_id,
                     line.origin_location_id,
                     lot_id=line.lot_id,
+                    package_id=line.package_id,
+                    owner_id=line.owner_id,
                     strict=False,
                 )
                 move._update_reserved_quantity(
@@ -223,6 +225,8 @@ class StockMoveLocationWizard(models.TransientModel):
                     available_quantity,
                     line.origin_location_id,
                     lot_id=line.lot_id,
+                    package_id=line.package_id,
+                    owner_id=line.owner_id,
                     strict=False,
                 )
             # Force the state to be assigned, instead of _action_assign,
