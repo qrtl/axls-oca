@@ -10,7 +10,9 @@ from odoo import api, fields, models
 class StockMove(models.Model):
     _inherit = "stock.move"
 
-    restrict_partner_id = fields.Many2one(compute="_compute_restrict_partner_id", store=True)
+    restrict_partner_id = fields.Many2one(
+        compute="_compute_restrict_partner_id", store=True
+    )
 
     @api.depends("picking_type_id.owner_restriction", "picking_id.owner_id")
     def _compute_restrict_partner_id(self):
@@ -20,6 +22,7 @@ class StockMove(models.Model):
             else:
                 move.restrict_partner_id = False
 
+    # pylint: disable=W8110
     @api.depends("restrict_partner_id")
     def _compute_forecast_information(self):
         for move in self:

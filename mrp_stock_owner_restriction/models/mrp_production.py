@@ -19,5 +19,8 @@ class MrpProduction(models.Model):
 
     def write(self, vals):
         if "owner_id" in vals:
-            self.move_line_raw_ids.unlink()
+            for production in self:
+                owner_restriction = self.picking_type_id.owner_restriction
+                if owner_restriction in ("unassigned_owner", "picking_partner"):
+                    production.move_line_raw_ids.unlink()
         return super().write(vals)
