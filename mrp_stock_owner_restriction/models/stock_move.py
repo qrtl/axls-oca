@@ -1,11 +1,16 @@
 # Copyright 2023 Quartile Limited
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
-from odoo import models
+from odoo import api, models
 
 
 class StockMove(models.Model):
     _inherit = "stock.move"
+
+    # Just to add a trigger
+    @api.depends("production_id.owner_id")
+    def _compute_restrict_partner_id(self):
+        return super()._compute_restrict_partner_id()
 
     def _get_mo_to_unbuild(self):
         self.ensure_one()
