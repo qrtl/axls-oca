@@ -9,10 +9,9 @@ class PurchaseOrderLine(models.Model):
     _inherit = "purchase.order.line"
 
     def write(self, values):
-        res = super(PurchaseOrderLine, self).write(values)
-        lines = self.filtered(lambda l: l.order_id.state == "purchase")
+        res = super().write(values)
         if "analytic_distribution" in values:
-            for line in lines:
+            for line in self:
                 moves = line.move_ids.filtered(
                     lambda s: s.state not in ("cancel", "done")
                     and s.product_id == line.product_id
