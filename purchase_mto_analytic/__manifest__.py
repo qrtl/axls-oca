@@ -6,7 +6,7 @@
     "author": "Quartile Limited, Odoo Community Association (OCA)",
     "category": "Purchase Management",
     "website": "https://github.com/OCA/purchase-workflow",
-    "depends": ["purchase_analytic", "stock_picking_analytic"],
+    "depends": ["purchase_analytic", "stock_analytic"],
     "license": "AGPL-3",
     "installable": True,
 }

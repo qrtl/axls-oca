@@ -1,1 +1,2 @@
-This module propagates the analytic_distribution from a source document to new Purchase Order created by the stock rule.
+This module propagates the analytic distribution from the origin stock move to the
+purchase order newly created by the stock rule.
