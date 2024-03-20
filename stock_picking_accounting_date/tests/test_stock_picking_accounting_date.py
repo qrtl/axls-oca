@@ -9,9 +9,17 @@ from odoo.addons.stock_account.tests.test_stockvaluation import TestStockValuati
 class TestStockValuation(TestStockValuation):
     def setUp(self):
         super(TestStockValuation, self).setUp()
+        self.product = self.env["product.product"].create(
+            {
+                "name": "Test Product",
+                "type": "product",
+                "categ_id": self.env.ref("product.product_category_all").id,
+                "standard_price": 100.00,
+            }
+        )
+        self.product.categ_id.property_valuation = "real_time"
 
     def test_stock_picking_accounting_date(self):
-        self.product1.categ_id.property_cost_method = "fifo"
         accounting_date = date.today() + timedelta(days=1)
         receipt = self.env["stock.picking"].create(
             {
@@ -29,7 +37,7 @@ class TestStockValuation(TestStockValuation):
                 "name": "10 in",
                 "location_id": self.supplier_location.id,
                 "location_dest_id": self.stock_location.id,
-                "product_id": self.product1.id,
+                "product_id": self.product.id,
                 "product_uom": self.uom_unit.id,
                 "product_uom_qty": 10.0,
                 "price_unit": 10,
@@ -38,7 +46,7 @@ class TestStockValuation(TestStockValuation):
                         0,
                         0,
                         {
-                            "product_id": self.product1.id,
+                            "product_id": self.product.id,
                             "location_id": self.supplier_location.id,
                             "location_dest_id": self.stock_location.id,
                             "product_uom_id": self.uom_unit.id,
@@ -50,6 +58,28 @@ class TestStockValuation(TestStockValuation):
         )
         move._action_confirm()
         move._action_done()
+        self.assertEqual(
+            move.stock_valuation_layer_ids.account_move_id.date, accounting_date
+        )
+
+    def test_inventory_adjustment_accounting_date(self):
+        self.env["stock.quant"]._update_available_quantity(
+            self.product, self.stock_location, 100
+        )
+        inventory_quant = self.env["stock.quant"].search(
+            [
+                ("location_id", "=", self.stock_location.id),
+                ("product_id", "=", self.product.id),
+            ]
+        )
+        inventory_quant.inventory_quantity = 200.00
+        accounting_date = date.today() + timedelta(days=3)
+        inventory_quant.accounting_date = accounting_date
+        inventory_quant.action_apply_inventory()
+        move = self.env["stock.move"].search(
+            [("product_id", "=", self.product.id), ("is_inventory", "=", True)],
+            limit=1,
+        )
         self.assertEqual(
             move.stock_valuation_layer_ids.account_move_id.date, accounting_date
         )

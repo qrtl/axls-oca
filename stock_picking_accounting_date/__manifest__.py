@@ -1,8 +1,8 @@
-# Copyright 2023 Quartile Limited
+# Copyright 2023-2024 Quartile Limited
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 {
     "name": "Stock Picking Accounting Date",
-    "version": "16.0.1.0.0",
+    "version": "16.0.1.0.1",
     "author": "Quartile Limited, Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/stock-logistics-warehouse",
     "category": "Stock",
