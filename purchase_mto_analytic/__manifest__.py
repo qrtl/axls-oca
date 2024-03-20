@@ -8,6 +8,5 @@
     "website": "https://github.com/OCA/purchase-workflow",
     "depends": ["purchase_analytic", "stock_analytic"],
     "license": "AGPL-3",
-    "data": ["views/res_company_views.xml"],
     "installable": True,
 }

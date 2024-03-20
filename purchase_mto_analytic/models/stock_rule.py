@@ -25,8 +25,6 @@ class StockRule(models.Model):
 
     def _make_po_get_domain(self, company_id, values, partner):
         domain = super()._make_po_get_domain(company_id, values, partner)
-        if not self.company_id.split_po_analytic_distribution:
-            return domain
         if values.get("analytic_distribution"):
             # Fetch matching record IDs based on dynamic analytic_distribution
             matching_record_id = self._find_matching_analytic_distribution_record(
