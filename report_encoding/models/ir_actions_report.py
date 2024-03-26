@@ -15,3 +15,8 @@ class IrActionReport(models.Model):
         help="If nothing is selected, CSV export will fail with an error message when "
         "there is a character that fail to be encoded.",
     )
+    show_encoding = fields.Boolean(compute="_compute_show_encoding")
+
+    def _compute_show_encoding(self):
+        for report in self:
+            report.show_encoding = False

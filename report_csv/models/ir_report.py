@@ -11,6 +11,13 @@ class ReportAction(models.Model):
         selection_add=[("csv", "csv")], ondelete={"csv": "set default"}
     )
 
+    def _compute_show_encoding(self):
+        super()._compute_show_encoding()
+        for report in self:
+            if report.report_type == "csv":
+                report.show_encoding = True
+        return
+
     @api.model
     def _render_csv(self, report_ref, docids, data):
         report_sudo = self._get_report(report_ref)
