@@ -8,9 +8,8 @@
     "category": "Reporting",
     "version": "16.0.1.0.0",
     "license": "AGPL-3",
-    "depends": ["base", "web"],
+    "depends": ["base", "web", "report_encoding"],
     "demo": ["demo/report.xml"],
-    "data": ["views/ir_actions_views.xml"],
     "assets": {
         "web.assets_backend": [
             "report_csv/static/src/js/report/qwebactionmanager.esm.js"
