@@ -18,6 +18,14 @@ class PurchaseOrder(models.Model):
         "incoming stock picking.",
     )
 
+    def button_confirm(self):
+        # TODO: Double-check if this is necessary
+        for order in self:
+            if order.owner_id:
+                order = order.with_context(owner_id=order.owner_id.id)
+            super(PurchaseOrder, order).button_confirm()
+        return True
+
     def _prepare_picking(self):
         res = super()._prepare_picking()
         res["owner_id"] = self.owner_id.id
