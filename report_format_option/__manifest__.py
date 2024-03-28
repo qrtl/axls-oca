@@ -1,7 +1,7 @@
 # Copyright 2024 Quartile Limited
 # License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl.html).
 {
-    "name": "Report Encoding",
+    "name": "Report Format Option",
     "author": "Quartile Limited, Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/reporting-engine",
     "category": "Reporting",
