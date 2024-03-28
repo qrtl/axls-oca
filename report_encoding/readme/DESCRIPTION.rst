@@ -1,1 +1,0 @@
-This module adds an encoding option for reports. It is not meant to stand alone; instead, it will be used as a base for other reporting-related modules (e.g., report_csv).

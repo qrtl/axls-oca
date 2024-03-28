@@ -16,6 +16,9 @@ class IrActionReport(models.Model):
         "there is a character that fail to be encoded.",
     )
     show_encoding = fields.Boolean(compute="_compute_show_encoding")
+    line_ending = fields.Char(
+        help="Line ending to be applied to the generated report. e.g., crlf"
+    )
 
     def _compute_show_encoding(self):
         for report in self:
