@@ -12,6 +12,6 @@ location.
 
 This sequence does not represent the reality where production is done before transfer, and therefore
 the above Step 1 would fail with negative stock in the subcontractor location, when stock_no_negative
-is installed, unless the prodcut/location is configured to allow negative stock.
+is installed, unless the product/location is configured to allow negative stock.
 
 ref. https://github.com/odoo/odoo/pull/75065
