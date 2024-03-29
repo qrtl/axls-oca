@@ -36,11 +36,11 @@ jobs:
       matrix:
         include:
           - container: ghcr.io/oca/oca-ci/py3.10-ocb16.0:latest
-            include: "stock_owner_restriction,mrp_stock_owner_restriction,purchase_order_owner,mrp_subcontracting_owner,crm_exception,analytic_distribution_widget_remove_save,analytic_mixin_analytic_account,auditlog,base_country_state_translatable,base_custom_filter,base_exception,base_view_inheritance_extension"
+            include: "stock_owner_restriction,mrp_stock_owner_restriction,purchase_order_owner,mrp_subcontracting_owner,crm_exception"
             name: test with OCB
             makepot: "false"
           - container: ghcr.io/oca/oca-ci/py3.10-ocb16.0:latest
-            exclude: "stock_owner_restriction,mrp_stock_owner_restriction,purchase_order_owner,mrp_subcontracting_owner,crm_exception,analytic_distribution_widget_remove_save,analytic_mixin_analytic_account,auditlog,base_country_state_translatable,base_custom_filter,base_exception,base_view_inheritance_extension"
+            exclude: "stock_owner_restriction,mrp_stock_owner_restriction,purchase_order_owner,mrp_subcontracting_owner,crm_exception"
             name: test with OCB
             makepot: "false"
     services:
