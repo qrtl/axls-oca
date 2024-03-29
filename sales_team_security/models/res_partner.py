@@ -3,7 +3,7 @@
 # License AGPL-3 - See http://www.gnu.org/licenses/agpl-3.0.html
 
 from lxml import etree
-
+import logging
 from odoo import api, fields, models
 
 
@@ -69,6 +69,9 @@ class ResPartner(models.Model):
             childrens = record.child_ids.filtered(
                 lambda x: x.type in {"invoice", "delivery"}
             )
+            logging.info("Childeren______________")
+            logging.info(childrens.ids)
+            logging.info(followers.ids)
             (childrens + record).message_subscribe(partner_ids=followers.ids)
 
     @api.model_create_multi
