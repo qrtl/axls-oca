@@ -92,6 +92,8 @@ class ResPartner(models.Model):
             for record in self.filtered("user_id"):
                 record._remove_key_followers(record.user_id.partner_id)
         result = super().write(vals)
+        logging.info("write____________")
         if "user_id" in vals or vals.get("type") in {"invoice", "delivery"}:
+            logging.info("Type++++++++++++++++++")
             self._add_followers_from_salesmans()
         return result
