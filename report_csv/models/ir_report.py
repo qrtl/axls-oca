@@ -24,9 +24,11 @@ class ReportAction(models.Model):
         report_model_name = "report.%s" % report_sudo.report_name
         report_model = self.env[report_model_name]
         return report_model.with_context(
-            active_model=report_sudo.model,
-            encoding=self.encoding,
-            encode_error_handling=self.encode_error_handling,
+            **{
+                "active_model": report_sudo.model,
+                "encoding": self.encoding,
+                "encode_error_handling": self.encode_error_handling,
+            }
         ).create_csv_report(docids, data)
 
     @api.model

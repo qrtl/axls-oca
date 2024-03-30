@@ -15,7 +15,11 @@
                     name="encode_error_handling"
                     attrs="{'invisible': [('encoding', '=', False)]}"
                 />
-                <field name="line_ending" />
+                <field name="show_line_ending" invisible="1" />
+                <field
+                    name="line_ending"
+                    attrs="{'invisible': [('show_line_ending', '=', False)]}"
+                />
             </xpath>
         </field>
     </record>
