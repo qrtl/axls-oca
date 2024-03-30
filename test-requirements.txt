@@ -1,1 +1,2 @@
 odoo_test_helper
+odoo-addon-stock-picking-line-sequence @ git+https://github.com/qrtl/axls-oca.git@refs/pull/120/head#subdirectory=setup/stock_picking_line_sequence
