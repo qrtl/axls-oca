@@ -36,12 +36,12 @@ jobs:
       matrix:
         include:
           - container: ghcr.io/oca/oca-ci/py3.10-ocb16.0:latest
-            # sales_team_security: incompatible with crm (alias_id)
-            include: "stock_owner_restriction,mrp_stock_owner_restriction,purchase_order_owner,mrp_subcontracting_owner,sales_team_security,auditlog"
+            # sales_team_security: incompatible with auditlog (for some reason)
+            include: "stock_owner_restriction,mrp_stock_owner_restriction,purchase_order_owner,mrp_subcontracting_owner,sales_team_security"
             name: test with OCB
             makepot: "false"
           - container: ghcr.io/oca/oca-ci/py3.10-ocb16.0:latest
-            exclude: "stock_owner_restriction,mrp_stock_owner_restriction,purchase_order_owner,mrp_subcontracting_owner,sales_team_security,auditlog"
+            exclude: "stock_owner_restriction,mrp_stock_owner_restriction,purchase_order_owner,mrp_subcontracting_owner,sales_team_security"
             name: test with OCB
             makepot: "false"
     services:
