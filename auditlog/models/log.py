@@ -2,6 +2,7 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
+from odoo.tools.safe_eval import safe_eval
 
 
 class AuditlogLog(models.Model):
@@ -52,12 +53,11 @@ class AuditlogLog(models.Model):
 
     def show_res_ids(self):
         self.ensure_one()
-        res_ids = list(map(int, self.res_ids.strip("[]").split(", ")))
         return {
             "type": "ir.actions.act_window",
             "view_mode": "tree,form",
             "res_model": self.model_id.model,
-            "domain": [("id", "in", res_ids)],
+            "domain": [("id", "in", safe_eval(self.res_ids))],
         }
 
 

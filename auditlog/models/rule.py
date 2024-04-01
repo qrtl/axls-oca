@@ -283,7 +283,7 @@ class AuditlogRule(models.Model):
         )
 
     def _make_export_data(self):
-        """Instanciate an export method that log its calls."""
+        """Instanciate a create method that log its calls."""
         self.ensure_one()
         log_type = self.log_type
         users_to_exclude = self.mapped("users_to_exclude_ids")
@@ -427,6 +427,9 @@ class AuditlogRule(models.Model):
                 .with_context(prefetch_fields=False)
                 .read(fields_list)
             }
+            # invalidate_recordset method must be called with existing fields
+            if self._name == "res.users":
+                vals = self._remove_reified_groups(vals)
             # Prevent the cache of modified fields from being poisoned by
             # x2many items inaccessible to the current user.
             self.invalidate_recordset(vals.keys())
@@ -564,7 +567,7 @@ class AuditlogRule(models.Model):
             name = model_model.browse(res_id).name_get()
             res_name = name and name[0] and name[0][1]
 
-            log_vals = {**vals, "name": res_name, "res_id": res_id}
+            log_vals = {**vals, **{"name": res_name, "res_id": res_id}}
             log = log_model.create(log_vals)
             diff = DictDiffer(
                 new_values.get(res_id, EMPTY_DICT), old_values.get(res_id, EMPTY_DICT)

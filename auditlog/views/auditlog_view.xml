@@ -172,7 +172,11 @@
                                 readonly="1"
                                 attrs="{'invisible': [('res_ids', '=', False)]}"
                             />
-                            <field name="name" readonly="1" />
+                            <field
+                                name="name"
+                                readonly="1"
+                                attrs="{'invisible': [('name', '=', False)]}"
+                            />
                         </group>
                     </group>
                     <group string="HTTP Context">
