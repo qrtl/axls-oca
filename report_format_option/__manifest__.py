@@ -9,5 +9,6 @@
     "license": "LGPL-3",
     "depends": ["base"],
     "data": ["views/ir_actions_report_views.xml"],
+    "demo": ["demo/report_demo.xml"],
     "installable": True,
 }
