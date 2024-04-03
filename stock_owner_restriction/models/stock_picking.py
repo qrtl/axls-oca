@@ -11,6 +11,8 @@ class StockPicking(models.Model):
 
     def write(self, vals):
         if "owner_id" in vals:
-            # TODO: Do this only when owner_id is different to restricted_partner_id of moves
-            self.move_line_ids.unlink()
+            for pick in self:
+                owner_restriction = pick.picking_type_id.owner_restriction
+                if owner_restriction in ("unassigned_owner", "picking_partner"):
+                    pick.move_line_ids.unlink()
         return super().write(vals)

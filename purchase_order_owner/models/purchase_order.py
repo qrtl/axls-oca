@@ -19,10 +19,14 @@ class PurchaseOrder(models.Model):
     )
 
     def button_confirm(self):
-        # TODO: Double-check if this is necessary
+        """For subcontracting orders
+
+        Without this, the downstream component demands may misjudge the available
+        quantities with owner consideration.
+        """
+        # TODO: Double-check if the logic is optimal
         for order in self:
-            if order.owner_id:
-                order = order.with_context(owner_id=order.owner_id.id)
+            order = order.with_context(owner_id=order.owner_id.id)
             super(PurchaseOrder, order).button_confirm()
         return True
 
