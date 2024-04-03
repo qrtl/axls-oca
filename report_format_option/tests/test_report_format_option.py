@@ -45,7 +45,6 @@ class TestReportFormatOption(TransactionCase):
         content, content_type = self.demo_report._render_qweb_text(
             self.demo_report.id, [self.partner.id]
         )
-
         # Decode content to verify Japanese characters are correctly handled
         content_str = content.decode("shift_jis")
         self.assertIn(
