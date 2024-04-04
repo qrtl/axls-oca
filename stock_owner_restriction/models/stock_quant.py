@@ -41,18 +41,14 @@ class StockQuant(models.Model):
         if not owner_in_domain:
             restricted_owner = self.env.context.get("force_restricted_owner_id", None)
             if restricted_owner is not None:
-                domain = expression.AND(
-                    [
-                        domain,
-                        [
-                            (
-                                "owner_id",
-                                "=",
-                                restricted_owner and restricted_owner.id or False,
-                            )
-                        ],
-                    ]
-                )
+                owner_domain = [
+                    (
+                        "owner_id",
+                        "=",
+                        restricted_owner and restricted_owner.id or False,
+                    ),
+                ]
+                domain = expression.AND([domain, owner_domain])
         return super(StockQuant, self).read_group(
             domain,
             fields,

@@ -1,14 +1,36 @@
 # Copyright 2020 Carlos Dauden - Tecnativa
 # Copyright 2020 Sergio Teruel - Tecnativa
-# Copyright 2023 Quartile Limited
+# Copyright 2023-2024 Quartile Limited
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 from collections import defaultdict
 
-from odoo import models
+from odoo import api, fields, models
 
 
 class StockMove(models.Model):
     _inherit = "stock.move"
+
+    restrict_partner_id = fields.Many2one(
+        compute="_compute_restrict_partner_id",
+        store=True,
+        readonly=False,
+    )
+
+    @api.depends("picking_type_id", "picking_id.owner_id", "move_dest_ids")
+    def _compute_restrict_partner_id(self):
+        for move in self:
+            if move.picking_type_id.owner_restriction == "picking_partner":
+                move.restrict_partner_id = move._get_owner_for_assign()
+            else:
+                move.restrict_partner_id = False
+
+    # pylint: disable=W8110
+    @api.depends("restrict_partner_id")
+    def _compute_forecast_information(self):
+        for move in self:
+            if move.picking_type_id.owner_restriction == "picking_partner":
+                move = move.with_context(owner_id=move.restrict_partner_id.id)
+            super(StockMove, move)._compute_forecast_information()
 
     def _get_moves_to_assign_with_standard_behavior(self):
         """This method is expected to be extended as necessary. e.g. you may not want to
@@ -32,10 +54,11 @@ class StockMove(models.Model):
         needs to be applied to moves in manufacturing orders.
         """
         self.ensure_one()
-        partner = self.move_dest_ids.picking_id.owner_id
-        if not partner:
-            partner = self.picking_id.owner_id or self.picking_id.partner_id
-        return partner
+        return (
+            self.move_dest_ids.restrict_partner_id
+            or self.picking_id.owner_id
+            or self.picking_id.partner_id
+        )
 
     def _action_assign(self, force_qty=False):
         # Split moves by picking type owner behavior restriction to process
