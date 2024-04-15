@@ -9,7 +9,7 @@ class StockRule(models.Model):
 
     def _make_po_get_domain(self, company_id, values, partner):
         """Consider analytic distribution at purchase order level.
-        
+
         This logic is expected to be moved into another custom module (or made
         configurable in this module, if that makes sense...) once the migration PR is
         merged in the OCA repo.
