@@ -4,7 +4,7 @@
 import logging
 
 from odoo import _, api, fields, models
-from odoo.exceptions import UserError
+from odoo.exceptions import UserError, ValidationError
 from odoo.tools.config import config
 
 _logger = logging.getLogger(__name__)
@@ -15,13 +15,29 @@ class ApiConfig(models.Model):
     _description = "API Configuration"
 
     name = fields.Char(required=True)
+    code = fields.Char(required=True)
     base_url = fields.Char(string="URL")
     header_api_key_string = fields.Char(
         required=True,
         help="This string will be used as the key in the API header for the API key value.",
     )
-    external_system = fields.Selection([])
+    external_system = fields.Selection(
+        [("generic", "Generic")], default="generic", required=True
+    )
     api_key = fields.Char(string="Api Key or Token", required=True)
+
+    @api.constrains("code")
+    def _check_code(self):
+        for record in self:
+            duplicate_rec = self.search(
+                [
+                    ("code", "=", record.code),
+                    ("id", "!=", record.id),
+                ],
+                limit=1,
+            )
+            if duplicate_rec:
+                raise ValidationError(_("Code must be unique."))
 
     def _current_env_encrypted_key_exists(self):
         env = self.env["encrypted.data"]._retrieve_env()
@@ -37,17 +53,21 @@ class ApiConfig(models.Model):
             encrypted_data = self.env["encrypted.data"]._encrypt_data(
                 vals["api_key"], env
             )
-            name = self._name
+            unique_id = vals.get("code")  # Assuming 'code' is unique
             existing_data = (
                 self.env["encrypted.data"]
                 .sudo()
-                .search([("name", "=", name), ("environment", "=", env)])
+                .search([("name", "=", unique_id), ("environment", "=", env)])
             )
             if existing_data:
                 existing_data.write({"encrypted_data": encrypted_data})
             else:
                 self.env["encrypted.data"].sudo().create(
-                    {"name": name, "environment": env, "encrypted_data": encrypted_data}
+                    {
+                        "name": unique_id,
+                        "environment": env,
+                        "encrypted_data": encrypted_data,
+                    }
                 )
             vals["api_key"] = encrypted_data
         return super(ApiConfig, self).create(vals)
@@ -58,10 +78,11 @@ class ApiConfig(models.Model):
             encrypted_data = self.env["encrypted.data"]._encrypt_data(
                 vals["api_key"], env
             )
+            unique_id = self.code  # Using the code of the current record
             existing_data = (
                 self.env["encrypted.data"]
                 .sudo()
-                .search([("name", "=", self._name), ("environment", "=", env)])
+                .search([("name", "=", unique_id), ("environment", "=", env)])
             )
             existing_data.write({"encrypted_data": encrypted_data})
             vals["api_key"] = encrypted_data
@@ -74,7 +95,7 @@ class ApiConfig(models.Model):
             encrypted_data = (
                 self.env["encrypted.data"]
                 .sudo()
-                .search([("name", "=", self._name), ("environment", "=", env)])
+                .search([("name", "=", self.code), ("environment", "=", env)])
             )
             return encrypted_data._decrypt_data(env)
         else:

@@ -19,6 +19,7 @@
                         <field name="name" />
                         <field name="base_url" />
                         <field name="external_system" />
+                        <field name="code" />
                         <field name="header_api_key_string" />
                         <field name="api_key" password="True" />
                     </group>

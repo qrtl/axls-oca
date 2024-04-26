@@ -11,10 +11,17 @@ class APICallMixin(models.AbstractModel):
     _description = "API Call Mixin"
 
     def make_api_call(
-        self, external_system, endpoint, params=None, json=None, http_method="get"
+        self,
+        code,
+        external_system="generic",
+        endpoint=None,
+        custom_headers=None,
+        params=None,
+        json=None,
+        http_method="get",
     ):
         config = self.env["api.config"].search(
-            [("external_system", "=", external_system)], limit=1
+            [("external_system", "=", external_system), ("code", "=", code)], limit=1
         )
         if not config:
             return
@@ -22,6 +29,8 @@ class APICallMixin(models.AbstractModel):
         headers = {
             "Content-Type": "application/json",
         }
+        if custom_headers:
+            headers.update(custom_headers)
         if config.api_key:
             decrypted_api_key = config.get_decrypted_api_key()
             headers[config.header_api_key_string] = decrypted_api_key
