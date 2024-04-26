@@ -1,5 +1,5 @@
 # Copyright 2023 Quartile Limited
-# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
+# License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl).
 
 import requests
 
@@ -9,6 +9,9 @@ from odoo import models
 class APICallMixin(models.AbstractModel):
     _name = "api.call.mixin"
     _description = "API Call Mixin"
+
+    def get_api_key(self, config):
+        return config.api_key
 
     def make_api_call(
         self,
@@ -31,9 +34,8 @@ class APICallMixin(models.AbstractModel):
         }
         if custom_headers:
             headers.update(custom_headers)
-        if config.api_key:
-            decrypted_api_key = config.get_decrypted_api_key()
-            headers[config.header_api_key_string] = decrypted_api_key
+        api_key = self.get_api_key(config)
+        headers[config.header_api_key_string] = api_key
         function = getattr(requests, http_method)
         kwargs = {"headers": headers, "params": params}
         if json:

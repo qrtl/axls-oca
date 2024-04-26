@@ -7,7 +7,7 @@
     "website": "https://www.quartile.co",
     "author": "Quartile Limited, Odoo Community Association (OCA)",
     "license": "LGPL-3",
-    "depends": ["base", "data_encryption"],
+    "depends": ["base"],
     "data": [
         "security/ir.model.access.csv",
         "views/api_config_views.xml",
