@@ -27,40 +27,45 @@ class ApiConfig(models.Model):
             encrypted_data = self.env["encrypted.data"]._encrypt_data(
                 vals["api_key"], env
             )
-            unique_id = vals.get("code")  # Assuming 'code' is unique
-            existing_data = (
-                self.env["encrypted.data"]
-                .sudo()
-                .search([("name", "=", unique_id), ("environment", "=", env)])
+            code = vals.get("code")
+            self.env["encrypted.data"].sudo().create(
+                {
+                    "name": code,
+                    "environment": env,
+                    "encrypted_data": encrypted_data,
+                }
             )
-            if existing_data:
-                existing_data.write({"encrypted_data": encrypted_data})
-            else:
-                self.env["encrypted.data"].sudo().create(
-                    {
-                        "name": unique_id,
-                        "environment": env,
-                        "encrypted_data": encrypted_data,
-                    }
-                )
             vals["api_key"] = encrypted_data
         return super(ApiConfig, self).create(vals)
 
     def write(self, vals):
+        env = self.env["encrypted.data"]._retrieve_env()
+        code = self.code
+        existing_data = (
+            self.env["encrypted.data"]
+            .sudo()
+            .search([("name", "=", code), ("environment", "=", env)])
+        )
+        if "code" in vals:
+            existing_data.write({"name": vals["code"]})
         if "api_key" in vals:
-            env = self.env["encrypted.data"]._retrieve_env()
             encrypted_data = self.env["encrypted.data"]._encrypt_data(
                 vals["api_key"], env
             )
-            unique_id = self.code  # Using the code of the current record
-            existing_data = (
+            vals["api_key"] = encrypted_data
+            existing_data.write({"encrypted_data": encrypted_data})
+        return super(ApiConfig, self).write(vals)
+
+    def unlink(self):
+        for rec in self:
+            env = self.env["encrypted.data"]._retrieve_env()
+            encrypt_rec = (
                 self.env["encrypted.data"]
                 .sudo()
-                .search([("name", "=", unique_id), ("environment", "=", env)])
+                .search([("name", "=", rec.code), ("environment", "=", env)])
             )
-            existing_data.write({"encrypted_data": encrypted_data})
-            vals["api_key"] = encrypted_data
-        return super(ApiConfig, self).write(vals)
+            encrypt_rec.unlink()
+        return super().unlink()
 
     def get_decrypted_api_key(self):
         self.ensure_one()
