@@ -29,28 +29,21 @@ class APICallMixin(models.AbstractModel):
         )
         if not config:
             raise UserError(_("API configuration not found."))
-
         url = f"{config.base_url}/{endpoint}"
         headers = {"Content-Type": "application/json"}
         if custom_headers:
             headers.update(custom_headers)
-
         api_key = self.get_api_key(config)
         headers[config.header_api_key_string] = api_key
-
         function = getattr(requests, http_method)
         kwargs = {"headers": headers, "params": params}
         if json:
             kwargs["json"] = json
-
         try:
             response = function(url, **kwargs)
             response.raise_for_status()  # Raises HTTPError for bad responses
         except requests.exceptions.HTTPError as e:
-            # Handles HTTP errors, you can log this error or handle it differently if needed
             raise UserError(f"HTTP Error: {str(e)}") from e
         except requests.exceptions.RequestException as e:
-            # Handles other requests issues like connectivity, timeout, etc.
             raise UserError(f"Request Error: {str(e)}") from e
-
         return response
