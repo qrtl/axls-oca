@@ -1,10 +1,14 @@
 # Copyright 2023 Quartile Limited
 # License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl).
 
+import logging
+
 import requests
 
 from odoo import _, models
 from odoo.exceptions import UserError
+
+_logger = logging.getLogger(__name__)
 
 
 class APICallMixin(models.AbstractModel):
@@ -42,6 +46,9 @@ class APICallMixin(models.AbstractModel):
         try:
             response = function(url, **kwargs)
             response.raise_for_status()  # Raises HTTPError for bad responses
+            _logger.info(
+                f"Successful API call to {url}. Response status code: {response.status_code}"
+            )
         except requests.exceptions.HTTPError as e:
             raise UserError(f"HTTP Error: {str(e)}") from e
         except requests.exceptions.RequestException as e:
