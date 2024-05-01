@@ -13,11 +13,14 @@ Base API Connection
 .. |badge1| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
     :target: https://odoo-community.org/page/development-status
     :alt: Beta
-.. |badge2| image:: https://img.shields.io/badge/github-qrtl%2Faxls--private-lightgray.png?logo=github
+.. |badge2| image:: https://img.shields.io/badge/licence-LGPL--3-blue.png
+    :target: http://www.gnu.org/licenses/lgpl-3.0-standalone.html
+    :alt: License: LGPL-3
+.. |badge3| image:: https://img.shields.io/badge/github-qrtl%2Faxls--private-lightgray.png?logo=github
     :target: https://github.com/qrtl/axls-private/tree/16.0/base_api_connection
     :alt: qrtl/axls-private
 
-|badge1| |badge2|
+|badge1| |badge2| |badge3|
 
 This module facilitates API connections between Odoo and other system.
 It is not usable on its own; rather, it is a low-level module intended
@@ -33,7 +36,8 @@ Configuration
 =============
 
 1. Go to Settings > API Connection > API Configuration.
-2. Create an API configuration record with 'base_url' and 'x_api_key'.
+2. Create an API configuration record with 'base_url',
+   'header_api_key_string', 'code', and 'x_api_key'.
 
 This module depends on the 'data_encryption' OCA
 module(https://github.com/OCA/server-env/blob/16.0/data_encryption).
