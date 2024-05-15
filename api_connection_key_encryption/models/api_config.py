@@ -46,7 +46,7 @@ class ApiConfig(models.Model):
                 vals["api_key"], env
             )
             vals["api_key"] = encrypted_key
-            rec.encrypted_data_ids.write({"encrypted_data": encrypted_key})
+            rec.sudo().encrypted_data_ids.write({"encrypted_data": encrypted_key})
         return super().write(vals)
 
     def get_decrypted_api_key(self):
