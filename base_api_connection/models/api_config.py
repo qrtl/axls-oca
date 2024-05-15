@@ -1,12 +1,8 @@
 # Copyright 2023 Quartile Limited
 # License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl).
 
-import logging
-
 from odoo import _, api, fields, models
 from odoo.exceptions import ValidationError
-
-_logger = logging.getLogger(__name__)
 
 
 class ApiConfig(models.Model):
