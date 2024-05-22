@@ -13,8 +13,12 @@ class TestStockPickingLocationCheck(TransactionCase):
         cls.stock_location = cls.env.ref("stock.stock_location_stock")
         cls.shelf1_location = cls.env.ref("stock.stock_location_components")
         cls.shelf2_location = cls.env.ref("stock.stock_location_14")
-        cls.refrigerator_small_location = cls.env.ref(
-            "stock.location_refrigerator_small"
+        cls.refrigerator_location = cls.env["stock.location"].create(
+            {
+                "name": "Refrigerator Location",
+                "location_id": cls.shelf2_location.id,  # Set shelf2 as the parent
+                "usage": "internal",
+            }
         )
         cls.other_location = cls.env["stock.location"].create(
             {"name": "Other Location"}
@@ -54,8 +58,7 @@ class TestStockPickingLocationCheck(TransactionCase):
         self.assertEqual(picking_internal.location_dest_id.id, self.stock_location.id)
         return picking_internal
 
-    def test_location_discrepancy(self):
-        # Test with discrepancy source location
+    def test_location_inconsistency(self):
         picking_internal = self.create_picking(
             self.other_location.id, self.shelf2_location.id
         )
@@ -63,7 +66,8 @@ class TestStockPickingLocationCheck(TransactionCase):
             picking_internal.button_validate()
         picking_internal.allow_location_inconsistency = True
         picking_internal.button_validate()
-        # Test with discrepancy destination location
+
+    def test_dest_location_inconsistency(self):
         picking_internal = self.create_picking(
             self.shelf1_location.id, self.other_location.id
         )
@@ -71,8 +75,9 @@ class TestStockPickingLocationCheck(TransactionCase):
             picking_internal.button_validate()
         picking_internal.allow_location_inconsistency = True
         picking_internal.button_validate()
-        # Test with child of shelf2 location
+
+    def test_hierarchical_location(self):
         picking_internal = self.create_picking(
-            self.shelf1_location.id, self.refrigerator_small_location.id
+            self.shelf1_location.id, self.refrigerator_location.id
         )
         picking_internal.button_validate()
