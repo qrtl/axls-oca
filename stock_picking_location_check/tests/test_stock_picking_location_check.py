@@ -61,7 +61,8 @@ class TestStockPickingLocationCheck(TransactionCase):
             }
         )
 
-    def test_incoming_location_discrepancy_allowed(self):
+    def test_location_discrepancies(self):
+        # Test incoming picking with discrepancy allowed
         self.picking_in.allow_location_inconsistency = True
         self.create_move_and_move_line(
             self.picking_in,
@@ -72,7 +73,8 @@ class TestStockPickingLocationCheck(TransactionCase):
         )
         self.picking_in.button_validate()
 
-    def test_incoming_location_discrepancy_not_allowed(self):
+        # Test incoming picking with discrepancy not allowed
+        self.picking_in.allow_location_inconsistency = False
         self.create_move_and_move_line(
             self.picking_in,
             self.product,
@@ -83,7 +85,7 @@ class TestStockPickingLocationCheck(TransactionCase):
         with self.assertRaises(UserError):
             self.picking_in.button_validate()
 
-    def test_outgoing_location_discrepancy_allowed(self):
+        # Test outgoing picking with discrepancy allowed
         self.picking_out.allow_location_inconsistency = True
         self.create_move_and_move_line(
             self.picking_out,
@@ -94,7 +96,8 @@ class TestStockPickingLocationCheck(TransactionCase):
         )
         self.picking_out.button_validate()
 
-    def test_outgoing_location_discrepancy_not_allowed(self):
+        # Test outgoing picking with discrepancy not allowed
+        self.picking_out.allow_location_inconsistency = False
         self.create_move_and_move_line(
             self.picking_out,
             self.product,
