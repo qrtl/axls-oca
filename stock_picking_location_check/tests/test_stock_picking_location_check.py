@@ -9,75 +9,66 @@ class TestStockPickingLocationCheck(TransactionCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.product = cls.env["product.product"].create({"name": "Test Product"})
-        cls.stock_location = cls.env.ref("stock.stock_location_stock")
-        cls.shelf1_location = cls.env.ref("stock.stock_location_components")
-        cls.shelf2_location = cls.env.ref("stock.stock_location_14")
-        cls.refrigerator_location = cls.env["stock.location"].create(
+        cls.product = cls.env["product.product"].create({"name": "test product"})
+        cls.location1 = cls._create_location(cls, "location 1")
+        cls.location2 = cls._create_location(cls, "location 2")
+        cls.location2_1 = cls._create_location(cls, "location 2-1", cls.location2)
+        cls.location2_1_1 = cls._create_location(cls, "location 2-1-1", cls.location2_1)
+        cls.location3 = cls._create_location(cls, "location 3")
+        cls.picking = cls.env["stock.picking"].create(
             {
-                "name": "Refrigerator Location",
-                "location_id": cls.shelf2_location.id,  # Set shelf2 as the parent
-                "usage": "internal",
+                "picking_type_id": cls.env.ref("stock.picking_type_internal").id,
+                "location_id": cls.location1.id,
+                "location_dest_id": cls.location2.id,
             }
         )
-        cls.other_location = cls.env["stock.location"].create(
-            {"name": "Other Location"}
-        )
-
-    def create_picking(self, location_id, location_dest_id):
-        picking_internal = self.env["stock.picking"].create(
+        cls.move = cls.env["stock.move"].create(
             {
-                "picking_type_id": self.env.ref("stock.picking_type_internal").id,
-                "allow_location_inconsistency": False,
-            }
-        )
-        move = self.env["stock.move"].create(
-            {
-                "name": self.product.name,
-                "product_id": self.product.id,
-                "product_uom": self.product.uom_id.id,
-                "location_id": location_id,
-                "location_dest_id": location_dest_id,
-                "picking_id": picking_internal.id,
+                "name": cls.product.name,
+                "product_id": cls.product.id,
+                "product_uom": cls.product.uom_id.id,
+                "location_id": cls.location1.id,
+                "location_dest_id": cls.location2.id,
+                "picking_id": cls.picking.id,
                 "product_uom_qty": 10,
                 "state": "assigned",
             }
         )
-        self.env["stock.move.line"].create(
+        cls.move_line = cls.env["stock.move.line"].create(
             {
-                "move_id": move.id,
-                "product_id": self.product.id,
-                "product_uom_id": self.product.uom_id.id,
-                "location_id": location_id,
-                "location_dest_id": location_dest_id,
-                "picking_id": picking_internal.id,
+                "move_id": cls.move.id,
+                "product_id": cls.product.id,
+                "product_uom_id": cls.product.uom_id.id,
+                "location_id": cls.location1.id,
+                "location_dest_id": cls.location2.id,
+                "picking_id": cls.picking.id,
                 "qty_done": 10,
             }
         )
-        self.assertEqual(picking_internal.location_id.id, self.stock_location.id)
-        self.assertEqual(picking_internal.location_dest_id.id, self.stock_location.id)
-        return picking_internal
 
-    def test_location_inconsistency(self):
-        picking_internal = self.create_picking(
-            self.other_location.id, self.shelf2_location.id
-        )
+    def _create_location(self, name, parent_location=None):
+        vals = {"name": name, "usage": "internal"}
+        if parent_location:
+            vals["location_id"] = parent_location.id
+        return self.env["stock.location"].create(vals)
+
+    def test_locations_no_inconsistency(self):
+        self.picking.button_validate()
+
+    def test_locations_no_inconsistency_recursive(self):
+        # Destination location of the move line is a grand child of that of the picking
+        self.move_line.location_dest_id = self.location2_1_1.id
+        self.picking.button_validate()
+
+    def test_locations_with_inconsistency(self):
+        # Make source locations inconsistent between picking and move line
+        self.picking.location_dest_id = self.location3
         with self.assertRaises(UserError):
-            picking_internal.button_validate()
-        picking_internal.allow_location_inconsistency = True
-        picking_internal.button_validate()
-
-    def test_dest_location_inconsistency(self):
-        picking_internal = self.create_picking(
-            self.shelf1_location.id, self.other_location.id
-        )
+            self.picking.button_validate()
+        self.picking.location_dest_id = self.location2
+        # Make destination locations inconsistent between picking and move line
+        self.picking.location_id = self.location3
         with self.assertRaises(UserError):
-            picking_internal.button_validate()
-        picking_internal.allow_location_inconsistency = True
-        picking_internal.button_validate()
-
-    def test_hierarchical_location(self):
-        picking_internal = self.create_picking(
-            self.shelf1_location.id, self.refrigerator_location.id
-        )
-        picking_internal.button_validate()
+            self.picking.button_validate()
+        self.picking.allow_location_inconsistency = True
+        self.picking.button_validate()
