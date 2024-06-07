@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-11-28 03:44+0000\n"
-"PO-Revision-Date: 2024-06-03 03:40+0000\n"
+"PO-Revision-Date: 2024-06-06 00:30+0000\n"
 "Last-Translator: Wang-TKurata <takahiko.kurata@axelspace.com>\n"
 "Language-Team: Japanese (https://www.transifex.com/oca/teams/23907/ja/)\n"
 "Language: ja\n"
@@ -368,7 +368,7 @@ msgstr "不正確"
 #: model_terms:ir.ui.view,arch_db:quality_control_oca.qc_inspection_form_view
 #: model_terms:ir.ui.view,arch_db:quality_control_oca.qc_inspection_line_search_view
 msgid "Inspection"
-msgstr "検査"
+msgstr "品質検査"
 
 #. module: quality_control_oca
 #: model:ir.model.fields,field_description:quality_control_oca.field_qc_inspection__inspection_lines
@@ -391,7 +391,7 @@ msgstr "検査番号"
 #: model:ir.ui.menu,name:quality_control_oca.qc_inspection_menu
 #: model:ir.ui.menu,name:quality_control_oca.qc_inspection_menu_parent
 msgid "Inspections"
-msgstr "検査"
+msgstr "品質検査"
 
 #. module: quality_control_oca
 #: model:ir.model.fields,field_description:quality_control_oca.field_qc_inspection__internal_notes
@@ -731,12 +731,12 @@ msgstr "品質検査トリガー"
 #. module: quality_control_oca
 #: model:ir.model.fields.selection,name:quality_control_oca.selection__qc_inspection__state__failed
 msgid "Quality failed"
-msgstr "品質不可"
+msgstr "不合格"
 
 #. module: quality_control_oca
 #: model:ir.model.fields.selection,name:quality_control_oca.selection__qc_inspection__state__success
 msgid "Quality success"
-msgstr "品質可"
+msgstr "合格"
 
 #. module: quality_control_oca
 #: model:ir.model.fields.selection,name:quality_control_oca.selection__qc_inspection_line__question_type__quantitative
@@ -752,7 +752,7 @@ msgstr "定量値"
 #. module: quality_control_oca
 #: model:ir.model.fields,field_description:quality_control_oca.field_qc_inspection__qty
 msgid "Quantity"
-msgstr "量"
+msgstr "数量"
 
 #. module: quality_control_oca
 #: model:ir.model.fields,field_description:quality_control_oca.field_qc_inspection_line__name

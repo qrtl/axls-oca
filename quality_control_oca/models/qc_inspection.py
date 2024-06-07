@@ -5,6 +5,8 @@
 # Copyright 2017 Simone Rubino - Agile Business Group
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
+from datetime import datetime
+
 from odoo import _, api, exceptions, fields, models
 from odoo.tools import formatLang
 
@@ -43,12 +45,14 @@ class QcInspection(models.Model):
         copy=False,
     )
     date = fields.Datetime(
+        string="Plan Date",
         required=True,
         readonly=True,
         copy=False,
         default=fields.Datetime.now,
         states={"draft": [("readonly", False)]},
     )
+    date_done = fields.Datetime("Completion Date", readonly=True)
     object_id = fields.Reference(
         string="Reference",
         selection="object_selection_values",
@@ -118,6 +122,14 @@ class QcInspection(models.Model):
             if vals.get("name", "/") == "/":
                 vals["name"] = self.env["ir.sequence"].next_by_code("qc.inspection")
         return super().create(vals)
+
+    def write(self, vals):
+        if "state" in vals:
+            if vals["state"] in ["success", "failed"]:
+                vals["date_done"] = datetime.now()
+            elif vals["state"] == "draft":
+                vals["date_done"] = False
+        return super().write(vals)
 
     def unlink(self):
         for inspection in self:
