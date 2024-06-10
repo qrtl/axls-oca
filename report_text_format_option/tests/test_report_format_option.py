@@ -10,7 +10,7 @@ class TestReportFormatOption(TransactionCase):
     def setUpClass(cls):
         super(TestReportFormatOption, cls).setUpClass()
         cls.demo_report = cls.env.ref(
-            "report_format_option.action_report_demo"
+            "report_text_format_option.action_report_demo"
         ).with_context(lang="en_US")
         cls.partner = cls.env["res.partner"].create({"name": "Odoo Test Partner"})
 
@@ -40,7 +40,7 @@ class TestReportFormatOption(TransactionCase):
 
     def test_report_encoding_shiftjis(self):
         # Example: Testing with Shift-JIS encoding for Japanese characters
-        self.demo_report.encoding = "shift_jis"
+        self.demo_report.text_encoding = "shift_jis"
         self.partner.name = "テストパートナー"
         content, content_type = self.demo_report._render_qweb_text(
             self.demo_report.id, [self.partner.id]
