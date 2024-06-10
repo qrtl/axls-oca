@@ -66,6 +66,9 @@ class TestQualityControlStockOca(TestQualityControlOcaBase):
             (0, 0, {"trigger": self.trigger.id, "test": self.test.id})
         ]
         self.picking1._action_done()
+        # Just so _compute_count_inspections() is triggered
+        # pylint: disable=W0104
+        self.picking1.qc_inspections_ids
         self.assertEqual(
             self.picking1.created_inspections, 1, "Only one inspection must be created"
         )
@@ -85,6 +88,8 @@ class TestQualityControlStockOca(TestQualityControlOcaBase):
             (0, 0, {"trigger": self.trigger.id, "test": self.test.id})
         ]
         self.picking1._action_done()
+        # pylint: disable=W0104
+        self.picking1.qc_inspections_ids
         self.assertEqual(
             self.picking1.created_inspections, 1, "Only one inspection must be created"
         )
@@ -100,6 +105,8 @@ class TestQualityControlStockOca(TestQualityControlOcaBase):
             (0, 0, {"trigger": self.trigger.id, "test": self.test.id})
         ]
         self.picking1._action_done()
+        # pylint: disable=W0104
+        self.picking1.qc_inspections_ids
         self.assertEqual(
             self.picking1.created_inspections, 1, "Only one inspection must be created"
         )
@@ -123,6 +130,8 @@ class TestQualityControlStockOca(TestQualityControlOcaBase):
             )
         ]
         self.picking1._action_done()
+        # pylint: disable=W0104
+        self.picking1.qc_inspections_ids
         self.assertEqual(
             self.picking1.created_inspections, 1, "Only one inspection must be created"
         )
@@ -146,6 +155,8 @@ class TestQualityControlStockOca(TestQualityControlOcaBase):
             )
         ]
         self.picking1._action_done()
+        # pylint: disable=W0104
+        self.picking1.qc_inspections_ids
         self.assertEqual(
             self.picking1.created_inspections, 1, "Only one inspection must be created"
         )
@@ -169,6 +180,8 @@ class TestQualityControlStockOca(TestQualityControlOcaBase):
             )
         ]
         self.picking1._action_done()
+        # pylint: disable=W0104
+        self.picking1.qc_inspections_ids
         self.assertEqual(
             self.picking1.created_inspections, 1, "Only one inspection must be created"
         )
@@ -192,6 +205,8 @@ class TestQualityControlStockOca(TestQualityControlOcaBase):
             )
         ]
         self.picking1._action_done()
+        # pylint: disable=W0104
+        self.picking1.qc_inspections_ids
         self.assertEqual(
             self.picking1.created_inspections, 0, "No inspection must be created"
         )
@@ -210,6 +225,8 @@ class TestQualityControlStockOca(TestQualityControlOcaBase):
             )
         ]
         self.picking1._action_done()
+        # pylint: disable=W0104
+        self.picking1.qc_inspections_ids
         self.assertEqual(
             self.picking1.created_inspections, 0, "No inspection must be created"
         )
@@ -228,6 +245,8 @@ class TestQualityControlStockOca(TestQualityControlOcaBase):
             )
         ]
         self.picking1._action_done()
+        # pylint: disable=W0104
+        self.picking1.qc_inspections_ids
         self.assertEqual(
             self.picking1.created_inspections, 0, "No inspection must be created"
         )
@@ -241,6 +260,8 @@ class TestQualityControlStockOca(TestQualityControlOcaBase):
             (0, 0, {"trigger": self.trigger.id, "test": self.test.id})
         ]
         self.picking1._action_done()
+        # pylint: disable=W0104
+        self.picking1.qc_inspections_ids
         self.assertEqual(
             self.picking1.created_inspections, 1, "Only one inspection must be created"
         )

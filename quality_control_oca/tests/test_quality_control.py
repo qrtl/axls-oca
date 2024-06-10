@@ -171,7 +171,7 @@ class TestQualityControlOca(TestQualityControlOcaBase):
         ]:
             trigger_lines = trigger_lines.union(
                 self.env[model].get_trigger_line_for_product(
-                    self.qc_trigger, self.product
+                    self.qc_trigger, ["after"], self.product
                 )
             )
         self.assertEqual(len(trigger_lines), 3)

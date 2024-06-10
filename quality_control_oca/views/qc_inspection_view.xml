@@ -148,7 +148,15 @@
                 <field name="date" optional="show" />
                 <field name="date_done" optional="show" />
                 <field name="success" />
-                <field name="state" />
+                <field
+                    name="state"
+                    widget="badge"
+                    decoration-info="state == 'plan'"
+                    decoration-warning="state == 'waiting'"
+                    decoration-success="state == 'success'"
+                    decoration-danger="state == 'failed'"
+                    decoration-muted="state == 'canceled'"
+                />
             </tree>
         </field>
     </record>

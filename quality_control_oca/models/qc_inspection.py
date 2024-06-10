@@ -50,7 +50,11 @@ class QcInspection(models.Model):
         readonly=True,
         copy=False,
         default=fields.Datetime.now,
-        states={"draft": [("readonly", False)]},
+        states={
+            "plan": [("readonly", False)],
+            "draft": [("readonly", False)],
+            "ready": [("readonly", False)],
+        },
     )
     date_done = fields.Datetime("Completion Date", readonly=True)
     object_id = fields.Reference(
@@ -80,6 +84,7 @@ class QcInspection(models.Model):
     )
     state = fields.Selection(
         [
+            ("plan", "Plan"),
             ("draft", "Draft"),
             ("ready", "Ready"),
             ("waiting", "Waiting supervisor approval"),
@@ -196,7 +201,7 @@ class QcInspection(models.Model):
                 trigger_line.test, force_fill=force_fill
             )
 
-    def _make_inspection(self, object_ref, trigger_line):
+    def _make_inspection(self, object_ref, trigger_line, date=None):
         """Overridable hook method for creating inspection from test.
         :param object_ref: Object instance
         :param trigger_line: Trigger line instance
@@ -205,6 +210,8 @@ class QcInspection(models.Model):
         inspection = self.create(
             self._prepare_inspection_header(object_ref, trigger_line)
         )
+        if date:
+            inspection.date = date
         inspection.set_test(trigger_line)
         return inspection
 
@@ -218,7 +225,7 @@ class QcInspection(models.Model):
             "object_id": object_ref
             and "{},{}".format(object_ref._name, object_ref.id)
             or False,
-            "state": "ready",
+            "state": trigger_line.timing == "plan_ahead" and "plan" or "ready",
             "test": trigger_line.test.id,
             "user": trigger_line.user.id,
             "auto_generated": True,
@@ -256,6 +263,12 @@ class QcInspection(models.Model):
                 # Fill with a value inside the interval
                 data["quantitative_value"] = (line.min_value + line.max_value) * 0.5
         return data
+
+    def _get_existing_inspections(self, records):
+        reference_vals = []
+        for rec in records:
+            reference_vals.append(",".join([rec._name, str(rec.id)]))
+        return self.sudo().search([("object_id", "in", reference_vals)])
 
 
 class QcInspectionLine(models.Model):
