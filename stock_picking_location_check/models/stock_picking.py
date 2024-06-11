@@ -40,8 +40,8 @@ class StockPicking(models.Model):
                 for line in pick.move_line_ids
                 if not getattr(line.move_id, "is_subcontract", False)
             ]
-            self._check_location_consistency(pick.location_id, line_source_locations)
-            self._check_location_consistency(
+            pick._check_location_consistency(pick.location_id, line_source_locations)
+            pick._check_location_consistency(
                 pick.location_dest_id, pick.move_line_ids.location_dest_id
             )
         return super()._action_done()
