@@ -11,17 +11,17 @@ class ApiConfig(models.Model):
 
     encrypted_data_ids = fields.One2many("encrypted.data", "api_config_id")
 
-    def _current_env_encrypted_key_exists(self):
+    def _get_env_with_encryption_key(self):
         env = self.env["encrypted.data"]._retrieve_env()
         key_name = "encryption_key_%s" % env
-        return bool(config.get(key_name))
+        if not bool(config.get(key_name)):
+            raise UserError(_("Encryption key not found for the current environment."))
+        return env
 
     @api.model
     def create(self, vals):
-        if not self._current_env_encrypted_key_exists():
-            raise UserError(_("Encryption key not found for the current environment."))
         if "api_key" in vals and vals["api_key"]:
-            env = self.env["encrypted.data"]._retrieve_env()
+            env = self._get_env_with_encryption_key()
             encrypted_data = self.env["encrypted.data"]._encrypt_data(
                 vals["api_key"], env
             )
@@ -51,8 +51,5 @@ class ApiConfig(models.Model):
 
     def get_decrypted_api_key(self):
         self.ensure_one()
-        if self._current_env_encrypted_key_exists():
-            env = self.env["encrypted.data"]._retrieve_env()
-            return self.sudo().encrypted_data_ids._decrypt_data(env)
-        else:
-            raise UserError(_("Encryption key not found for the current environment."))
+        env = self._get_env_with_encryption_key()
+        return self.sudo().encrypted_data_ids._decrypt_data(env)
