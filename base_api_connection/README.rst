@@ -19,7 +19,7 @@ Base API Connection
 
 |badge1| |badge2| |badge3| 
 
-This module facilitates API connections between Odoo and other system. It is not usable on its own; rather, it is a low-level module intended to serve as a base for others. An example of such a module is 'project_task_capture'.
+This module facilitates API connections between Odoo and other web services. It is not usable on its own; rather, it is a low-level module intended to serve as a base for others. An example of such a module is 'project_task_capture'.
 
 **Table of contents**
 

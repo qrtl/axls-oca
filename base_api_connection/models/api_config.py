@@ -10,7 +10,11 @@ class ApiConfig(models.Model):
     _description = "API Configuration"
 
     name = fields.Char(required=True)
-    code = fields.Char(required=True)
+    code = fields.Char(
+        required=True,
+        help="Expected to act as an identifier of the API configuration "
+        "record along with External System.",
+    )
     base_url = fields.Char(string="URL")
     header_api_key_string = fields.Char(
         required=True,
@@ -24,12 +28,8 @@ class ApiConfig(models.Model):
     @api.constrains("code")
     def _check_code(self):
         for record in self:
-            duplicate_rec = self.search(
-                [
-                    ("code", "=", record.code),
-                    ("id", "!=", record.id),
-                ],
-                limit=1,
+            existing_rec = self.search(
+                [("code", "=", record.code), ("id", "!=", record.id)],
             )
-            if duplicate_rec:
+            if existing_rec:
                 raise ValidationError(_("Code must be unique."))
