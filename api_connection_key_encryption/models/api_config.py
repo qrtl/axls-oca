@@ -40,7 +40,7 @@ class ApiConfig(models.Model):
     def write(self, vals):
         if "api_key" not in vals:
             return super().write(vals)
-        env = self.env["encrypted.data"]._retrieve_env()
+        env = self._get_env_with_encryption_key()
         for rec in self:
             encrypted_key = self.env["encrypted.data"]._encrypt_data(
                 vals["api_key"], env
