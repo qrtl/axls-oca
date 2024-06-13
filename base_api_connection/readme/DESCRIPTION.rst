@@ -1,0 +1,1 @@
+This module facilitates API connections between Odoo and other web services. It is not usable on its own; rather, it is a low-level module intended to serve as a base for others. An example of such a module is 'project_task_capture'.
