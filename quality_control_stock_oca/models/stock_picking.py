@@ -61,11 +61,6 @@ class StockPicking(models.Model):
         :param: timings: list of timings among 'before', 'after' and 'plan_ahead'
         """
         self.ensure_one()
-        qc_trigger = (
-            self.env["qc.trigger"]
-            .sudo()
-            .search([("picking_type_id", "=", self.picking_type_id.id)])
-        )
         moves_with_inspections = self.env["stock.move"]
         existing_inspections = self.env["qc.inspection"]._get_existing_inspections(
             self.move_ids
@@ -74,13 +69,7 @@ class StockPicking(models.Model):
             inspection.onchange_object_id()
             moves_with_inspections += inspection.object_id
         for operation in self.move_ids - moves_with_inspections:
-            operation.trigger_inspection(qc_trigger, timings, self.partner_id)
-
-    def action_confirm(self):
-        res = super().action_confirm()
-        for picking in self:
-            picking.trigger_inspections(["before", "plan_ahead"])
-        return res
+            operation.trigger_inspection(timings, self.partner_id)
 
     def action_cancel(self):
         res = super().action_cancel()
@@ -93,4 +82,10 @@ class StockPicking(models.Model):
         plan_inspections.write({"state": "ready", "date": fields.Datetime.now()})
         for picking in self:
             picking.trigger_inspections(["after"])
+        return res
+
+    def _create_backorder(self):
+        res = super()._create_backorder()
+        # To re-allocate backorder moves to the new backorder picking
+        self.qc_inspections_ids._compute_picking()
         return res

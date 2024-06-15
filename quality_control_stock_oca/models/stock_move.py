@@ -4,6 +4,8 @@
 # Copyright 2024 Quartile
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
+from functools import lru_cache
+
 from odoo import models
 
 from odoo.addons.quality_control_oca.models.qc_trigger_line import _filter_trigger_lines
@@ -20,10 +22,25 @@ class StockMove(models.Model):
             existing_inspections.write({"date": vals.get("date")})
         return super().write(vals)
 
-    def trigger_inspection(self, qc_trigger, timings, partner=False):
+    def _get_partner_for_trigger_line(self):
+        return self.picking_id.partner_id
+
+    def trigger_inspection(self, timings, partner=False):
+        @lru_cache()
+        def get_qc_trigger():
+            return (
+                self.env["qc.trigger"]
+                .sudo()
+                .search([("picking_type_id", "=", self.picking_type_id.id)])
+            )
+
         self.ensure_one()
         inspection_model = self.env["qc.inspection"].sudo()
-        partner = partner if qc_trigger.partner_selectable else False
+        qc_trigger = get_qc_trigger()
+        if qc_trigger.partner_selectable:
+            partner = partner or self._get_partner_for_trigger_line()
+        else:
+            partner = False
         trigger_lines = set()
         for model in [
             "qc.trigger.product_category_line",
@@ -43,3 +60,9 @@ class StockMove(models.Model):
                 # To pass scheduled date to the generated inspection
                 date = self.date
             inspection_model._make_inspection(self, trigger_line, date=date)
+
+    def _action_confirm(self, merge=True, merge_into=False):
+        res = super()._action_confirm(merge=merge, merge_into=merge_into)
+        for move in self:
+            move.trigger_inspection(["before", "plan_ahead"])
+        return res
