@@ -78,7 +78,6 @@
                             <field name="product_id" />
                         </group>
                         <group>
-                            <field name="create_date" string="Create Date" />
                             <field name="date" />
                             <field name="date_done" />
                             <field name="success" />
@@ -144,7 +143,6 @@
                 <field name="test" />
                 <field name="qty" />
                 <field name="product_id" />
-                <field name="create_date" string="Create Date" optional="show" />
                 <field name="date" optional="show" />
                 <field name="date_done" optional="show" />
                 <field name="success" />

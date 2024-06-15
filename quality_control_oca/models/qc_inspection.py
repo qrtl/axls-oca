@@ -50,11 +50,7 @@ class QcInspection(models.Model):
         readonly=True,
         copy=False,
         default=fields.Datetime.now,
-        states={
-            "plan": [("readonly", False)],
-            "draft": [("readonly", False)],
-            "ready": [("readonly", False)],
-        },
+        states={"plan": [("readonly", False)], "draft": [("readonly", False)]},
     )
     date_done = fields.Datetime("Completion Date", readonly=True)
     object_id = fields.Reference(
