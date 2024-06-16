@@ -149,7 +149,7 @@
                 <field
                     name="state"
                     widget="badge"
-                    decoration-info="state == 'plan'"
+                    decoration-info="state == 'ready'"
                     decoration-warning="state == 'waiting'"
                     decoration-success="state == 'success'"
                     decoration-danger="state == 'failed'"
