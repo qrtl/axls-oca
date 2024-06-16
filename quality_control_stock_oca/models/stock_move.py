@@ -27,16 +27,19 @@ class StockMove(models.Model):
 
     def trigger_inspection(self, timings, partner=False):
         @lru_cache()
-        def get_qc_trigger():
+        def get_qc_trigger(picking_type):
             return (
                 self.env["qc.trigger"]
                 .sudo()
-                .search([("picking_type_id", "=", self.picking_type_id.id)])
+                .search([("picking_type_id", "=", picking_type.id)])
             )
 
         self.ensure_one()
+        # To avoid CacheMiss error from tests of other modules
+        if "picking_type_id" not in self._cache:
+            return
         inspection_model = self.env["qc.inspection"].sudo()
-        qc_trigger = get_qc_trigger()
+        qc_trigger = get_qc_trigger(self.picking_type_id)
         if qc_trigger.partner_selectable:
             partner = partner or self._get_partner_for_trigger_line()
         else:
