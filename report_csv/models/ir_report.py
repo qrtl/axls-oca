@@ -10,13 +10,14 @@ class ReportAction(models.Model):
     report_type = fields.Selection(
         selection_add=[("csv", "csv")], ondelete={"csv": "set default"}
     )
-
-    def _compute_show_encoding(self):
-        super()._compute_show_encoding()
-        for report in self:
-            if report.report_type == "csv":
-                report.show_encoding = True
-        return
+    encoding = fields.Char(
+        help="Encoding to be applied to the generated CSV file. e.g. cp932"
+    )
+    encode_error_handling = fields.Selection(
+        selection=[("ignore", "Ignore"), ("replace", "Replace")],
+        help="If nothing is selected, CSV export will fail with an error message when "
+        "there is a character that fail to be encoded.",
+    )
 
     @api.model
     def _render_csv(self, report_ref, docids, data):
