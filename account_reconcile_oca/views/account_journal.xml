@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<!-- Copyright 2022 CreuBlanca
+<!-- Copyright 2023 Dixmit
      License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
 <odoo>
 
@@ -13,6 +13,11 @@
                     name="reconcile_mode"
                     attrs="{'required': [('type', 'in', ('bank', 'cash'))], 'invisible': [('type', 'not in', ('bank', 'cash'))]}"
                     options="{'no_quick_create': True}"
+                    groups="account.group_account_readonly"
+                />
+                <field
+                    name="reconcile_aggregate"
+                    attrs="{'invisible': [('type','not in', ['bank', 'cash'])]}"
                     groups="account.group_account_readonly"
                 />
             </field>
