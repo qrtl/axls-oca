@@ -34,6 +34,10 @@ class ProductProduct(models.Model):
         ]
         return candidates_domain
 
+    def _get_candidates(self, company):
+        candidates_domain = self._get_candidates_domain(company)
+        return self.env["stock.valuation.layer"].sudo().search(candidates_domain)
+
     def _price_updateable(self, new_standard_price=False):
         self.ensure_one()
         return new_standard_price and self.cost_method == "fifo"

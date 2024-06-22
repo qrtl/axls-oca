@@ -22,8 +22,7 @@ def post_load_hook():
         # to value `quantity`.
         qty_to_take_on_candidates = quantity
         # START HOOK Search Candidates
-        candidates_domain = self._get_candidates_domain(company)
-        candidates = self.env["stock.valuation.layer"].sudo().search(candidates_domain)
+        candidates = self._get_candidates(company)
         # END HOOK Search Candidates
         new_standard_price = 0
         tmp_value = 0  # to accumulate the value taken on the candidates
@@ -336,6 +335,8 @@ def post_load_hook():
                     or move.name
                 )
             svl_vals["description"] += svl_vals.pop("rounding_adjustment", "")
+            # TODO: Find the right way to handle this.
+            svl_vals.pop("taken_data")
             svl_vals_list.append(svl_vals)
         return self.env["stock.valuation.layer"].sudo().create(svl_vals_list)
 
