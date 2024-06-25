@@ -35,9 +35,6 @@ class StockMove(models.Model):
             )
 
         self.ensure_one()
-        # To avoid CacheMiss error from tests of other modules
-        if "picking_type_id" not in self._cache:
-            return
         inspection_model = self.env["qc.inspection"].sudo()
         qc_trigger = get_qc_trigger(self.picking_type_id)
         if qc_trigger.partner_selectable:
@@ -65,7 +62,7 @@ class StockMove(models.Model):
             inspection_model._make_inspection(self, trigger_line, date=date)
 
     def _action_confirm(self, merge=True, merge_into=False):
-        res = super()._action_confirm(merge=merge, merge_into=merge_into)
-        for move in self:
+        moves = super()._action_confirm(merge=merge, merge_into=merge_into)
+        for move in moves:
             move.trigger_inspection(["before", "plan_ahead"])
-        return res
+        return moves
