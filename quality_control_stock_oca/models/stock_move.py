@@ -4,6 +4,8 @@
 # Copyright 2024 Quartile
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
+from functools import lru_cache
+
 from odoo import models
 
 from odoo.addons.quality_control_oca.models.qc_trigger_line import _filter_trigger_lines
@@ -24,16 +26,20 @@ class StockMove(models.Model):
         return self.picking_id.partner_id
 
     def trigger_inspection(self, timings, partner=False):
-        def get_qc_trigger():
+        @lru_cache()
+        def get_qc_trigger(picking_type):
             return (
                 self.env["qc.trigger"]
                 .sudo()
-                .search([("picking_type_id", "=", self.picking_type_id.id)])
+                .search([("picking_type_id", "=", picking_type.id)])
             )
 
         self.ensure_one()
+        # To avoid CacheMiss error from tests of other modules
+        if "picking_type_id" not in self._cache:
+            return
         inspection_model = self.env["qc.inspection"].sudo()
-        qc_trigger = get_qc_trigger()
+        qc_trigger = get_qc_trigger(self.picking_type_id)
         if qc_trigger.partner_selectable:
             partner = partner or self._get_partner_for_trigger_line()
         else:
@@ -59,7 +65,7 @@ class StockMove(models.Model):
             inspection_model._make_inspection(self, trigger_line, date=date)
 
     def _action_confirm(self, merge=True, merge_into=False):
-        moves = super()._action_confirm(merge=merge, merge_into=merge_into)
-        for move in moves:
+        res = super()._action_confirm(merge=merge, merge_into=merge_into)
+        for move in self:
             move.trigger_inspection(["before", "plan_ahead"])
-        return moves
+        return res
