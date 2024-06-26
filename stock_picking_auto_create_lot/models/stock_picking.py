@@ -20,7 +20,8 @@ class StockPicking(models.Model):
                 and x.product_id.auto_create_lot
             )
         )
-        lines.set_lot_auto()
+        for line in lines:
+            line.lot_name = line._get_lot_sequence()
 
     def _action_done(self):
         self._set_auto_lot()
