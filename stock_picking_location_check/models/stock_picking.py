@@ -1,6 +1,8 @@
 # Copyright 2024 Quartile Limited
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl)
 
+import logging
+
 from odoo import _, fields, models
 from odoo.exceptions import UserError
 
@@ -21,6 +23,8 @@ class StockPicking(models.Model):
 
     def _check_location_consistency(self, pick_location, line_locations):
         self.ensure_one()
+        logging.info(set(line_locations))
+        logging.info(self._get_child_location_ids(pick_location))
         if not set(line_locations).issubset(
             self._get_child_location_ids(pick_location)
         ):
@@ -41,7 +45,11 @@ class StockPicking(models.Model):
                 if not getattr(line.move_id, "is_subcontract", False)
             ]
             pick._check_location_consistency(pick.location_id, line_source_locations)
-            pick._check_location_consistency(
-                pick.location_dest_id, pick.move_line_ids.location_dest_id
-            )
+            if pick._check_immediate():
+                line_dest_locations = pick.move_line_ids.location_dest_id
+            else:
+                line_dest_locations = pick.move_line_ids.filtered(
+                    lambda line: line.qty_done > 0
+                ).mapped("location_dest_id")
+            pick._check_location_consistency(pick.location_dest_id, line_dest_locations)
         return super()._action_done()
