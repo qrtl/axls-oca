@@ -1,14 +1,16 @@
 # Copyright 2024 Quartile Limited
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
+from odoo.tests.common import TransactionCase
 
-from odoo.addons.stock_account.tests.test_stockvaluation import TestStockValuation
 
-
-class TestStockOwnerValued(TestStockValuation):
+class TestStockOwnerValued(TransactionCase):
     @classmethod
     def setUpClass(cls):
-        super(TestStockOwnerValued, cls).setUpClass()
+        super().setUpClass()
+        cls.supplier_location = cls.env.ref("stock.stock_location_suppliers")
+        cls.stock_location = cls.env.ref("stock.stock_location_stock")
+        cls.partner = cls.env["res.partner"].create({"name": "Test Partner"})
         cls.product = cls.env["product.product"].create(
             {
                 "name": "Test Product",
@@ -18,6 +20,12 @@ class TestStockOwnerValued(TestStockValuation):
             }
         )
         cls.product.categ_id.property_valuation = "real_time"
+        cls.owner1 = cls.env["res.partner"].create(
+            {
+                "name": "Owner 1",
+                "value_owner_inventory": False,
+            }
+        )
         cls.owner2 = cls.env["res.partner"].create(
             {
                 "name": "Owner 2",
@@ -42,7 +50,7 @@ class TestStockOwnerValued(TestStockValuation):
                 "location_id": self.supplier_location.id,
                 "location_dest_id": self.stock_location.id,
                 "product_id": self.product.id,
-                "product_uom": self.uom_unit.id,
+                "product_uom": self.product.uom_id.id,
                 "product_uom_qty": 10.0,
                 "price_unit": 10,
             }
