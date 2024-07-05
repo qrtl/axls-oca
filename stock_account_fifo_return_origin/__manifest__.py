@@ -5,7 +5,7 @@
     "name": "Stock Account FIFO Return Origin",
     "version": "16.0.1.0.0",
     "license": "AGPL-3",
-    "author": "Quartile Limited, Odoo Community Association (OCA)",
+    "author": "Quartile, Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/stock-logistics-workflow",
-    "depends": ["stock_account_product_run_fifo_hook"],
+    "depends": ["stock_account"],
 }

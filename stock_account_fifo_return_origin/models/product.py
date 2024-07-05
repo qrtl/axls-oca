@@ -7,8 +7,8 @@ from odoo import models
 class Product(models.Model):
     _inherit = "product.product"
 
-    def _get_candidates(self, company):
-        candidates = super()._get_candidates(company)
+    def _get_fifo_candidates(self, company):
+        candidates = super()._get_fifo_candidates(company)
         returned_moves = self._context.get("origin_returned_moves")
         if not returned_moves:
             return candidates
