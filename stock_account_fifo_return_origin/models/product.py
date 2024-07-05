@@ -12,8 +12,9 @@ class Product(models.Model):
         returned_moves = self._context.get("origin_returned_moves")
         if not returned_moves:
             return candidates
-        origin_svl = returned_moves.filtered(
-            lambda x: x.product_id == self
-        ).stock_valuation_layer_ids
+        returned_moves = returned_moves.filtered(lambda x: x.product_id == self)
+        origin_svl = returned_moves.stock_valuation_layer_ids.filtered(
+            lambda x: x.remaining_qty > 0.00
+        )
         candidates = origin_svl | candidates
         return candidates
