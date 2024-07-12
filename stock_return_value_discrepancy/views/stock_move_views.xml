@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_stock_move_form_inherit" model="ir.ui.view">
+        <field name="name">stock.move.form.inherit</field>
+        <field name="model">stock.move</field>
+        <field name="inherit_id" ref="stock.view_move_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='date']" position="after">
+                <group groups="account.group_account_invoice">
+                    <field name="has_return_value_discrepancy" />
+                    <field
+                        name="to_check_discrepancy"
+                        string="To Check"
+                        widget="boolean_toggle"
+                    />
+                </group>
+            </xpath>
+        </field>
+    </record>
+    <record id="view_move_tree" model="ir.ui.view">
+        <field name="name">stock.move.tree</field>
+        <field name="model">stock.move</field>
+        <field name="inherit_id" ref="stock.view_move_tree" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='company_id']" position="before">
+                <field
+                    name="has_return_value_discrepancy"
+                    groups="account.group_account_invoice"
+                    optional="show"
+                />
+                <field
+                    name="to_check_discrepancy"
+                    string="To Check"
+                    widget="boolean_toggle"
+                    groups="account.group_account_invoice"
+                    optional="show"
+                />
+            </xpath>
+        </field>
+    </record>
+    <record id="view_move_search_inherit" model="ir.ui.view">
+        <field name="name">stock.move.search.inherit</field>
+        <field name="model">stock.move</field>
+        <field name="inherit_id" ref="stock.view_move_search" />
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='inventory']" position="after">
+                <filter
+                    name="has_return_value_discrepancy"
+                    string="Return Value Discrepancy"
+                    domain="[('has_return_value_discrepancy','=',True)]"
+                />
+                <filter
+                    name="to_check_discrepancy"
+                    string="To Check Discrepancy"
+                    domain="[('to_check_discrepancy','=',True)]"
+                />
+                <filter
+                    name="discrepancy_checked"
+                    string="Discrepancy Checked"
+                    domain="[('has_return_value_discrepancy','=',True),('to_check_discrepancy','=',False)]"
+                />
+            </xpath>
+        </field>
+    </record>
+</odoo>

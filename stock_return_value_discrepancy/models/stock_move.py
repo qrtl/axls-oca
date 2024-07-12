@@ -1,4 +1,4 @@
-# Copyright 2023 Quartile (https://www.quartile.co)
+# Copyright 2024 Quartile (https://www.quartile.co)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 from odoo import fields, models
@@ -7,7 +7,8 @@ from odoo import fields, models
 class StockMove(models.Model):
     _inherit = "stock.move"
 
-    return_origin_svl_difference = fields.Boolean()
+    has_return_value_discrepancy = fields.Boolean()
+    to_check_discrepancy = fields.Boolean()
 
     def _action_done(self, cancel_backorder=False):
         moves = super()._action_done(cancel_backorder)
@@ -33,5 +34,6 @@ class StockMove(models.Model):
                 return_quantity = sum(return_move_svls.mapped("quantity"))
                 return_unit_cost = abs(return_value / return_quantity)
             if origin_unit_cost != return_unit_cost:
-                move.return_origin_svl_difference = True
+                move.has_return_value_discrepancy = True
+                move.to_check_discrepancy = True
         return moves
