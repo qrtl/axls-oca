@@ -159,3 +159,18 @@ class TestStockPickingAutoCreateLot(CommonStockPickingAutoCreateLot, Transaction
         immediate_wizard_form.process()
         # Confirm that validation is not blocked, for example, by create-backorder wizard.
         self.assertEqual(self.picking.state, "done")
+
+    def test_auto_create_lot_with_quantity_done(self):
+        self.picking.action_assign()
+        move = self.picking.move_ids.filtered(
+            lambda m: m.product_id == self.product_serial
+        )
+        self.assertEqual(move.product_uom_qty, 3.0)
+        self.assertFalse(move.display_assign_serial)
+        move.write({"quantity_done": 1.00})
+        self.picking._action_done()
+        # Search for serials
+        lot = self.env["stock.lot"].search(
+            [("product_id", "=", self.product_serial.id)]
+        )
+        self.assertEqual(len(lot), 1)
