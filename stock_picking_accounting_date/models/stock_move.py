@@ -50,23 +50,5 @@ class StockMove(models.Model):
     def _get_price_unit(self):
         """Set date for convert price unit multi currency."""
         self.ensure_one()
-        price_unit = super()._get_price_unit()
-        if (
-            hasattr(self, "purchase_line_id")
-            and self.accounting_date
-            and not self.origin_returned_move_id
-            and self.purchase_line_id
-            and self.product_id.id == self.purchase_line_id.product_id.id
-        ):
-            line = self.purchase_line_id
-            order = line.order_id
-            price_unit = line.price_unit
-            if order.currency_id != order.company_id.currency_id:
-                price_unit = order.currency_id._convert(
-                    price_unit,
-                    order.company_id.currency_id,
-                    order.company_id,
-                    self.accounting_date,
-                    round=False,
-                )
-        return price_unit
+        self = self.with_context(accounting_date=self.accounting_date)
+        return super()._get_price_unit()
