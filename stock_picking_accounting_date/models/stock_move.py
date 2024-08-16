@@ -48,7 +48,8 @@ class StockMove(models.Model):
         return am_vals
 
     def _get_price_unit(self):
-        """Set date for convert price unit multi currency."""
+        """Passes the accounting_date to be used in currency conversion for receipts
+        in foreign currency purchases."""
         self.ensure_one()
         self = self.with_context(accounting_date=self.accounting_date)
         return super()._get_price_unit()
