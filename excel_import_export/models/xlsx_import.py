@@ -11,7 +11,7 @@ import xlrd
 import xlwt
 
 from odoo import _, api, models
-from odoo.exceptions import ValidationError
+from odoo.exceptions import UserError, ValidationError
 from odoo.tools.float_utils import float_compare
 from odoo.tools.safe_eval import safe_eval
 
@@ -107,7 +107,16 @@ class XLSXImport(models.AbstractModel):
             # Use max_row, i.e., order_line[5], use it. Otherwise, use st.nrows
             max_end_row = st.nrows if max_row is False else (row + max_row)
             for idx in range(row, max_row and max_end_row or st.nrows):
-                cell_type = st.cell_type(idx, col)  # empty type = 0
+                try:
+                    cell_type = st.cell_type(idx, col)  # empty type = 0
+                except Exception as e:
+                    raise UserError(
+                        _(
+                            "There is an error when getting the value for %(field)s field "
+                            "from the sheet.\nError: %(error)s"
+                        )
+                        % {"field": _col, "error": e}
+                    ) from e
                 r_types = test_rows.get(idx, [])
                 r_types.append(cell_type)
                 test_rows[idx] = r_types
