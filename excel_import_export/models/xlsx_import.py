@@ -112,10 +112,11 @@ class XLSXImport(models.AbstractModel):
                 except Exception as e:
                     raise UserError(
                         _(
-                            "There is an error when getting the value for %(field)s field "
-                            "from the sheet.\nError: %(error)s"
+                            "The value for the '%(field)s' field is expected to be "
+                            "in cell %(cell_position)s, but no column exists for that "
+                            "cell in the Excel sheet. Please check your Excel file."
                         )
-                        % {"field": _col, "error": e}
+                        % {"field": _col, "cell_position": rc}
                     ) from e
                 r_types = test_rows.get(idx, [])
                 r_types.append(cell_type)
