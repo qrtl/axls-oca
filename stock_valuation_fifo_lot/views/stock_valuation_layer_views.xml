@@ -1,12 +1,19 @@
 <odoo>
-    <record id="view_inventory_valuation_search_inherit" model="ir.ui.view">
+    <record id="view_inventory_valuation_search" model="ir.ui.view">
         <field name="name">stock.valuation.layer.search</field>
         <field name="model">stock.valuation.layer</field>
         <field name="inherit_id" ref="stock_account.view_inventory_valuation_search" />
         <field name="arch" type="xml">
-            <field name="product_id" position="after">
+            <field name="product_tmpl_id" position="after">
                 <field name="lot_ids" />
             </field>
+            <filter name="group_by_product_id" position="after">
+                <filter
+                    string="Lot"
+                    name="group_by_lot"
+                    context="{'group_by': 'lot_ids'}"
+                />
+            </filter>
         </field>
     </record>
 
@@ -15,14 +22,8 @@
         <field name="model">stock.valuation.layer</field>
         <field name="inherit_id" ref="stock_account.stock_valuation_layer_tree" />
         <field name="arch" type="xml">
-            <field name="quantity" position="after">
-                <field name="remaining_qty" optional="show" />
-            </field>
             <field name="product_id" position="after">
                 <field name="lot_ids" widget="many2many_tags" />
-            </field>
-            <field name="value" position="after">
-                <field name="remaining_value" optional="show" />
             </field>
         </field>
     </record>
