@@ -11,3 +11,9 @@ class StockValuationLayer(models.Model):
         comodel_name="stock.lot",
         string="Lots/Serial Numbers",
     )
+
+    def _get_unconsumed_in_move_line(self, lot):
+        self.ensure_one()
+        return self.stock_move_id.move_line_ids.filtered(
+            lambda x: x.lot_id == lot and x.qty_remaining
+        )

@@ -1,32 +1,25 @@
 # Copyright 2023 Ecosoft Co., Ltd (https://ecosoft.co.th)
+# Copyright 2024 Quartile (https://www.quartile.co)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html)
 
-from odoo import models
+from odoo import Command, models
 
 
 class StockMove(models.Model):
     _inherit = "stock.move"
 
     def _prepare_common_svl_vals(self):
-        """
-        Prepare lots/serial numbers on stock valuation report
-        """
+        """Add lots/serials to the stock valuation layer."""
         self.ensure_one()
         res = super()._prepare_common_svl_vals()
-        res.update(
-            {
-                "lot_ids": [(6, 0, self.lot_ids.ids)],
-            }
-        )
+        res.update({"lot_ids": [Command.set(self.lot_ids.ids)]})
         return res
 
     def _create_out_svl(self, forced_quantity=None):
-        """
-        Send context current move to _create_out_svl function
-        """
+        """Set the move as a context for processing in _run_fifo()."""
         layers = self.env["stock.valuation.layer"]
         for move in self:
-            move = move.with_context(used_in_move_id=move.id)
+            move = move.with_context(fifo_move=move)
             layer = super(StockMove, move)._create_out_svl(
                 forced_quantity=forced_quantity
             )
@@ -34,65 +27,47 @@ class StockMove(models.Model):
         return layers
 
     def _create_in_svl(self, forced_quantity=None):
-        """
-        1. Check stock move - Multiple lot on the stock move is not
-           allowed for incoming transfer
-        2. Change product standard price to first available lot price
-        """
+        """Change product standard price to the first available lot price."""
         layers = self.env["stock.valuation.layer"]
         for move in self:
             layer = super(StockMove, move)._create_in_svl(
                 forced_quantity=forced_quantity
             )
-            # Calculate standard price (Sorted by lot created date)
-            if (
-                move.product_id.cost_method == "fifo"
-                and move.product_id.tracking != "none"
-            ):
-                all_candidates = move.product_id.with_context(
-                    sort_by="lot_create_date"
-                )._get_fifo_candidates(move.company_id)
-                if all_candidates:
-                    move.product_id.sudo().with_company(
-                        move.company_id.id
-                    ).with_context(
-                        disable_auto_svl=True
-                    ).standard_price = all_candidates[
-                        0
-                    ].unit_cost
+            product = move.product_id
+            # Calculate standard price (sorted by lot created date)
+            if product.cost_method != "fifo" or product.tracking == "none":
+                continue
+            product = product.with_context(sort_by="lot_create_date")
+            candidate = product._get_fifo_candidates(move.company_id)[:1]
+            if not candidate:
+                continue
+            product = product.with_company(move.company_id.id)
+            product = product.with_context(disable_auto_svl=True)
+            product.sudo().standard_price = candidate.unit_cost
             layers |= layer
         return layers
 
     def _get_price_unit(self):
-        """
-        No PO, Get price unit from lot price
+        """No PO (e.g. customer returns) and get the price unit from the last consumed
+        incoming move line for the lot.
         """
         self.ensure_one()
         if not self.company_id.use_lot_get_price_unit_fifo:
             return super()._get_price_unit()
-        if (
-            hasattr(self, "purchase_line_id")
-            and not self.purchase_line_id
-            and self.product_id.cost_method == "fifo"
-            and len(self.lot_ids) == 1
-        ):
-            candidate = (
-                self.env["stock.valuation.layer"]
-                .sudo()
-                .search(
-                    [
-                        ("product_id", "=", self.product_id.id),
-                        (
-                            "lot_ids",
-                            "in",
-                            self.lot_ids.ids,
-                        ),
-                        ("remaining_qty", ">", 0),
-                        ("company_id", "=", self.company_id.id),
-                    ],
-                    limit=1,
-                )
+        if hasattr(self, "purchase_line_id") and self.purchase_line_id:
+            return super()._get_price_unit()
+        if self.product_id.cost_method == "fifo" and len(self.lot_ids) == 1:
+            # Get the last consumed incoming move line.
+            move_line = self.env["stock.move.line"].search(
+                [
+                    ("product_id", "=", self.product_id.id),
+                    ("lot_id", "=", self.lot_ids.id),
+                    ("qty_consumed", ">", 0),
+                    ("company_id", "=", self.company_id.id),
+                ],
+                order="id desc",
+                limit=1,
             )
-            if candidate:
-                return candidate.remaining_value / candidate.remaining_qty
+            if move_line:
+                return move_line.cost_consumed / move_line.qty_consumed
         return super()._get_price_unit()
