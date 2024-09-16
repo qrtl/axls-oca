@@ -9,7 +9,7 @@ class StockValuationLayer(models.Model):
 
     lot_ids = fields.Many2many(
         comodel_name="stock.lot",
-        string="Lots/Serial Numbers",
+        string="Lots/Serials",
     )
 
     def _get_unconsumed_in_move_line(self, lot):

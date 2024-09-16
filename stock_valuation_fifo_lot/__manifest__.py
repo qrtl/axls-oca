@@ -14,8 +14,10 @@
     "data": [
         "views/res_config_settings_views.xml",
         "views/stock_move_line_views.xml",
+        "views/stock_package_level_views.xml",
         "views/stock_valuation_layer_views.xml",
     ],
     "installable": True,
+    "post_init_hook": "post_init_hook",
     "maintainers": ["newtratip"],
 }

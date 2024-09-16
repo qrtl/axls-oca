@@ -4,7 +4,8 @@
 
 from collections import defaultdict
 
-from odoo import models
+from odoo import _, models
+from odoo.exceptions import UserError
 from odoo.osv import expression
 from odoo.tools import float_is_zero
 
@@ -30,6 +31,15 @@ class ProductProduct(models.Model):
             for svl in all_candidates:
                 if not svl._get_unconsumed_in_move_line(fifo_lot):
                     all_candidates -= svl
+            if not all_candidates:
+                raise UserError(
+                    _(
+                        "There is no remaining balance for FIFO valuation for the "
+                        "lot/serial %s. Please select a Force FIFO Lot/Serial in the "
+                        "detailed operation line."
+                    )
+                    % fifo_lot.display_name
+                )
         sort_by = self.env.context.get("sort_by")
         if sort_by == "lot_create_date":
 
@@ -47,12 +57,19 @@ class ProductProduct(models.Model):
     def _get_qty_taken_on_candidate(self, qty_to_take_on_candidates, candidate):
         fifo_lot = self.env.context.get("fifo_lot")
         if fifo_lot:
-            candidate_move_line = candidate._get_unconsumed_in_move_line(fifo_lot)
-            qty_to_take_on_candidates = min(
-                qty_to_take_on_candidates, candidate_move_line.qty_remaining
+            candidate_ml = candidate._get_unconsumed_in_move_line(fifo_lot)
+            ml_uom = candidate_ml.product_uom_id
+            ml_qty_remaining = ml_uom._compute_quantity(
+                candidate_ml.qty_remaining, candidate_ml.product_id.uom_id
             )
-            candidate_move_line.qty_consumed += qty_to_take_on_candidates
-            candidate_move_line.cost_consumed += qty_to_take_on_candidates * (
+            qty_to_take_on_candidates = min(qty_to_take_on_candidates, ml_qty_remaining)
+            ml_qty_to_take_on_candidates = (
+                candidate_ml.product_id.uom_id._compute_quantity(
+                    qty_to_take_on_candidates, ml_uom
+                )
+            )
+            candidate_ml.qty_consumed += ml_qty_to_take_on_candidates
+            candidate_ml.value_consumed += ml_qty_to_take_on_candidates * (
                 candidate.remaining_value / candidate.remaining_qty
             )
         return super()._get_qty_taken_on_candidate(qty_to_take_on_candidates, candidate)
@@ -67,9 +84,10 @@ class ProductProduct(models.Model):
         correction_move_line = self.env.context.get("correction_move_line")
         move_lines = correction_move_line or fifo_move._get_out_move_lines()
         for ml in move_lines:
+            fifo_lot = ml.force_fifo_lot_id or ml.lot_id
             ml_qty = fifo_move.product_uom._compute_quantity(ml.qty_done, self.uom_id)
             fifo_qty = min(remaining_qty, ml_qty)
-            self = self.with_context(fifo_lot=ml.lot_id, fifo_qty=fifo_qty)
+            self = self.with_context(fifo_lot=fifo_lot, fifo_qty=fifo_qty)
             ml_fifo_vals = super()._run_fifo(fifo_qty, company)
             for key, value in ml_fifo_vals.items():
                 if key in ("remaining_qty", "value"):
