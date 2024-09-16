@@ -20,17 +20,16 @@ class StockMove(models.Model):
         layers = self.env["stock.valuation.layer"]
         for move in self:
             move = move.with_context(fifo_move=move)
-            layer = super(StockMove, move)._create_out_svl(
+            layers |= super(StockMove, move)._create_out_svl(
                 forced_quantity=forced_quantity
             )
-            layers |= layer
         return layers
 
     def _create_in_svl(self, forced_quantity=None):
         """Change product standard price to the first available lot price."""
         layers = self.env["stock.valuation.layer"]
         for move in self:
-            layer = super(StockMove, move)._create_in_svl(
+            layers |= super(StockMove, move)._create_in_svl(
                 forced_quantity=forced_quantity
             )
             product = move.product_id
@@ -44,7 +43,6 @@ class StockMove(models.Model):
             product = product.with_company(move.company_id.id)
             product = product.with_context(disable_auto_svl=True)
             product.sudo().standard_price = candidate.unit_cost
-            layers |= layer
         return layers
 
     def _get_price_unit(self):
@@ -52,7 +50,7 @@ class StockMove(models.Model):
         incoming move line for the lot.
         """
         self.ensure_one()
-        if not self.company_id.use_lot_get_price_unit_fifo:
+        if not self.company_id.use_lot_cost_for_new_stock:
             return super()._get_price_unit()
         if hasattr(self, "purchase_line_id") and self.purchase_line_id:
             return super()._get_price_unit()
@@ -69,5 +67,5 @@ class StockMove(models.Model):
                 limit=1,
             )
             if move_line:
-                return move_line.cost_consumed / move_line.qty_consumed
+                return move_line.value_consumed / move_line.qty_consumed
         return super()._get_price_unit()
