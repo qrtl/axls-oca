@@ -60,12 +60,17 @@ class StockMove(models.Model):
                 [
                     ("product_id", "=", self.product_id.id),
                     ("lot_id", "=", self.lot_ids.id),
+                    "|",
                     ("qty_consumed", ">", 0),
+                    ("qty_remaining", ">", 0),
                     ("company_id", "=", self.company_id.id),
                 ],
                 order="id desc",
                 limit=1,
             )
             if move_line:
-                return move_line.value_consumed / move_line.qty_consumed
+                if move_line.qty_consumed:
+                    return move_line.value_consumed / move_line.qty_consumed
+                else:
+                    return move_line.value_remaining / move_line.qty_remaining
         return super()._get_price_unit()
