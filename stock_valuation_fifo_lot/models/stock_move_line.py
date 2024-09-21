@@ -50,26 +50,29 @@ class StockMoveLine(models.Model):
                 "internal",
                 "transit",
             ) or rec.location_dest_usage not in ("internal", "transit"):
-                layers = rec.move_id.stock_valuation_layer_ids
-                remaining_qty_layers = layers.filtered(lambda l: l.remaining_qty > 0)
-                if not remaining_qty_layers:
-                    rec.qty_remaining = 0
-                    rec.value_remaining = 0
+                # Specifically for the case where qty_done of the outgoing
+                # stock move line with done state is reduced, which creates
+                # a positive stock valuation layer for the outgoing move.
+                layers = rec.move_id.stock_valuation_layer_ids.filtered(
+                    lambda l: l.remaining_qty > 0
+                )
+                if not layers:
+                    rec.qty_remaining = 0.0
+                    rec.value_remaining = 0.0
                     continue
-                rec.qty_remaining = rec.product_uom_id._compute_quantity(
-                    sum(remaining_qty_layers.mapped("remaining_qty")),
-                    rec.product_id.uom_id,
+                rec.qty_remaining = rec.product_id.uom_id._compute_quantity(
+                    sum(layers.mapped("remaining_qty")), rec.product_uom_id
                 )
                 rec.value_remaining = (
-                    sum(remaining_qty_layers.mapped("remaining_value"))
-                    * sum(remaining_qty_layers.mapped("remaining_qty"))
+                    sum(layers.mapped("remaining_value"))
+                    * sum(layers.mapped("remaining_qty"))
                     / rec.qty_remaining
                 )
                 continue
             rec.qty_remaining = rec.qty_done - rec.qty_consumed
             layers = rec.move_id.stock_valuation_layer_ids
-            remaining_qty = rec.product_uom_id._compute_quantity(
-                sum(layers.mapped("remaining_qty")), rec.product_id.uom_id
+            remaining_qty = rec.product_id.uom_id._compute_quantity(
+                sum(layers.mapped("remaining_qty")), rec.product_uom_id
             )
             if not remaining_qty:
                 rec.qty_remaining = 0

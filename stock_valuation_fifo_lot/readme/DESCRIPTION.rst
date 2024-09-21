@@ -44,7 +44,10 @@ Main UI Changes
     - 'Force FIFO Lot/Serial': Used when you are stuck by not being able to find a FIFO
       balance for the lot in an outgoing move line.
  
- .. [*] Updated only for valued incoming moves of the products with FIFO costing method.
+ .. [*] Updated only for valued incoming moves and outgoing moves where the qty_done has been 
+        reduced in the completed state for products with FIFO costing method. For these outgoing moves,
+        the system generates positive stock valuation layers with remaining_qty and remaining_value,
+        which need to be reflected in the related move line.
         The values here represent the theoretical figures in terms of FIFO costing,
         meaning that they may differ from the actual stock situation especially for
         those updated at the installation of this module.

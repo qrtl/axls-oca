@@ -85,7 +85,7 @@ class ProductProduct(models.Model):
         move_lines = correction_move_line or fifo_move._get_out_move_lines()
         for ml in move_lines:
             fifo_lot = ml.force_fifo_lot_id or ml.lot_id
-            ml_qty = fifo_move.product_uom._compute_quantity(ml.qty_done, self.uom_id)
+            ml_qty = ml.product_uom_id._compute_quantity(ml.qty_done, self.uom_id)
             fifo_qty = min(remaining_qty, ml_qty)
             self = self.with_context(fifo_lot=fifo_lot, fifo_qty=fifo_qty)
             ml_fifo_vals = super()._run_fifo(fifo_qty, company)

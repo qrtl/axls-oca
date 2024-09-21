@@ -55,7 +55,7 @@ class StockMove(models.Model):
         if hasattr(self, "purchase_line_id") and self.purchase_line_id:
             return super()._get_price_unit()
         if self.product_id.cost_method == "fifo" and len(self.lot_ids) == 1:
-            # Get the last consumed incoming move line.
+            # Get the most recent incoming move line for the lot.
             move_line = self.env["stock.move.line"].search(
                 [
                     ("product_id", "=", self.product_id.id),
@@ -71,6 +71,5 @@ class StockMove(models.Model):
             if move_line:
                 if move_line.qty_consumed:
                     return move_line.value_consumed / move_line.qty_consumed
-                else:
-                    return move_line.value_remaining / move_line.qty_remaining
+                return move_line.value_remaining / move_line.qty_remaining
         return super()._get_price_unit()
