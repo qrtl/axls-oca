@@ -7,6 +7,10 @@ from odoo import api, fields, models
 class StockMoveLine(models.Model):
     _inherit = "stock.move.line"
 
+    qty_base = fields.Float(
+        help="Base quantity for FIFO allocation; this should be equal to the summary "
+        "of the quantity of the relevant incoming stock valuation layers.",
+    )
     qty_consumed = fields.Float(
         help="Quantity that has gone out of the inventory for valued incoming moves "
         "for FIFO products with a lot/serial.",
@@ -37,43 +41,15 @@ class StockMoveLine(models.Model):
     )
 
     @api.depends(
-        "qty_done", "qty_consumed", "move_id.stock_valuation_layer_ids.remaining_value"
+        "qty_base", "qty_consumed", "move_id.stock_valuation_layer_ids.remaining_value"
     )
     def _compute_remaining_value(self):
         for rec in self:
-            if (
-                rec.product_id.with_company(rec.company_id.id).cost_method != "fifo"
-                or not rec.lot_id
-            ):
+            if not rec.product_id._is_fifo() or not rec.lot_id:
                 continue
-            if rec.location_usage in (
-                "internal",
-                "transit",
-            ) or rec.location_dest_usage not in ("internal", "transit"):
-                # Specifically for the case where qty_done of the outgoing
-                # stock move line with done state is reduced, which creates
-                # a positive stock valuation layer for the outgoing move.
-                layers = rec.move_id.stock_valuation_layer_ids.filtered(
-                    lambda l: l.remaining_qty > 0
-                )
-                if not layers:
-                    rec.qty_remaining = 0.0
-                    rec.value_remaining = 0.0
-                    continue
-                rec.qty_remaining = rec.product_id.uom_id._compute_quantity(
-                    sum(layers.mapped("remaining_qty")), rec.product_uom_id
-                )
-                rec.value_remaining = (
-                    sum(layers.mapped("remaining_value"))
-                    * sum(layers.mapped("remaining_qty"))
-                    / rec.qty_remaining
-                )
-                continue
-            rec.qty_remaining = rec.qty_done - rec.qty_consumed
+            rec.qty_remaining = rec.qty_base - rec.qty_consumed
             layers = rec.move_id.stock_valuation_layer_ids
-            remaining_qty = rec.product_id.uom_id._compute_quantity(
-                sum(layers.mapped("remaining_qty")), rec.product_uom_id
-            )
+            remaining_qty = sum(layers.mapped("remaining_qty"))
             if not remaining_qty:
                 rec.qty_remaining = 0
                 rec.value_remaining = 0
@@ -83,6 +59,16 @@ class StockMoveLine(models.Model):
                 * rec.qty_remaining
                 / remaining_qty
             )
+
+    def _action_done(self):
+        res = super()._action_done()
+        for ml in self.exists():
+            if not ml.product_id._is_fifo():
+                continue
+            ml.qty_base = ml.product_uom_id._compute_quantity(
+                ml.qty_done, ml.product_id.uom_id
+            )
+        return res
 
     def _create_correction_svl(self, move, diff):
         # Pass the move line as a context value in case qty_done is overridden in a done

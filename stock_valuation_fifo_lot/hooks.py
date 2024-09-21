@@ -13,22 +13,32 @@ def post_init_hook(cr, registry):
         svl.lot_ids = svl.stock_move_id.lot_ids
         if not svl.lot_ids:
             continue
-        if svl.quantity <= 0:  # Skip outgoing ones
+        if svl.quantity <= 0:  # Skip outgoing svls
             continue
-        if svl.product_id.with_company(svl.company_id.id).cost_method != "fifo":
+        if not svl.product_id._is_fifo():
             continue
+        product_uom = svl.product_id.uom_id
+        if svl.stock_move_id._is_out():
+            # The case where outgoing done qty is reduced
+            # Let the first move line represent for such adjustments.
+            ml = svl.stock_move_id.move_line_ids[0]
+            ml.qty_base += svl.quantity
+        else:
+            for ml in svl.stock_move_id.move_line_ids:
+                ml.qty_base = ml.product_uom_id._compute_quantity(
+                    ml.qty_done, product_uom
+                )
         svl_consumed_qty = svl_consumed_qty_bal = svl.quantity - svl.remaining_qty
         if not svl_consumed_qty:
             continue
         svl_total_value = svl.value + sum(svl.stock_valuation_layer_ids.mapped("value"))
         svl_consumed_value = svl_total_value - svl.remaining_value
-        product_uom = svl.product_id.uom_id
         for ml in svl.stock_move_id.move_line_ids.sorted("id"):
-            ml_uom = ml.product_uom_id
-            ml_qty = ml_uom._compute_quantity(ml.qty_done, product_uom)
-            qty_to_allocate = min(svl_consumed_qty_bal, ml_qty)
-            ml.qty_consumed += product_uom._compute_quantity(qty_to_allocate, ml_uom)
+            qty_to_allocate = min(svl_consumed_qty_bal, ml.qty_base)
+            ml.qty_consumed += qty_to_allocate
             svl_consumed_qty_bal -= qty_to_allocate
             ml.value_consumed += svl_consumed_value * qty_to_allocate / svl_consumed_qty
-            if float_is_zero(svl_consumed_qty_bal, precision_rounding=ml_uom.rounding):
+            if float_is_zero(
+                svl_consumed_qty_bal, precision_rounding=product_uom.rounding
+            ):
                 break
