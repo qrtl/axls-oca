@@ -8,11 +8,30 @@ from odoo import Command, models
 class StockMove(models.Model):
     _inherit = "stock.move"
 
+    def _action_done(self, cancel_backorder=False):
+        res = super()._action_done(cancel_backorder=cancel_backorder)
+        for move in res:
+            if not move.product_id._is_fifo():
+                continue
+            if not move._is_in():
+                continue
+            for ml in move._get_in_move_lines():
+                ml.qty_base = ml.product_uom_id._compute_quantity(
+                    ml.qty_done, ml.product_id.uom_id
+                )
+        return res
+
+    def _get_move_lots(self):
+        self.ensure_one()
+        correction_ml = self.env.context.get("correction_move_line")
+        return correction_ml.lot_id if correction_ml else self.lot_ids
+
     def _prepare_common_svl_vals(self):
         """Add lots/serials to the stock valuation layer."""
         self.ensure_one()
         res = super()._prepare_common_svl_vals()
-        res.update({"lot_ids": [Command.set(self.lot_ids.ids)]})
+        lots = self._get_move_lots()
+        res.update({"lot_ids": [Command.set(lots.ids)]})
         return res
 
     def _create_out_svl(self, forced_quantity=None):
@@ -57,26 +76,34 @@ class StockMove(models.Model):
         incoming move line for the lot.
         """
         self.ensure_one()
-        if not self.company_id.use_lot_cost_for_new_stock:
+        if (
+            not self.company_id.use_lot_cost_for_new_stock
+            or not self.product_id._is_fifo()
+        ):
             return super()._get_price_unit()
         if hasattr(self, "purchase_line_id") and self.purchase_line_id:
             return super()._get_price_unit()
-        if self.product_id._is_fifo() and len(self.lot_ids) == 1:
-            # Get the most recent incoming move line for the lot.
-            move_line = self.env["stock.move.line"].search(
+        lots = self._get_move_lots()
+        if not len(lots) == 1:
+            return super()._get_price_unit()
+        # Get the most recent incoming move line for the lot.
+        move_line = (
+            self.env["stock.move.line"]
+            .search(
                 [
                     ("product_id", "=", self.product_id.id),
-                    ("lot_id", "=", self.lot_ids.id),
+                    ("lot_id", "=", lots.id),
                     "|",
                     ("qty_consumed", ">", 0),
                     ("qty_remaining", ">", 0),
                     ("company_id", "=", self.company_id.id),
                 ],
                 order="id desc",
-                limit=1,
             )
-            if move_line:
-                if move_line.qty_consumed:
-                    return move_line.value_consumed / move_line.qty_consumed
-                return move_line.value_remaining / move_line.qty_remaining
+            .filtered(lambda x: x.move_id._is_in())[:1]
+        )
+        if move_line:
+            if move_line.qty_consumed:
+                return move_line.value_consumed / move_line.qty_consumed
+            return move_line.value_remaining / move_line.qty_remaining
         return super()._get_price_unit()

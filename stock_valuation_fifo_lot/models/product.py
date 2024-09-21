@@ -78,12 +78,18 @@ class ProductProduct(models.Model):
             return super()._run_fifo(quantity, company)
         remaining_qty = quantity
         vals = defaultdict(float)
-        correction_move_line = self.env.context.get("correction_move_line")
-        move_lines = correction_move_line or fifo_move._get_out_move_lines()
+        correction_ml = self.env.context.get("correction_move_line")
+        move_lines = correction_ml or fifo_move._get_out_move_lines()
+        moved_qty = 0
         for ml in move_lines:
             fifo_lot = ml.force_fifo_lot_id or ml.lot_id
-            ml_qty = ml.product_uom_id._compute_quantity(ml.qty_done, self.uom_id)
-            fifo_qty = min(remaining_qty, ml_qty)
+            if correction_ml:
+                moved_qty = quantity
+            else:
+                moved_qty = ml.product_uom_id._compute_quantity(
+                    ml.qty_done, self.uom_id
+                )
+            fifo_qty = min(remaining_qty, moved_qty)
             self = self.with_context(fifo_lot=fifo_lot, fifo_qty=fifo_qty)
             ml_fifo_vals = super()._run_fifo(fifo_qty, company)
             for key, value in ml_fifo_vals.items():
