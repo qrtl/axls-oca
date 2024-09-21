@@ -48,7 +48,9 @@ class StockMoveLine(models.Model):
             if not rec.product_id._is_fifo() or not rec.lot_id:
                 continue
             rec.qty_remaining = rec.qty_base - rec.qty_consumed
-            layers = rec.move_id.stock_valuation_layer_ids
+            layers = rec.move_id.stock_valuation_layer_ids.filtered(
+                lambda x: x.lot_ids in [rec.lot_id]
+            )
             remaining_qty = sum(layers.mapped("remaining_qty"))
             if not remaining_qty:
                 rec.qty_remaining = 0
@@ -59,16 +61,6 @@ class StockMoveLine(models.Model):
                 * rec.qty_remaining
                 / remaining_qty
             )
-
-    def _action_done(self):
-        res = super()._action_done()
-        for ml in self.exists():
-            if not ml.product_id._is_fifo():
-                continue
-            ml.qty_base = ml.product_uom_id._compute_quantity(
-                ml.qty_done, ml.product_id.uom_id
-            )
-        return res
 
     def _create_correction_svl(self, move, diff):
         # Pass the move line as a context value in case qty_done is overridden in a done
