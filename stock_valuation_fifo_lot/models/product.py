@@ -13,6 +13,10 @@ from odoo.tools import float_is_zero
 class ProductProduct(models.Model):
     _inherit = "product.product"
 
+    def _is_fifo(self):
+        self.ensure_one()
+        return self.with_company(self.company_id.id).cost_method == "fifo"
+
     def _get_fifo_candidates_domain(self, company):
         res = super()._get_fifo_candidates_domain(company)
         fifo_lot = self.env.context.get("fifo_lot")
@@ -58,18 +62,11 @@ class ProductProduct(models.Model):
         fifo_lot = self.env.context.get("fifo_lot")
         if fifo_lot:
             candidate_ml = candidate._get_unconsumed_in_move_line(fifo_lot)
-            ml_uom = candidate_ml.product_uom_id
-            ml_qty_remaining = ml_uom._compute_quantity(
-                candidate_ml.qty_remaining, candidate_ml.product_id.uom_id
+            qty_to_take_on_candidates = min(
+                qty_to_take_on_candidates, candidate_ml.qty_remaining
             )
-            qty_to_take_on_candidates = min(qty_to_take_on_candidates, ml_qty_remaining)
-            ml_qty_to_take_on_candidates = (
-                candidate_ml.product_id.uom_id._compute_quantity(
-                    qty_to_take_on_candidates, ml_uom
-                )
-            )
-            candidate_ml.qty_consumed += ml_qty_to_take_on_candidates
-            candidate_ml.value_consumed += ml_qty_to_take_on_candidates * (
+            candidate_ml.qty_consumed += qty_to_take_on_candidates
+            candidate_ml.value_consumed += qty_to_take_on_candidates * (
                 candidate.remaining_value / candidate.remaining_qty
             )
         return super()._get_qty_taken_on_candidate(qty_to_take_on_candidates, candidate)

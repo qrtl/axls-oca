@@ -26,16 +26,23 @@ class StockMove(models.Model):
         return layers
 
     def _create_in_svl(self, forced_quantity=None):
-        """Change product standard price to the first available lot price."""
+        correction_ml = self.env.context.get("correction_move_line")
+        if forced_quantity and correction_ml:
+            correction_ml.qty_base += forced_quantity
+            return super()._create_in_svl(forced_quantity=forced_quantity)
         layers = self.env["stock.valuation.layer"]
         for move in self:
-            layers |= super(StockMove, move)._create_in_svl(
+            layer = super(StockMove, move)._create_in_svl(
                 forced_quantity=forced_quantity
             )
-            product = move.product_id
+            layers |= layer
             # Calculate standard price (sorted by lot created date)
-            if product.cost_method != "fifo" or product.tracking == "none":
+            product = move.product_id
+            if not product._is_fifo() or product.tracking == "none":
                 continue
+            for ml in layer.stock_move_id.move_line_ids:
+                ml.qty_base = ml.qty_done
+            # Change product standard price to the first available lot price.
             product = product.with_context(sort_by="lot_create_date")
             candidate = product._get_fifo_candidates(move.company_id)[:1]
             if not candidate:
@@ -54,7 +61,7 @@ class StockMove(models.Model):
             return super()._get_price_unit()
         if hasattr(self, "purchase_line_id") and self.purchase_line_id:
             return super()._get_price_unit()
-        if self.product_id.cost_method == "fifo" and len(self.lot_ids) == 1:
+        if self.product_id._is_fifo() and len(self.lot_ids) == 1:
             # Get the most recent incoming move line for the lot.
             move_line = self.env["stock.move.line"].search(
                 [

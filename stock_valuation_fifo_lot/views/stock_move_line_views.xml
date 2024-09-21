@@ -14,6 +14,12 @@
             <xpath expr="//field[@name='product_uom_id']" position="after">
                 <field name="company_currency_id" invisible="1" />
                 <field
+                    name="qty_base"
+                    sum="Qty Base"
+                    groups="stock.group_stock_manager"
+                    optional="show"
+                />
+                <field
                     name="qty_consumed"
                     sum="Qty Consumed"
                     groups="stock.group_stock_manager"
