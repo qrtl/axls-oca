@@ -52,7 +52,10 @@ class StockMoveLine(models.Model):
     )
     def _compute_remaining_value(self):
         for rec in self:
-            if not rec.product_id._is_fifo() or not rec.lot_id:
+            if (
+                rec.product_id.with_company(rec.company_id).cost_method != "fifo"
+                or not rec.lot_id
+            ):
                 continue
             rec.qty_remaining = rec.qty_base - rec.qty_consumed
             layers = rec.move_id.stock_valuation_layer_ids.filtered(
