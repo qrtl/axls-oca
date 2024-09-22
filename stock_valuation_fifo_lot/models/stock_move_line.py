@@ -8,29 +8,33 @@ class StockMoveLine(models.Model):
     _inherit = "stock.move.line"
 
     qty_base = fields.Float(
-        help="Base quantity for FIFO allocation; this should be equal to the summary "
-        "of the quantity of the relevant incoming stock valuation layers.",
+        help="Base quantity for FIFO allocation for FIFO valued products with a "
+        "lot/serial; represents the total quantity of the moves with incoming "
+        "valuation for the move line. In product UoM.",
     )
     qty_consumed = fields.Float(
-        help="Quantity that has gone out of the inventory for valued incoming moves "
-        "for FIFO products with a lot/serial.",
-    )
-    qty_remaining = fields.Float(
-        compute="_compute_remaining_value",
-        store=True,
-        help="Remaining quantity for valued incoming moves for FIFO products with a "
-        "lot/serial.",
+        help="Consumed quantity by outgoing valuation for FIFO valued products with "
+        "a lot/serial. In product UoM.",
     )
     company_currency_id = fields.Many2one(related="company_id.currency_id")
     value_consumed = fields.Monetary(
         currency_field="company_currency_id",
-        help="The value of the inventory that has been consumed for FIFO products with "
-        "a lot/serial.",
+        help="Consumed value by outgoing valuation for FIFO valued products with a "
+        "lot/serial",
+    )
+    qty_remaining = fields.Float(
+        compute="_compute_remaining_value",
+        store=True,
+        help="Remaining quantity for FIFO valued products with a lot/serial (the "
+        "total by product should match that of the inventory valuation). In product "
+        "UoM.",
     )
     value_remaining = fields.Monetary(
         compute="_compute_remaining_value",
         store=True,
         currency_field="company_currency_id",
+        help="Remaining value for FIFO valued products with a lot/serial (the total "
+        "by product should match that of the inventory valuation)",
     )
     force_fifo_lot_id = fields.Many2one(
         "stock.lot",
@@ -44,7 +48,6 @@ class StockMoveLine(models.Model):
         "lot_id",
         "qty_base",
         "qty_consumed",
-        "move_id.stock_valuation_layer_ids",
         "move_id.stock_valuation_layer_ids.remaining_value",
     )
     def _compute_remaining_value(self):

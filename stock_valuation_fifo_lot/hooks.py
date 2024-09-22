@@ -8,37 +8,32 @@ from odoo.tools import float_is_zero
 def post_init_hook(cr, registry):
     env = api.Environment(cr, SUPERUSER_ID, {})
 
-    svls = env["stock.valuation.layer"].search([("stock_move_id", "!=", False)])
-    for svl in svls:
-        svl.lot_ids = svl.stock_move_id.lot_ids
-        if not svl.lot_ids:
+    moves = env["stock.move"].search([("stock_valuation_layer_ids", "!=", False)])
+    for move in moves:
+        if not move.product_id._is_fifo() or not move.lot_ids:
             continue
-        if svl.quantity <= 0:  # Skip outgoing svls
+        svls = move.stock_valuation_layer_ids
+        svls.lot_ids = move.lot_ids
+        if move._is_out():
+            remaining_qty = sum(svls.mapped("remaining_qty"))
+            if remaining_qty:
+                # The case where outgoing done qty is reduced
+                # Let the first move line take such adjustments.
+                move.move_line_ids[0].qty_base = remaining_qty
             continue
-        if not svl.product_id._is_fifo():
-            continue
-        product_uom = svl.product_id.uom_id
-        if svl.stock_move_id._is_out():
-            # The case where outgoing done qty is reduced
-            # Let the first move line represent for such adjustments.
-            ml = svl.stock_move_id.move_line_ids[0]
-            ml.qty_base += svl.quantity
-        else:
-            for ml in svl.stock_move_id.move_line_ids:
-                ml.qty_base = ml.product_uom_id._compute_quantity(
-                    ml.qty_done, product_uom
-                )
-        svl_consumed_qty = svl_consumed_qty_bal = svl.quantity - svl.remaining_qty
-        if not svl_consumed_qty:
-            continue
-        svl_total_value = svl.value + sum(svl.stock_valuation_layer_ids.mapped("value"))
-        svl_consumed_value = svl_total_value - svl.remaining_value
-        for ml in svl.stock_move_id.move_line_ids.sorted("id"):
-            qty_to_allocate = min(svl_consumed_qty_bal, ml.qty_base)
+        consumed_qty = consumed_qty_bal = sum(svls.mapped("quantity")) - sum(
+            svls.mapped("remaining_qty")
+        )
+        total_value = sum(svls.mapped("value")) + sum(
+            svls.stock_valuation_layer_ids.mapped("value")
+        )
+        consumed_value = total_value - sum(svls.mapped("remaining_value"))
+        product_uom = move.product_id.uom_id
+        for ml in move.move_line_ids.sorted("id"):
+            ml.qty_base = ml.product_uom_id._compute_quantity(ml.qty_done, product_uom)
+            if float_is_zero(consumed_qty_bal, precision_rounding=product_uom.rounding):
+                continue
+            qty_to_allocate = min(consumed_qty_bal, ml.qty_base)
             ml.qty_consumed += qty_to_allocate
-            svl_consumed_qty_bal -= qty_to_allocate
-            ml.value_consumed += svl_consumed_value * qty_to_allocate / svl_consumed_qty
-            if float_is_zero(
-                svl_consumed_qty_bal, precision_rounding=product_uom.rounding
-            ):
-                break
+            consumed_qty_bal -= qty_to_allocate
+            ml.value_consumed += consumed_value * qty_to_allocate / consumed_qty
