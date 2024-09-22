@@ -35,19 +35,22 @@ Main UI Changes
 
   - Adds the following fields:
 
-    - 'Qty Consumed' [*]_: Consumed quantity by outgoing moves.
-    - 'Value Consumed' [*]_: Consumed value by outgoing moves.
+    - 'Qty Base' [*]_: Base quantity for FIFO allocation; represents the total quantity
+      of the moves with incoming valuation for the move line. In product UoM.
+    - 'Qty Consumed' [*]_: Consumed quantity by outgoing valuation. In product UoM.
+    - 'Value Consumed' [*]_: Consumed value by outgoing valuation.
     - 'Qty Remaining' [*]_: Remaining quantity (the total by product should match that
-      of the inventory valuation).
+      of the inventory valuation). In product UoM.
     - 'Value Remaining' [*]_: Remaining value (the total by product should match that
       of the inventory valuation).
     - 'Force FIFO Lot/Serial': Used when you are stuck by not being able to find a FIFO
       balance for the lot in an outgoing move line.
  
- .. [*] Updated only for valued incoming moves and outgoing moves where the qty_done has been 
-        reduced in the completed state for products with FIFO costing method. For these outgoing moves,
-        the system generates positive stock valuation layers with remaining_qty and remaining_value,
-        which need to be reflected in the related move line.
+ .. [*] Updated only for products with FIFO costing method only, for valued incoming
+        moves, and outgoing moves where the qty_done has been reduced in the completed
+        state.
+        For these outgoing moves, the system generates positive stock valuation layers
+        with a remaining balance, which need to be reflected in the related move line.
         The values here represent the theoretical figures in terms of FIFO costing,
         meaning that they may differ from the actual stock situation especially for
         those updated at the installation of this module.

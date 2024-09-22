@@ -2,7 +2,8 @@
 # Copyright 2024 Quartile (https://www.quartile.co)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html)
 
-from odoo import Command, models
+from odoo import Command, _, models
+from odoo.exceptions import UserError
 
 
 class StockMove(models.Model):
@@ -19,7 +20,6 @@ class StockMove(models.Model):
                 ml.qty_base = ml.product_uom_id._compute_quantity(
                     ml.qty_done, ml.product_id.uom_id
                 )
-                # ml._compute_remaining_value()
         return res
 
     def _get_move_lots(self):
@@ -36,13 +36,25 @@ class StockMove(models.Model):
         return res
 
     def _create_out_svl(self, forced_quantity=None):
-        """Set the move as a context for processing in _run_fifo()."""
         layers = self.env["stock.valuation.layer"]
         for move in self:
+            # Set the move as a context for processing in _run_fifo().
             move = move.with_context(fifo_move=move)
-            layers |= super(StockMove, move)._create_out_svl(
+            layer = super(StockMove, move)._create_out_svl(
                 forced_quantity=forced_quantity
             )
+            product = move.product_id
+            # To prevent unknown creation of negative inventory.
+            if (
+                product._is_fifo()
+                and product.tracking != "none"
+                and layer.remaining_qty < 0
+            ):
+                raise UserError(
+                    _("Negative inventory is not allowed for product %s.")
+                    % product.display_name
+                )
+            layers |= layer
         return layers
 
     def _create_in_svl(self, forced_quantity=None):
