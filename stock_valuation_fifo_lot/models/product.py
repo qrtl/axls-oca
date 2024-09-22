@@ -13,10 +13,6 @@ from odoo.tools import float_is_zero
 class ProductProduct(models.Model):
     _inherit = "product.product"
 
-    def _is_fifo(self):
-        self.ensure_one()
-        return self.with_company(self.company_id.id).cost_method == "fifo"
-
     def _get_fifo_candidates_domain(self, company):
         res = super()._get_fifo_candidates_domain(company)
         fifo_lot = self.env.context.get("fifo_lot")

@@ -10,7 +10,10 @@ def post_init_hook(cr, registry):
 
     moves = env["stock.move"].search([("stock_valuation_layer_ids", "!=", False)])
     for move in moves:
-        if not move.product_id._is_fifo() or not move.lot_ids:
+        if (
+            move.product_id.with_company(move.company_id).cost_method != "fifo"
+            or not move.lot_ids
+        ):
             continue
         svls = move.stock_valuation_layer_ids
         svls.lot_ids = move.lot_ids

@@ -12,7 +12,7 @@ class StockMove(models.Model):
     def _action_done(self, cancel_backorder=False):
         res = super()._action_done(cancel_backorder=cancel_backorder)
         for move in res:
-            if not move.product_id._is_fifo():
+            if move.product_id.cost_method != "fifo":
                 continue
             if not move._is_in():
                 continue
@@ -46,7 +46,7 @@ class StockMove(models.Model):
             product = move.product_id
             # To prevent unknown creation of negative inventory.
             if (
-                product._is_fifo()
+                product.cost_method == "fifo"
                 and product.tracking != "none"
                 and layer.remaining_qty < 0
             ):
@@ -70,7 +70,7 @@ class StockMove(models.Model):
             layers |= layer
             # Calculate standard price (sorted by lot created date)
             product = move.product_id
-            if not product._is_fifo() or product.tracking == "none":
+            if product.cost_method != "fifo" or product.tracking == "none":
                 continue
             for ml in layer.stock_move_id.move_line_ids:
                 ml.qty_base = ml.qty_done
@@ -91,7 +91,7 @@ class StockMove(models.Model):
         self.ensure_one()
         if (
             not self.company_id.use_lot_cost_for_new_stock
-            or not self.product_id._is_fifo()
+            or self.product_id.cost_method != "fifo"
         ):
             return super()._get_price_unit()
         if hasattr(self, "purchase_line_id") and self.purchase_line_id:
