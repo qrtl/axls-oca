@@ -19,6 +19,7 @@ class StockMove(models.Model):
                 ml.qty_base = ml.product_uom_id._compute_quantity(
                     ml.qty_done, ml.product_id.uom_id
                 )
+                # ml._compute_remaining_value()
         return res
 
     def _get_move_lots(self):

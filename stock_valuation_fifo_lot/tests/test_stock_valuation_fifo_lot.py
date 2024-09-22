@@ -4,7 +4,7 @@
 from odoo.tests.common import Form, TransactionCase
 
 
-class TestStockAccountFifoReturnOrigin(TransactionCase):
+class TestStockValuationFifoLot(TransactionCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -45,6 +45,7 @@ class TestStockAccountFifoReturnOrigin(TransactionCase):
                 "picking_type_id": picking_type.id,
             }
         )
+        move_line_qty = 5.0
         move = self.env["stock.move"].create(
             {
                 "name": "Test",
@@ -52,7 +53,7 @@ class TestStockAccountFifoReturnOrigin(TransactionCase):
                 "location_id": picking.location_id.id,
                 "location_dest_id": picking.location_dest_id.id,
                 "product_uom": self.product.uom_id.id,
-                "product_uom_qty": 5.0,
+                "product_uom_qty": move_line_qty * len(lot_numbers),
                 "picking_id": picking.id,
             }
         )
@@ -68,7 +69,7 @@ class TestStockAccountFifoReturnOrigin(TransactionCase):
                     "location_id": move.location_id.id,
                     "location_dest_id": move.location_dest_id.id,
                     "product_uom_id": move.product_uom.id,
-                    "qty_done": move.product_uom_qty,
+                    "qty_done": move_line_qty,
                 }
             )
             if is_receipt:
