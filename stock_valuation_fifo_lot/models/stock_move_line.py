@@ -41,7 +41,11 @@ class StockMoveLine(models.Model):
     )
 
     @api.depends(
-        "qty_base", "qty_consumed", "move_id.stock_valuation_layer_ids.remaining_value"
+        "lot_id",
+        "qty_base",
+        "qty_consumed",
+        "move_id.stock_valuation_layer_ids",
+        "move_id.stock_valuation_layer_ids.remaining_value",
     )
     def _compute_remaining_value(self):
         for rec in self:
