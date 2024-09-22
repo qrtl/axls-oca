@@ -53,7 +53,7 @@ class StockMoveLine(models.Model):
                 continue
             rec.qty_remaining = rec.qty_base - rec.qty_consumed
             layers = rec.move_id.stock_valuation_layer_ids.filtered(
-                lambda x: x.lot_ids in [rec.lot_id]
+                lambda x: rec.lot_id in x.lot_ids
             )
             remaining_qty = sum(layers.mapped("remaining_qty"))
             if not remaining_qty:
