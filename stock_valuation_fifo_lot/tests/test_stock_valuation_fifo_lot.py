@@ -1,6 +1,7 @@
 # Copyright 2024 Quartile (https://www.quartile.co)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
+from odoo.exceptions import UserError
 from odoo.tests.common import Form, TransactionCase
 
 
@@ -37,6 +38,7 @@ class TestStockValuationFifoLot(TransactionCase):
         lot_numbers,
         price_unit=0.0,
         is_receipt=True,
+        force_lot_name=None,
     ):
         picking = self.env["stock.picking"].create(
             {
@@ -79,6 +81,15 @@ class TestStockValuationFifoLot(TransactionCase):
                     [("product_id", "=", self.product.id), ("name", "=", lot)], limit=1
                 )
                 move_line.lot_id = lot.id
+                if force_lot_name:
+                    force_lot = self.env["stock.lot"].search(
+                        [
+                            ("product_id", "=", self.product.id),
+                            ("name", "=", force_lot_name),
+                        ],
+                        limit=1,
+                    )
+                    move_line.force_fifo_lot_id = force_lot.id
         picking.action_confirm()
         picking.action_assign()
         picking._action_done()
@@ -405,4 +416,59 @@ class TestStockValuationFifoLot(TransactionCase):
             move.stock_valuation_layer_ids.value,
             1000.0,
             "Stock valuation for lot 002 should be 1000.0",
+        )
+
+    def test_force_fifo_lot_id(self):
+        _, move_in = self.create_picking(
+            self.supplier_location,
+            self.stock_location,
+            self.picking_type_in,
+            ["001", "002"],
+            100.0,
+        )
+        # Deliver lot 002
+        _, move_out_002 = self.create_picking(
+            self.stock_location,
+            self.customer_location,
+            self.picking_type_out,
+            ["002"],
+            is_receipt=False,
+        )
+        self.assertEqual(
+            abs(move_out_002.stock_valuation_layer_ids.value),
+            500.0,
+            "Stock valuation for the delivery of lot 002 should be 500.0",
+        )
+        move_line_lot_001 = move_in.move_line_ids.filtered(
+            lambda ml: ml.lot_name == "001"
+        )
+        move_line_lot_001.qty_remaining = 0.0
+        move_line_lot_001.qty_consumed = 5.0
+        move_line_lot_002 = move_in.move_line_ids.filtered(
+            lambda ml: ml.lot_name == "002"
+        )
+        move_line_lot_002.qty_remaining = 5.0
+        move_line_lot_002.qty_consumed = 0.0
+
+        # Create delivery for lot 001
+        with self.assertRaises(UserError):
+            _, _ = self.create_picking(
+                self.stock_location,
+                self.customer_location,
+                self.picking_type_out,
+                ["001"],
+                is_receipt=False,
+            )
+        _, move_out_001 = self.create_picking(
+            self.stock_location,
+            self.customer_location,
+            self.picking_type_out,
+            ["001"],
+            is_receipt=False,
+            force_lot_name="002",
+        )
+        self.assertEqual(
+            abs(move_out_001.stock_valuation_layer_ids.value),
+            500.0,
+            "Stock valuation for the delivery of lot 001 should be 500.0",
         )
