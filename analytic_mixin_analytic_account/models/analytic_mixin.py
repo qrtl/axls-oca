@@ -10,6 +10,7 @@ class AnalyticMixin(models.AbstractModel):
     analytic_account_ids = fields.Many2many(
         "account.analytic.account",
         compute="_compute_analytic_account_ids",
+        context={"active_test": False},
         string="Analytic Accounts",
         help="Analytic accounts computed from analytic distribution.",
     )
@@ -20,14 +21,13 @@ class AnalyticMixin(models.AbstractModel):
     )
 
     def _compute_analytic_account_ids(self):
-        analytic_account = self.env["account.analytic.account"]
         for rec in self:
             if not rec.analytic_distribution:
-                rec.analytic_account_ids = analytic_account
+                rec.analytic_account_ids = False
                 rec.analytic_account_names = False
                 continue
             account_ids = [int(key) for key in rec.analytic_distribution.keys()]
-            rec.analytic_account_ids = analytic_account.browse(account_ids)
+            rec.analytic_account_ids = [(6, 0, account_ids)]
             rec.analytic_account_names = ", ".join(
                 account.display_name for account in rec.analytic_account_ids
             )
