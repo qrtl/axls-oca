@@ -8,6 +8,7 @@
     "category": "Stock",
     "license": "AGPL-3",
     "depends": ["stock_account"],
+    "external_dependencies": {"python": ["openupgradelib"]},
     "data": [
         "views/stock_move_line_views.xml",
         "views/stock_move_views.xml",
