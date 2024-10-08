@@ -15,10 +15,6 @@ class StockMove(models.Model):
 
     analytic_distribution = fields.Json(
         inverse="_inverse_analytic_distribution",
-        states={
-            "done": [("readonly", True)],
-            "cancel": [("readonly", True)],
-        },
     )
 
     def _inverse_analytic_distribution(self):
