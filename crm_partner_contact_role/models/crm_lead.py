@@ -9,17 +9,16 @@ class CrmLead(models.Model):
 
     role_ids = fields.Many2many(
         comodel_name="res.partner.role",
-        compute="_compute_role",
+        compute="_compute_role_ids",
         readonly=False,
         store=True,
         string="Roles",
     )
 
     @api.depends("partner_id")
-    def _compute_role(self):
+    def _compute_role_ids(self):
         for lead in self:
-            if lead.partner_id.role_ids:
-                lead.role_ids = lead.partner_id.role_ids
+            lead.role_ids = lead.partner_id.role_ids
 
     def _prepare_customer_values(self, partner_name, is_company=False, parent_id=False):
         vals = super()._prepare_customer_values(partner_name, is_company, parent_id)
