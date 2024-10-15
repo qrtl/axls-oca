@@ -18,12 +18,11 @@ class StockMove(models.Model):
     )
 
     def _inverse_analytic_distribution(self):
-        """If analytic distribution is set on picking, write it on all move lines"""
+        """If analytic distribution is set on move, write it on all move lines"""
         for move in self:
-            if move.analytic_distribution:
-                move.line_ids.write(
-                    {"analytic_distribution": move.analytic_distribution}
-                )
+            move.move_line_ids.write(
+                {"analytic_distribution": move.analytic_distribution}
+            )
 
     def _prepare_account_move_line(
         self, qty, cost, credit_account_id, debit_account_id, svl_id, description
