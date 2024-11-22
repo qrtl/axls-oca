@@ -33,16 +33,19 @@
             <xpath expr="//field[@name='company_id']" position="before">
                 <field
                     name="move_value"
+                    sum="Total Value"
                     groups="account.group_account_invoice"
                     optional="show"
                 />
                 <field
                     name="move_origin_value"
+                    sum="Total Origin Value"
                     groups="account.group_account_invoice"
                     optional="show"
                 />
                 <field
                     name="value_discrepancy"
+                    sum="Total Discrepancy"
                     groups="account.group_account_invoice"
                     optional="show"
                 />

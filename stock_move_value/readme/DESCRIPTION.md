@@ -1,4 +1,4 @@
-This module adds value fields to the stock move model, to add visivility of how the move
+This module adds value fields to the stock move model, to add visibility of how the move
 has affected the stock valuation.
 
 - **Move Value**: Value of the move including related SVL values (i.e. price differences
