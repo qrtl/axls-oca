@@ -69,7 +69,8 @@ class StockMove(models.Model):
                             location=location.complete_name,
                         )
                     )
-        res = super(StockMove, self - moves_with_no_check)._action_done(
+        moves_with_check = self - moves_with_no_check
+        res = super(StockMove, moves_with_check.with_context(no_backorder=True))._action_done(
             cancel_backorder=cancel_backorder
         )
         res += super(StockMove, moves_with_no_check)._action_done(
