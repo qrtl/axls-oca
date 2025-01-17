@@ -5,6 +5,7 @@ from datetime import date
 
 from freezegun import freeze_time
 
+from odoo import fields
 from odoo.tests import tagged
 
 from odoo.addons.stock_account.tests.test_stockvaluationlayer import (
@@ -38,5 +39,6 @@ class TestStockValuationStandard(TestStockValuationStandard):
         self._make_in_move(self.product1, 10)
         valuation_layer = self.product1.stock_valuation_layer_ids
         self.assertEqual(
-            valuation_layer.accounting_date, valuation_layer.create_date.date()
+            valuation_layer.accounting_date,
+            fields.Date.context_today(valuation_layer, valuation_layer.create_date),
         )
