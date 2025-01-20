@@ -40,5 +40,5 @@ class TestStockValuationStandard(TestStockValuationStandard):
         valuation_layer = self.product1.stock_valuation_layer_ids
         self.assertEqual(
             valuation_layer.accounting_date,
-            fields.Date.context_today(valuation_layer, valuation_layer.create_date),
+            fields.Date.context_today(self, valuation_layer.create_date),
         )
