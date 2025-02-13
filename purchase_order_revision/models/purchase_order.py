@@ -30,7 +30,7 @@ class PurchaseOrder(models.Model):
 
     def action_view_revisions(self):
         self.ensure_one()
-        action = self.env.ref("purchase.purchase_rfq")
+        action = self.env.ref("purchase.purchase_rfq").sudo()
         result = action.read()[0]
         result["domain"] = ["|", ("active", "=", False), ("active", "=", True)]
         result["context"] = {
