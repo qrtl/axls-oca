@@ -35,13 +35,13 @@ Main UI Changes
 
   - Adds the following fields:
 
-    - 'Qty Base' [*]_: Base quantity for FIFO allocation; represents the total quantity
+    - 'Qty Base' [*]: Base quantity for FIFO allocation; represents the total quantity
       of the moves with incoming valuation for the move line. In product UoM.
-    - 'Qty Consumed' [*]_: Consumed quantity by outgoing valuation. In product UoM.
-    - 'Value Consumed' [*]_: Consumed value by outgoing valuation.
-    - 'Qty Remaining' [*]_: Remaining quantity (the total by product should match that
+    - 'Qty Consumed' [*]: Consumed quantity by outgoing valuation. In product UoM.
+    - 'Value Consumed' [*]: Consumed value by outgoing valuation.
+    - 'Qty Remaining' [*]: Remaining quantity (the total by product should match that
       of the inventory valuation). In product UoM.
-    - 'Value Remaining' [*]_: Remaining value (the total by product should match that
+    - 'Value Remaining' [*]: Remaining value (the total by product should match that
       of the inventory valuation).
     - 'Force FIFO Lot/Serial': Used when you are stuck by not being able to find a FIFO
       balance for the lot in an outgoing move line.
