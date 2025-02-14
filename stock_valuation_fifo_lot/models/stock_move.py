@@ -31,19 +31,21 @@ class StockMove(models.Model):
         """Add lots/serials to the stock valuation layer."""
         self.ensure_one()
         res = super()._prepare_common_svl_vals()
-        lots = self._get_move_lots()
-        res.update({"lot_ids": [Command.set(lots.ids)]})
+        if self.product_id.cost_method == "fifo" and self.product_id.tracking != "none":
+            lots = self._get_move_lots()
+            res.update({"lot_ids": [Command.set(lots.ids)]})
         return res
 
     def _create_out_svl(self, forced_quantity=None):
         layers = self.env["stock.valuation.layer"]
         for move in self:
             # Set the move as a context for processing in _run_fifo().
-            move = move.with_context(fifo_move=move)
+            product = move.product_id
+            if product.cost_method == "fifo":
+                move = move.with_context(fifo_move=move)
             layer = super(StockMove, move)._create_out_svl(
                 forced_quantity=forced_quantity
             )
-            product = move.product_id
             # To prevent unknown creation of negative inventory.
             if (
                 product.cost_method == "fifo"
