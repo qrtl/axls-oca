@@ -274,3 +274,17 @@ class TestStockValuationFifoLot(TestStockValuationFifoCommon):
             500.0,
             "Stock valuation for the delivery of lot 001 should be 500.0",
         )
+
+    def test_avco_product_receipt(self):
+        self.product.categ_id.property_cost_method = "average"
+        _, move_in = self.create_picking(
+            self.supplier_location,
+            self.stock_location,
+            self.picking_type_in,
+            ["001", "002", "003"],
+            100.0,
+        )
+        self.assertFalse(
+            move_in.stock_valuation_layer_ids.lot_ids,
+            "Lot IDs should be empty for AVCO product.",
+        )
