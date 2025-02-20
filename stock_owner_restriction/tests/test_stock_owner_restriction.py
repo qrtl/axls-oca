@@ -8,7 +8,16 @@ class TestStockOwnerRestriction(TransactionCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.env = cls.env(context=dict(cls.env.context, tracking_disable=True))
+        # Remove this variable in v16 and put instead:
+        # from odoo.addons.base.tests.common import DISABLED_MAIL_CONTEXT
+        DISABLED_MAIL_CONTEXT = {
+            "tracking_disable": True,
+            "mail_create_nolog": True,
+            "mail_create_nosubscribe": True,
+            "mail_notrack": True,
+            "no_reset_password": True,
+        }
+        cls.env = cls.env(context=dict(cls.env.context, **DISABLED_MAIL_CONTEXT))
         # models
         cls.picking_model = cls.env["stock.picking"]
         cls.move_model = cls.env["stock.move"]
@@ -57,8 +66,14 @@ class TestStockOwnerRestriction(TransactionCase):
 
     def test_product_qty_available(self):
         # Quants with owner assigned are not available
-        self.assertEqual(self.product.qty_available, 500.00)
-        self.product.invalidate_model()
+        # No need invalidate the cache, force_restricted_owner_id key is added to
+        # context depends of product qty_available
+        self.assertEqual(
+            self.product.with_context(
+                force_restricted_owner_id=self.owner.id
+            ).qty_available,
+            500.00,
+        )
         self.assertEqual(
             self.product.with_context(skip_restricted_owner=True).qty_available, 1000.00
         )
@@ -121,6 +136,27 @@ class TestStockOwnerRestriction(TransactionCase):
         self.assertTrue(self.picking_out.move_line_ids.mapped("owner_id"))
         self.assertEqual(self.picking_out.state, "assigned")
 
+        # Set restriction options on picking type to get only quants with an
+        # owner assigned.
+        # The picking partner has quants assigned and there ara unassigned quants
+        # so the picking is in assigned state and with 1000 reserved units
+        self.picking_type_out.owner_restriction = "partner_or_unassigned"
+        self.picking_out.do_unreserve()
+        self.picking_out.action_assign()
+        self.assertEqual(self.picking_out.move_ids.reserved_availability, 1000.00)
+        self.assertEqual(len(self.picking_out.move_line_ids), 2)
+        self.assertEqual(self.picking_out.move_line_ids.mapped("owner_id"), self.owner)
+
+        # Set restriction options on picking type to get only quants with an
+        # owner assigned.
+        # The picking partner has not quants assigned but there are unassigned quants
+        # so the picking is in assigned state with 500 reserved units
+        self.picking_out.partner_id = False
+        self.picking_out.do_unreserve()
+        self.picking_out.action_assign()
+        self.assertEqual(self.picking_out.move_ids.reserved_availability, 500.00)
+        self.assertEqual(len(self.picking_out.move_line_ids), 1)
+
     def test_search_qty(self):
         products = self.env["product.product"].search(
             [("id", "=", self.product.id), ("qty_available", ">", 500.00)]
@@ -138,7 +174,8 @@ class TestStockOwnerRestriction(TransactionCase):
             self.product, self.picking_type_out.default_location_src_id, 100
         )
         self.assertEqual(self.product.qty_available, 500.00)
-        self.product.invalidate_model()
+        # Invalidate the cache of the product record to ensure qty_available is recalculated
+        self.product.invalidate_recordset()
         self.assertEqual(
             self.product.with_context(skip_restricted_owner=True).qty_available, 1100.00
         )
@@ -150,7 +187,8 @@ class TestStockOwnerRestriction(TransactionCase):
             self.product, self.picking_type_out.default_location_src_id, 100
         )
         self.assertEqual(self.product.qty_available, 500.00)
-        self.product.invalidate_model()
+        # Invalidate the cache of the product record to ensure qty_available is recalculated
+        self.product.invalidate_recordset()
         self.assertEqual(
             self.product.with_context(skip_restricted_owner=True).qty_available, 1000.00
         )

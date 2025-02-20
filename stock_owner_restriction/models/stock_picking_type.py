@@ -9,9 +9,10 @@ class StockPickingType(models.Model):
 
     owner_restriction = fields.Selection(
         [
-            ("standard_behavior", "Standard Behavior"),
-            ("unassigned_owner", "Unassigned Owner"),
-            ("picking_partner", "Picking Partner"),
+            ("standard_behavior", "Standard behavior"),
+            ("unassigned_owner", "Unassigned owner"),
+            ("picking_partner", "Picking partner"),
+            ("partner_or_unassigned", "Picking partner or unassigned owner"),
         ],
         default="standard_behavior",
     )
