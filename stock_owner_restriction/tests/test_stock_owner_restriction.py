@@ -70,7 +70,7 @@ class TestStockOwnerRestriction(TransactionCase):
         # context depends of product qty_available
         self.assertEqual(
             self.product.with_context(
-                force_restricted_owner_id=self.owner.id
+                force_restricted_owner_id=self.owner
             ).qty_available,
             500.00,
         )
