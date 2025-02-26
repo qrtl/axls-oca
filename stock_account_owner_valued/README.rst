@@ -29,11 +29,23 @@ Stock Account Owner Valued
 |badge1| |badge2| |badge3| |badge4| |badge5|
 
 This module enables inventory valuation for owners whose value_owner_inventory is set to True.
+(By default, inventory held by owners is not included in valuation.)
 
 **Table of contents**
 
 .. contents::
    :local:
+
+Configuration
+=============
+
+To configure this module, follow the steps below:
+
+1. Go to the Contact and open the Sale & Purchase tab.
+2. Go to the Inventory section and enable the "Value Owner Inventory" option.
+
+- Access to the Inventory section requires Developer Mode to be activated.
+- The Value Owner Inventory setting can only be updated by system administrators.
 
 Bug Tracker
 ===========
