@@ -44,14 +44,14 @@ msgstr "価格差エラーを有効化"
 msgid ""
 "Enable the feature that triggers an error when receiving a product if\n"
 "                            the price difference exceeds the threshold."
-msgstr "受領時に価格差がしきい値を超えた場合にエラーを発生させる機能を有効化します。"
+msgstr "入荷時に価格差がしきい値を超えた場合にエラーを発生させる機能を有効化します。"
 
 #. module: purchase_stock_price_variance
 #: model:ir.model.fields,help:purchase_stock_price_variance.field_stock_picking__bypass_price_variance_check
 msgid ""
 "If enabled, no error is raised for price variance between the product's "
 "standard price and purchase receipt unit price."
-msgstr "有効にすると、商品の標準価格と購買受領単価の間の価格差によるエラーは発生しません。"
+msgstr "有効にすると、商品の標準価格と購買単価の間の価格差によるエラーは発生しません。"
 
 #. module: purchase_stock_price_variance
 #: model:ir.model.fields,help:purchase_stock_price_variance.field_product_category__bypass_price_variance_check
@@ -59,7 +59,7 @@ msgid ""
 "If enabled, the products under this category will not raise an error for "
 "price variance between the product's standard price and the purchase receipt"
 " unit price."
-msgstr "有効にすると、このカテゴリ内の製品は、標準価格と購買受領単価の価格差によるエラーを発生させません。"
+msgstr "有効にすると、このカテゴリ内の製品は、標準価格と購買単価の価格差によるエラーを発生させません。"
 
 #. module: purchase_stock_price_variance
 #: model:ir.model.fields,help:purchase_stock_price_variance.field_product_product__bypass_price_variance_check
@@ -67,7 +67,7 @@ msgstr "有効にすると、このカテゴリ内の製品は、標準価格と
 msgid ""
 "If enabled, this product will not raise an error for price variance between "
 "the product's standard price and the purchase receipt unit price."
-msgstr "有効にすると、この製品は、標準価格と購買受領単価の価格差によるエラーを発生させません。"
+msgstr "有効にすると、この製品は、標準価格と購買単価の価格差によるエラーを発生させません。"
 
 #. module: purchase_stock_price_variance
 #: model:res.groups,name:purchase_stock_price_variance.group_manage_price_variance_check
@@ -82,7 +82,7 @@ msgid ""
 "                            unit price.\n"
 "                            Keeping it at zero means that this threshold will not be checked."
 msgstr ""
-"製品の標準価格と購買受領単価の間で許容される最大の価格差（会社の通貨単位）。\n"
+"製品の標準価格と購買単価の間で許容される最大の価格差（会社の通貨単位）。\n"
 " 0に設定すると、このしきい値はチェックされません。"
 
 #. module: purchase_stock_price_variance
@@ -92,7 +92,7 @@ msgid ""
 "Maximum allowable variance (in monetary amount, based on company currency) "
 "between the product's standard price and the purchase receipt unit price. "
 "Setting this to zero means the threshold will refer to the global setting."
-msgstr "製品の標準価格と購買受領単価の間で許容される最大の価格差（会社の通貨単位）。0に設定すると、このグローバル設定が利用されます。"
+msgstr "製品の標準価格と購買単価の間で許容される最大の価格差（会社の通貨単位）。0に設定すると、このグローバル設定が利用されます。"
 
 #. module: purchase_stock_price_variance
 #: model:ir.model.fields,help:purchase_stock_price_variance.field_res_company__price_variance_threshold_amount
@@ -101,7 +101,7 @@ msgid ""
 "Maximum allowable variance (in monetary amount, based on company currency) "
 "between the product's standard price and the purchase receipt unit price. "
 "Setting this to zero means this threshold will not be checked."
-msgstr "製品の標準価格と購買受領単価の間で許容される最大の価格差（会社の通貨単位）。0に設定すると、このしきい値はチェックされません。"
+msgstr "製品の標準価格と購買単価の間で許容される最大の価格差（会社の通貨単位）。0に設定すると、このしきい値はチェックされません。"
 
 #. module: purchase_stock_price_variance
 #: model_terms:ir.ui.view,arch_db:purchase_stock_price_variance.view_stock_config_settings
@@ -109,7 +109,7 @@ msgid ""
 "Maximum variance (in percent) allowable between the product's standard\n"
 "                            price and purchase receipt unit price.\n"
 "                            Keeping it at zero means that this threshold will not be checked."
-msgstr "製品の標準価格に対する購買受領単価の許容される最大差異（パーセント）。0に設定すると、このしきい値はチェックされません。"
+msgstr "製品の標準価格に対する購買単価の許容される最大差異（パーセント）。0に設定すると、このしきい値はチェックされません。"
 
 #. module: purchase_stock_price_variance
 #: model:ir.model.fields,help:purchase_stock_price_variance.field_product_product__price_variance_threshold_percent
@@ -118,7 +118,7 @@ msgid ""
 "Maximum variance (in percent) allowable between the product's standard price"
 " and purchase receipt unit price. Setting this to zero means the threshold "
 "will refer to the global setting."
-msgstr "製品の標準価格に対する購買受領単価の許容される最大差異（パーセント）。0 に設定すると、このグローバル設定が利用されます。"
+msgstr "製品の標準価格に対する購買単価の許容される最大差異（パーセント）。0 に設定すると、このグローバル設定が利用されます。"
 
 #. module: purchase_stock_price_variance
 #: model:ir.model.fields,help:purchase_stock_price_variance.field_res_company__price_variance_threshold_percent
@@ -127,7 +127,7 @@ msgid ""
 "Maximum variance (in percent) allowable between the product's standard price"
 " and purchase receipt unit price.Setting this to zero means this threshold "
 "will not be checked."
-msgstr "製品の標準価格に対する購買受領単価の許容される最大差異（パーセント）。0に設定すると、このしきい値はチェックされません。"
+msgstr "製品の標準価格に対する購買単価の許容される最大差異（パーセント）。0に設定すると、このしきい値はチェックされません。"
 
 #. module: purchase_stock_price_variance
 #: model_terms:ir.ui.view,arch_db:purchase_stock_price_variance.view_template_property_form
