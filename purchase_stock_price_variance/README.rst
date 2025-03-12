@@ -42,7 +42,7 @@ the stock if needed.
 Configuration
 =============
 
-1. Navigate to Inventory > Configuration > Settings.
+1. Navigate to *Inventory > Configuration > Settings*.
 2. Find and enable the 'Enable Price Variance Error' option to activate
    this feature. An error will occur if the price difference exceeds the
    threshold when receiving the product.
@@ -55,10 +55,10 @@ Configuration
    -  **Price Variance Threshold Amount**: Default maximum variance for
       all products.
 
-4. Go to Inventory > Configuration > Product Categories.
+4. Go to *Inventory > Configuration > Product Categories*.
 5. Enable **Bypass Price Variance Check** to skip the error check for
    the products under this category.
-6. Go to Inventory > Products and open the product.
+6. Go to *Inventory > Products* and open the product.
 7. Click on the Inventory tab and configure the following fields. If the
    threshold value is set to 0, the threshold will refer to the global
    value.

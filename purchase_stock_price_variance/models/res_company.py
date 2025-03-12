@@ -11,13 +11,13 @@ class ResCompany(models.Model):
     enable_price_variance_error = fields.Boolean()
     price_variance_threshold_percent = fields.Float(
         help="Maximum variance (in percent) allowable between the product's standard price"
-        " and purchase receipt unit price. "
+        " and purchase receipt unit price."
         "Setting this to zero means this threshold will not be checked."
     )
     price_variance_threshold_amount = fields.Monetary(
         help="Maximum allowable variance (in monetary amount, based on company currency)"
-        " between the product's standard price and the purchase receipt unit price. "
-        "Setting this to zero means this threshold will not be checked.",
+        " between the product's standard price and the purchase receipt unit price."
+        "Setting this to zero means this threshold will not be checked."
     )
 
     @api.constrains(

@@ -1,6 +1,7 @@
 # Copyright 2025 Quartile (https://www.quartile.co)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
+from odoo import Command
 from odoo.exceptions import UserError
 from odoo.tests.common import TransactionCase
 
@@ -31,14 +32,12 @@ class TestPurchaseStockPriceVariance(TransactionCase):
             {
                 "partner_id": self.supplier.id,
                 "order_line": [
-                    (
-                        0,
-                        0,
+                    Command.create(
                         {
                             "product_id": self.product.product_variant_id.id,
                             "product_qty": 1,
                             "price_unit": price_unit,
-                        },
+                        }
                     )
                 ],
             }
@@ -65,7 +64,6 @@ class TestPurchaseStockPriceVariance(TransactionCase):
         po = self.create_purchase_order()
         po.button_confirm()
         picking = po.picking_ids
-        self.assertTrue(picking)
         self.validate_picking(picking)
         self.check_chatter_message(picking, False)
 
