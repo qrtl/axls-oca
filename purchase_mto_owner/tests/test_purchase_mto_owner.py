@@ -1,6 +1,7 @@
 # Copyright 2024 Quartile Limited
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
+from odoo import Command
 from odoo.tests.common import TransactionCase
 
 
@@ -16,14 +17,13 @@ class TestPurchaseMtoOwner(TransactionCase):
         # Create a product
         cls.product = cls.env["product.product"].create(
             {
-                "name": "Product 1",
+                "name": "Test",
                 "type": "product",
-                "route_ids": [(6, 0, [mto_route.id, purchase_route.id])],
+                "route_ids": [Command.set([mto_route.id, purchase_route.id])],
             }
         )
         # Create a vendor
-        cls.vendor = cls.env["res.partner"].create({"name": "Vendor 1"})
-
+        cls.vendor = cls.env["res.partner"].create({"name": "Vendor"})
         # Link the vendor to the product
         cls.env["product.supplierinfo"].create(
             {
@@ -31,7 +31,7 @@ class TestPurchaseMtoOwner(TransactionCase):
                 "product_tmpl_id": cls.product.product_tmpl_id.id,
             }
         )
-        cls.owner_id = cls.env["res.partner"].search([], limit=1)
+        cls.owner_id = cls.env["res.partner"].create({"name": "Owner"})
 
     def test_purchase_owner_id(self):
         # Create an outgoing stock picking for the product
@@ -45,9 +45,7 @@ class TestPurchaseMtoOwner(TransactionCase):
                 "location_dest_id": customer_location.id,
                 "owner_id": self.owner_id.id,
                 "move_ids": [
-                    (
-                        0,
-                        0,
+                    Command.create(
                         {
                             "name": "test: move out",
                             "product_id": self.product.id,
@@ -56,8 +54,8 @@ class TestPurchaseMtoOwner(TransactionCase):
                             "product_uom": self.product.uom_id.id,
                             "location_id": stock_location.id,
                             "location_dest_id": customer_location.id,
-                        },
-                    ),
+                        }
+                    )
                 ],
             }
         )

@@ -28,7 +28,8 @@ Purchase MTO Owner
 
 |badge1| |badge2| |badge3| |badge4| |badge5|
 
-This module propagates the owner_id from a source document to new Purchase Order created by the stock rule.
+This module propagates the owner_id from a source document to new
+Purchase Order created by the stock rule.
 
 **Table of contents**
 
@@ -49,12 +50,19 @@ Credits
 =======
 
 Authors
-~~~~~~~
+-------
 
-* Quartile Limited
+* Quartile
+
+Contributors
+------------
+
+-  `Quartile <https://www.quartile.co>`__:
+
+   -  Aung Ko Ko Lin
 
 Maintainers
-~~~~~~~~~~~
+-----------
 
 This module is maintained by the OCA.
 
