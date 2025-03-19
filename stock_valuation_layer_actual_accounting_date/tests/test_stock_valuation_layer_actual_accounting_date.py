@@ -10,7 +10,7 @@ class TestStockValuationLayer(TransactionCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.product_category = cls.env["product.category"].create(
+        product_category = cls.env["product.category"].create(
             {
                 "name": "Test Category FIFO",
                 "property_cost_method": "fifo",
@@ -21,7 +21,7 @@ class TestStockValuationLayer(TransactionCase):
             {
                 "name": "Test Product",
                 "type": "product",
-                "categ_id": cls.product_category.id,
+                "categ_id": product_category.id,
             }
         )
         cls.stock_location = cls.env.ref("stock.stock_location_stock")
@@ -35,7 +35,6 @@ class TestStockValuationLayer(TransactionCase):
                 "actual_date": date(2025, 3, 10),
             }
         )
-
         move = self.env["stock.move"].create(
             {
                 "name": "Test Move",
@@ -54,7 +53,9 @@ class TestStockValuationLayer(TransactionCase):
         picking.button_validate()
         svl = move.stock_valuation_layer_ids
         self.assertTrue(svl, "SVL should be created for the product.")
-        self.assertFalse(svl.account_move_id, "SVL should have a related account move.")
+        self.assertFalse(
+            svl.account_move_id, "SVL should not have a related account move."
+        )
         self.assertEqual(
             svl.accounting_date,
             date(2025, 3, 10),
