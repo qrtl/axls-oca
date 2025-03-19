@@ -90,10 +90,10 @@ class TestStockMoveActualDate(TransactionCase):
         self.assertEqual(move.account_move_ids.date, date(2024, 8, 1))
         scrap = self.create_scrap(receipt, date(2024, 9, 10))
         self.assertEqual(scrap.move_id.actual_date, date(2024, 9, 10))
-        self.assertEqual(scrap.move_id.account_move_ids.date, date(2024, 9, 10))
+        self.assertEqual(scrap.move_id.account_move_ids[0].date, date(2024, 9, 10))
         scrap.actual_date = date(2024, 8, 11)
         self.assertEqual(scrap.move_id.actual_date, date(2024, 8, 11))
-        self.assertEqual(scrap.move_id.account_move_ids.date, date(2024, 8, 11))
+        self.assertEqual(scrap.move_id.account_move_ids[0].date, date(2024, 8, 11))
 
     def test_inventory_adjustment_actual_date(self):
         quant = self.env["stock.quant"].create(
@@ -120,4 +120,4 @@ class TestStockMoveActualDate(TransactionCase):
         self.assertEqual(move.account_move_ids.date, date(2024, 9, 21))
         scrap = self.create_scrap(receipt)
         self.assertEqual(scrap.move_id.actual_date, date(2024, 9, 21))
-        self.assertEqual(scrap.move_id.account_move_ids.date, date(2024, 9, 21))
+        self.assertEqual(scrap.move_id.account_move_ids[0].date, date(2024, 9, 21))
