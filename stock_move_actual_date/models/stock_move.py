@@ -32,6 +32,13 @@ class StockMove(models.Model):
                 self.with_context(tz=tz), rec.date
             )
 
+    def _action_done(self, cancel_backorder=False):
+        moves = super()._action_done(cancel_backorder)
+        # i.e. Inventory adjustments with actual date
+        if self.env.context.get("force_period_date"):
+            self.write({"actual_date": self.env.context.get("force_period_date")})
+        return moves
+
     def _prepare_account_move_vals(
         self,
         credit_account_id,
@@ -51,12 +58,9 @@ class StockMove(models.Model):
             svl_id,
             cost,
         )
-        # i.e. Inventory adjustments with actual date
-        if self._context.get("force_period_date"):
-            self.write({"actual_date": self._context["force_period_date"]})
-            return am_vals
-        if self.actual_date:
-            am_vals.update({"date": self.actual_date})
+        actual_date = self.env.context.get("force_period_date") or self.actual_date
+        if actual_date:
+            am_vals.update({"date": actual_date})
         return am_vals
 
     def _get_price_unit(self):
