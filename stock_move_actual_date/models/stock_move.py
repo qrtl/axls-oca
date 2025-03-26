@@ -18,10 +18,9 @@ class StockMove(models.Model):
     @api.depends("date", "picking_id.actual_date", "scrap_ids.actual_date")
     def _compute_actual_date(self):
         tz = self._get_timezone()
+        context_actual_date = self.env.context.get("actual_date")
         for rec in self:
-            actual_date = (
-                self.env.context.get("actual_date") or rec.scrap_ids.actual_date
-            )
+            actual_date = context_actual_date or rec.scrap_ids.actual_date
             if actual_date:
                 rec.actual_date = actual_date
                 continue
@@ -49,7 +48,7 @@ class StockMove(models.Model):
         svl_id,
         cost,
     ):
-        am_vals = super(StockMove, self)._prepare_account_move_vals(
+        am_vals = super()._prepare_account_move_vals(
             credit_account_id,
             debit_account_id,
             journal_id,

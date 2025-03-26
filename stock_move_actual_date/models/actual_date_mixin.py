@@ -16,10 +16,12 @@ class ActualDateMixin(models.AbstractModel):
         compute="_compute_is_editable_actual_date", string="Is Editable"
     )
 
+    def _check_actual_date_editable(self):
+        self.ensure_one()
+        return self.state not in ["done", "cancel"] or self.env.user.has_group(
+            "stock_move_actual_date.group_actual_date_editable"
+        )
+
     def _compute_is_editable_actual_date(self):
         for rec in self:
-            rec.is_editable_actual_date = False
-            if rec.state not in ["done", "cancel"] or self.env.user.has_group(
-                "stock.group_stock_manager"
-            ):
-                rec.is_editable_actual_date = True
+            rec.is_editable_actual_date = rec._check_actual_date_editable()

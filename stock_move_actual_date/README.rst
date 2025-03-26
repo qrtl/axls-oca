@@ -28,27 +28,47 @@ Stock Move Actual Date
 
 |badge1| |badge2| |badge3| |badge4| |badge5|
 
-This module adds an Actual Date field to the stock picking, stock scrap, stock move, and stock move line models. This field allows users to record the actual date on which a stock transfer or stock scrap took place, in case the transaction in Odoo is processed after the fact.
+This module adds an Actual Date field to the stock picking, stock scrap, stock move,
+and stock move line models. This field allows users to record the actual date on which
+a stock transfer or stock scrap took place, in case the transaction in Odoo is processed
+after the fact.
 
 **Table of contents**
 
 .. contents::
    :local:
 
+Configuration
+=============
+
+* Go to Settings > Users & Companies > Groups.
+* Open Editable Actual Date and add the users who are allowed to edit the actual date
+  of completed records (e.g., pickings, scraps).
+
 Usage
 =====
 
 Use this module's function in the following situations:
 
-* If you are late in processing a transfer or scrap in Odoo and wish to record the transaction with the actual transfer date, fill in the Actual Date field in the picking or scrap form. The Actual Date of the picking or scrap is then propagated to its corresponding stock moves and stock move lines, and is also passed to the journal entry as the date.
-* You can also update the Actual Date of a completed picking or scrap if you belong to the Inventory Manager group. This operation updates the date of the related journal entries, re-proposing a new sequence to them as necessary.
+* If you are late in processing a transfer or scrap in Odoo and wish to record the
+  transaction with the actual transfer date, fill in the Actual Date field in the picking or
+  scrap form. The Actual Date of the picking or scrap is then propagated to its
+  corresponding stock moves and stock move lines, and is also passed to the journal
+  entry as the date.
+* You can also update the Actual Date of a completed picking or scrap if you belong to
+  the "Editable Actual Date" group. This operation updates the date of the related journal
+  entries, re-proposing a new sequence to them as necessary.
 
 Known issues / Roadmap
 ======================
 
-Updating the Actual Date of a completed receipt picking for a foreign currency purchase does not trigger a recalculation of the amounts in the associated journal entries, even if the currency rate for the new date differs.
+Updating the Actual Date of a completed receipt picking for a foreign currency purchase
+does not trigger a recalculation of the amounts in the associated journal entries, even if
+the currency rate for the new date differs.
 
-For the Actual Date of existing stock move and stock move line records created before this module was installed, the user's timezone will not be considered, and only the date part from the 'date' field in the UTC timezone will be assigned.
+For the Actual Date of existing stock move and stock move line records created before
+this module was installed, the user's timezone will not be considered, and only the date
+part from the 'date' field in the UTC timezone will be assigned.
 
 Bug Tracker
 ===========
