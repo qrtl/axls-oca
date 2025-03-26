@@ -36,7 +36,7 @@ class StockMove(models.Model):
         moves = super()._action_done(cancel_backorder)
         # i.e. Inventory adjustments with actual date
         if self.env.context.get("force_period_date"):
-            self.write({"actual_date": self.env.context.get("force_period_date")})
+            self.write({"actual_date": self.env.context["force_period_date"]})
         return moves
 
     def _prepare_account_move_vals(
