@@ -5,6 +5,7 @@ from datetime import date
 
 from freezegun import freeze_time
 
+from odoo import Command
 from odoo.tests.common import TransactionCase
 
 
@@ -60,15 +61,13 @@ class TestStockMoveActualDate(TransactionCase):
                 "product_uom_qty": 10.0,
                 "price_unit": 10,
                 "move_line_ids": [
-                    (
-                        0,
-                        0,
+                    Command.create(
                         {
                             "product_id": self.product_1.id,
                             "location_id": self.supplier_location.id,
                             "location_dest_id": self.stock_location.id,
                             "qty_done": 10.0,
-                        },
+                        }
                     )
                 ],
             }
