@@ -56,7 +56,7 @@ class StockMove(models.Model):
             )
             origin_values[move.id] = {
                 "quantity": origin_svls.quantity,
-                "unit_cost": origin_svls.unit_cost,
+                "value": origin_svls.value,
             }
         moves = super()._action_done(cancel_backorder)
         for move in moves:
@@ -64,7 +64,7 @@ class StockMove(models.Model):
             if not move._is_out() or not move.origin_returned_move_id:
                 continue
             move.move_origin_value = (
-                origin_values[move.id]["unit_cost"]
+                origin_values[move.id]["value"]
                 * move.product_qty
                 / origin_values[move.id]["quantity"]
             )
