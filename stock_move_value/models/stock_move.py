@@ -55,8 +55,8 @@ class StockMove(models.Model):
                 lambda r: r.quantity > 0
             )
             origin_values[move.id] = {
-                "remaining_qty": origin_svls.remaining_qty,
-                "remaining_value": origin_svls.remaining_value,
+                "quantity": origin_svls.quantity,
+                "value": origin_svls.value,
             }
         moves = super()._action_done(cancel_backorder)
         for move in moves:
@@ -64,9 +64,9 @@ class StockMove(models.Model):
             if not move._is_out() or not move.origin_returned_move_id:
                 continue
             move.move_origin_value = (
-                origin_values[move.id]["remaining_value"]
+                origin_values[move.id]["value"]
                 * move.product_qty
-                / origin_values[move.id]["remaining_qty"]
+                / origin_values[move.id]["quantity"]
             )
             move.value_discrepancy = move.move_origin_value + move.move_value
             if move.value_discrepancy != 0.0:
