@@ -40,7 +40,7 @@ class StockMove(models.Model):
     def _compute_move_value(self):
         for move in self:
             # There can be multiple svls per move in case landed costs are entered
-            move.move_value = sum(move.stock_valuation_layer_ids.mapped("value"))
+            move.move_value = sum(move.sudo().stock_valuation_layer_ids.mapped("value"))
 
     def _action_done(self, cancel_backorder=False):
         origin_values = defaultdict(dict)
@@ -60,7 +60,7 @@ class StockMove(models.Model):
             }
         moves = super()._action_done(cancel_backorder)
         for move in moves:
-            move.move_value = sum(move.stock_valuation_layer_ids.mapped("value"))
+            move.move_value = sum(move.sudo().stock_valuation_layer_ids.mapped("value"))
             if not move._is_out() or not move.origin_returned_move_id:
                 continue
             move.move_origin_value = (
