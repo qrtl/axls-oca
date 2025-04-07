@@ -29,7 +29,7 @@ Stock - Manual Quant Assignment
 |badge1| |badge2| |badge3| |badge4| |badge5|
 
 This module allows you to make stock reservations manually in a
-transfer, changing the selection that Odoo automatically made.This
+transfer, changing the selection that Odoo automatically made. This
 functionality is essential for detailed and specific control over
 inventory transfers, ensuring that the correct products are moved
 between precise locations within the warehouse.
