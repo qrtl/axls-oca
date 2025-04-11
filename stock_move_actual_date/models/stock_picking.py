@@ -8,14 +8,9 @@ class StockPicking(models.Model):
     _name = "stock.picking"
     _inherit = ["stock.picking", "actual.date.mixin"]
 
-    def write(self, vals):
-        res = super().write(vals)
-        if "actual_date" in vals:
-            for rec in self:
-                if rec.state != "done":
-                    continue
-                account_moves = rec.move_ids.account_move_ids
-                if not account_moves:
-                    continue
-                account_moves._update_accounting_date()
-        return res
+    def _get_stock_move_field_name(self):
+        return "move_ids"
+
+    def _get_stock_moves(self):
+        self.ensure_one()
+        return self.move_ids

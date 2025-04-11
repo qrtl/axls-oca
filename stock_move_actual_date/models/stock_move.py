@@ -11,21 +11,31 @@ class StockMove(models.Model):
         compute="_compute_actual_date",
         store=True,
     )
+    actual_date_source = fields.Date(
+        help="Technical field to store the actual_date of the source document."
+    )
 
     def _get_timezone(self):
         return self.env.context.get("tz") or self.env.user.tz or "UTC"
 
-    @api.depends("date", "picking_id.actual_date", "scrap_ids.actual_date")
+    @api.model_create_multi
+    def create(self, vals_list):
+        # This handles the case where a move is created separately after the parent record.
+        # For example, in mrp_stock_actual_date, the actual_date is passed via context
+        # when validating an unbuild order.
+        res = super().create(vals_list)
+        actual_date_source = self.env.context.get("actual_date_source")
+        if actual_date_source:
+            for rec in res:
+                rec.actual_date_source = actual_date_source
+        return res
+
+    @api.depends("date", "actual_date_source")
     def _compute_actual_date(self):
         tz = self._get_timezone()
-        context_actual_date = self.env.context.get("actual_date")
         for rec in self:
-            actual_date = context_actual_date or rec.scrap_ids.actual_date
-            if actual_date:
-                rec.actual_date = actual_date
-                continue
-            if not rec.scrapped and rec.picking_id.actual_date:
-                rec.actual_date = rec.picking_id.actual_date
+            if rec.actual_date_source:
+                rec.actual_date = rec.actual_date_source
                 continue
             rec.actual_date = fields.Date.context_today(
                 self.with_context(tz=tz), rec.date
@@ -35,7 +45,7 @@ class StockMove(models.Model):
         moves = super()._action_done(cancel_backorder)
         # i.e. Inventory adjustments with actual date
         if self.env.context.get("force_period_date"):
-            self.write({"actual_date": self.env.context["force_period_date"]})
+            self.write({"actual_date_source": self.env.context["force_period_date"]})
         return moves
 
     def _prepare_account_move_vals(

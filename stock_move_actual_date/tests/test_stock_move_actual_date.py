@@ -48,33 +48,33 @@ class TestStockMoveActualDate(TransactionCase):
                 "partner_id": self.partner.id,
                 "picking_type_id": self.env.ref("stock.picking_type_in").id,
                 "actual_date": actual_date,
-            }
-        )
-
-        move = self.env["stock.move"].create(
-            {
-                "picking_id": receipt.id,
-                "name": "10 in",
-                "location_id": self.supplier_location.id,
-                "location_dest_id": self.stock_location.id,
-                "product_id": self.product_1.id,
-                "product_uom_qty": 10.0,
-                "price_unit": 10,
-                "move_line_ids": [
+                "move_ids": [
                     Command.create(
                         {
-                            "product_id": self.product_1.id,
+                            "name": "10 in",
                             "location_id": self.supplier_location.id,
                             "location_dest_id": self.stock_location.id,
-                            "qty_done": 10.0,
+                            "product_id": self.product_1.id,
+                            "product_uom_qty": 10.0,
+                            "price_unit": 10,
+                            "move_line_ids": [
+                                Command.create(
+                                    {
+                                        "product_id": self.product_1.id,
+                                        "location_id": self.supplier_location.id,
+                                        "location_dest_id": self.stock_location.id,
+                                        "qty_done": 10.0,
+                                    }
+                                )
+                            ],
                         }
                     )
                 ],
             }
         )
-        move._action_confirm()
-        move._action_done()
-        return receipt, move
+        receipt.move_ids._action_confirm()
+        receipt.move_ids._action_done()
+        return receipt, receipt.move_ids
 
     def create_scrap(self, receipt, actual_date=False):
         scrap = self.env["stock.scrap"].create(
@@ -97,10 +97,10 @@ class TestStockMoveActualDate(TransactionCase):
         self.assertEqual(move.account_move_ids.date, date(2024, 8, 1))
         scrap = self.create_scrap(receipt, date(2024, 9, 10))
         self.assertEqual(scrap.move_id.actual_date, date(2024, 9, 10))
-        self.assertEqual(scrap.move_id.account_move_ids.date, date(2024, 9, 10))
+        self.assertEqual(scrap.move_id.account_move_ids[0].date, date(2024, 9, 10))
         scrap.actual_date = date(2024, 8, 11)
         self.assertEqual(scrap.move_id.actual_date, date(2024, 8, 11))
-        self.assertEqual(scrap.move_id.account_move_ids.date, date(2024, 8, 11))
+        self.assertEqual(scrap.move_id.account_move_ids[0].date, date(2024, 8, 11))
 
     def test_inventory_adjustment_actual_date(self):
         quant = self.env["stock.quant"].create(
@@ -144,4 +144,4 @@ class TestStockMoveActualDate(TransactionCase):
         self.assertEqual(move.account_move_ids.date, date(2024, 9, 21))
         scrap = self.create_scrap(receipt)
         self.assertEqual(scrap.move_id.actual_date, date(2024, 9, 21))
-        self.assertEqual(scrap.move_id.account_move_ids.date, date(2024, 9, 21))
+        self.assertEqual(scrap.move_id.account_move_ids[0].date, date(2024, 9, 21))
