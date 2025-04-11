@@ -56,8 +56,7 @@ class ActualDateMixin(models.AbstractModel):
         # when they were not in 'done' state before applying the changes.
         if (
             "actual_date" in vals
-            or move_field_name
-            and move_field_name in vals
+            or (move_field_name and move_field_name in vals)
             or "date_done" in vals
         ):
             for rec in self:
