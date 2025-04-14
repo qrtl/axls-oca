@@ -16,17 +16,14 @@ class ActualDateMixin(models.AbstractModel):
         compute="_compute_is_editable_actual_date", string="Is Editable"
     )
 
-    def _get_stock_move_field_name(self):
-        """Return the field name that stores related stock moves.
+    def _get_actual_date_update_triggers(self):
+        """Return a list of field names that trigger actual_date_source assignment
+        for stock moves.
 
-        This method should be overridden in the specific model to return
-        the corresponding One2many field name that links
-        to stock.move records.
-
-        Returns:
-            str: The technical field name as a string, or False if not applicable.
+        Should be extended in specific models to return relevant fields.
+        Example: Append 'date_done' and 'move_ids' for stock.picking.
         """
-        return False
+        return ["actual_date"]
 
     def _get_stock_moves(self):
         """This method should be overridden in the specific model to return related moves."""
@@ -50,19 +47,11 @@ class ActualDateMixin(models.AbstractModel):
 
     def write(self, vals):
         res = super().write(vals)
-        move_field_name = self._get_stock_move_field_name()
-        # Add date_done in the condition to handle pickings with actual_date
-        # that are validated after this PR (https://github.com/qrtl/axls-oca/pull/182),
-        # when they were not in 'done' state before applying the changes.
-        if (
-            "actual_date" in vals
-            or (move_field_name and move_field_name in vals)
-            or "date_done" in vals
-        ):
+        if any(field in vals for field in self._get_actual_date_update_triggers()):
             for rec in self:
                 moves = rec._get_stock_moves()
                 moves.write({"actual_date_source": rec.actual_date})
-                if rec.state not in self._get_done_state():
+                if rec.state not in self._get_done_state() or "actual_date" not in vals:
                     continue
                 account_moves = moves.account_move_ids
                 if not account_moves:
