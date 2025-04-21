@@ -16,6 +16,7 @@
         "views/stock_move_line_views.xml",
         "views/stock_package_level_views.xml",
         "views/stock_valuation_layer_views.xml",
+        "wizard/stock_valuation_layer_revaluation_views.xml",
     ],
     "installable": True,
     "post_init_hook": "post_init_hook",

@@ -49,6 +49,7 @@ class StockMoveLine(models.Model):
         "qty_base",
         "qty_consumed",
         "move_id.stock_valuation_layer_ids.remaining_value",
+        "move_id.stock_valuation_layer_ids.has_lot_revaluation",
     )
     def _compute_remaining_value(self):
         for rec in self:
@@ -71,6 +72,12 @@ class StockMoveLine(models.Model):
                 * rec.qty_remaining
                 / remaining_qty
             )
+            if not rec.qty_remaining:
+                continue
+            lot_revaluation_value = self.env[
+                "stock.valuation.layer"
+            ]._get_lot_revaluation_value(rec.lot_id, rec.qty_remaining)
+            rec.value_remaining += lot_revaluation_value
 
     def _create_correction_svl(self, move, diff):
         # Pass the move line as a context value in case qty_done is overridden in a done

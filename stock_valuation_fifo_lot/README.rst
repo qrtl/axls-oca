@@ -76,8 +76,8 @@ Main UI Changes
     - 'Force FIFO Lot/Serial': Used when you are stuck by not being able to find a FIFO
       balance for the lot in an outgoing move line.
  
- .. [*] Updated only for products with FIFO costing method only, for valued incoming
-        moves, and outgoing moves where the qty_done has been reduced in the completed
+ .. [*] Updated only for products with FIFO costing method, for valued incoming
+        moves, and for outgoing moves where the qty_done has been reduced in the completed
         state.
         For these outgoing moves, the system generates positive stock valuation layers
         with a remaining balance, which need to be reflected in the related move line.
@@ -118,6 +118,17 @@ been strictly FIFO). In such situations, you should select a "rogue" lot/serial 
 that still exists in terms of FIFO costing, but not in reality, due to the inconsistency
 carried over from the past) in the 'Force FIFO Lot/Serial' field so that this lot/serial
 is used for FIFO costing instead.
+
+To revalue a product with lot_ids displayed in the Stock Valuation Layer list view,
+use the standard revaluation wizard. Set a lot_id in the wizard to revalue a specific
+lot only. Only lots with a remaining quantity will appear in the dropdown list.
+
+Known issues / Roadmap
+======================
+
+The module currently doesn't support product revaluation for specific lots.
+If such a need arises, a workaround is to deduct the stock of the target lot and recreate it
+using an inventory adjustment after modifying the product cost.
 
 Bug Tracker
 ===========

@@ -288,3 +288,57 @@ class TestStockValuationFifoLot(TestStockValuationFifoCommon):
             move_in.stock_valuation_layer_ids.lot_ids,
             "Lot IDs should be empty for AVCO product.",
         )
+
+    def test_fifo_revaluation_lot(self):
+        receipt_picking, move_in = self.create_picking(
+            self.supplier_location,
+            self.stock_location,
+            self.picking_type_in,
+            ["001", "002", "003"],
+            100.0,
+        )
+        self.assertEqual(len(receipt_picking.move_line_ids), 3)
+        svls = move_in.stock_valuation_layer_ids
+        self.assertEqual(svls.remaining_value, 1500.0)
+        self.assertEqual(svls.remaining_qty, 15.0)
+        lot_001 = self.env["stock.lot"].search(
+            [("product_id", "=", self.product.id), ("name", "=", "001")], limit=1
+        )
+        self.assertTrue(lot_001, "Lot 001 should exist")
+        stock_valuation_account = self.env["account.account"].create(
+            {
+                "name": "Stock Valuation",
+                "code": "StockValuation",
+                "account_type": "asset_current",
+                "reconcile": True,
+            }
+        )
+        revaluation = self.env["stock.valuation.layer.revaluation"].create(
+            {
+                "product_id": self.product.id,
+                "company_id": self.env.company.id,
+                "added_value": 10.0,
+                "lot_id": lot_001.id,
+                "reason": "Test Revaluation Lot 001",
+                "account_id": stock_valuation_account.id,
+            }
+        )
+        revaluation.action_validate_revaluation()
+        svl_revaluation = self.env["stock.valuation.layer"].search(
+            [
+                ("product_id", "=", self.product.id),
+                ("lot_ids", "=", lot_001.ids),
+            ],
+            limit=1,
+            order="id desc",
+        )
+        self.assertTrue(svl_revaluation, "Revaluation SVL should be created")
+        self.assertIn(
+            lot_001, svl_revaluation.lot_ids, "Revaluation SVL should have correct lot"
+        )
+        self.assertEqual(svl_revaluation.value, 10.0)
+        self.assertEqual(
+            svl_revaluation.remaining_value,
+            10.0,
+            "Remaining value should be added in revaluation SVL",
+        )

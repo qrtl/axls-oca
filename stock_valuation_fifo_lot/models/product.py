@@ -61,6 +61,13 @@ class ProductProduct(models.Model):
             qty_to_take_on_candidates = min(
                 qty_to_take_on_candidates, candidate_ml.qty_remaining
             )
+            lot_revaluation_value = candidate._get_lot_revaluation_value(
+                fifo_lot, qty_to_take_on_candidates
+            )
+            self.env["stock.valuation.layer"]._adjust_lot_revaluation_remaining_value(
+                fifo_lot, qty_to_take_on_candidates
+            )
+            candidate_ml.value_consumed += lot_revaluation_value
             candidate_ml.qty_consumed += qty_to_take_on_candidates
             candidate_ml.value_consumed += qty_to_take_on_candidates * (
                 candidate.remaining_value / candidate.remaining_qty
@@ -86,13 +93,18 @@ class ProductProduct(models.Model):
                     ml.qty_done, self.uom_id
                 )
             fifo_qty = min(remaining_qty, moved_qty)
+            lot_revaluation_value = self.env[
+                "stock.valuation.layer"
+            ]._get_lot_revaluation_value(fifo_lot, fifo_qty)
             self = self.with_context(fifo_lot=fifo_lot, fifo_qty=fifo_qty)
             ml_fifo_vals = super()._run_fifo(fifo_qty, company)
             for key, value in ml_fifo_vals.items():
                 if key in ("remaining_qty", "value"):
                     vals[key] += value
                     continue
-                vals[key] = value  # unit_cost
+                vals[key] = value
+            vals["value"] -= lot_revaluation_value
+            vals["unit_cost"] = vals["value"] / fifo_qty
             remaining_qty -= fifo_qty
             if float_is_zero(remaining_qty, precision_rounding=self.uom_id.rounding):
                 break
