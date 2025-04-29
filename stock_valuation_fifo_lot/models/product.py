@@ -53,7 +53,6 @@ class ProductProduct(models.Model):
             all_candidates = self._sort_by_all_candidates(all_candidates, sort_by)
         return all_candidates
 
-    # Depends on https://github.com/odoo/odoo/pull/180245
     def _get_qty_taken_on_candidate(self, qty_to_take_on_candidates, candidate):
         fifo_lot = self.env.context.get("fifo_lot")
         if fifo_lot:

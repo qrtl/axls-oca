@@ -49,7 +49,6 @@ class StockMoveLine(models.Model):
         "qty_base",
         "qty_consumed",
         "move_id.stock_valuation_layer_ids.remaining_value",
-        "move_id.stock_valuation_layer_ids.has_lot_revaluation",
     )
     def _compute_remaining_value(self):
         for rec in self:

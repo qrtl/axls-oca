@@ -327,7 +327,7 @@ class TestStockValuationFifoLot(TestStockValuationFifoCommon):
         svl_revaluation = self.env["stock.valuation.layer"].search(
             [
                 ("product_id", "=", self.product.id),
-                ("lot_ids", "=", lot_001.ids),
+                ("lot_ids", "in", lot_001.ids),
             ],
             limit=1,
             order="id desc",
