@@ -9,6 +9,11 @@
         />
         <field name="arch" type="xml">
             <xpath expr="//label[@for='added_value']" position="before">
+                <field name="display_lot_id" invisible="1" />
+                <field
+                    name="lot_id"
+                    attrs="{'invisible': [('display_lot_id', '=', False)]}"
+                />
                 <label
                     for="current_value_lot"
                     string="Current Value for Lot"
@@ -26,13 +31,6 @@
                         /> <field name="product_uom_name" class="oe_inline" />
                     </span>
                 </div>
-            </xpath>
-            <xpath expr="//field[@name='reason']" position="before">
-                <field name="display_lot_id" invisible="1" />
-                <field
-                    name="lot_id"
-                    attrs="{'invisible': [('display_lot_id', '=', False)]}"
-                />
             </xpath>
         </field>
     </record>

@@ -1,3 +1,3 @@
-The module currently doesn't support product revaluation for specific lots.
-If such a need arises, a workaround is to deduct the stock of the target lot and recreate it
-using an inventory adjustment after modifying the product cost.
+Updating the "Done" quantity of completed stock move lines for valued and tracked FIFO
+products is not supported, in order to avoid overcomplicating the logic. Attempting to
+perform such an operation will result in a user error.

@@ -1,5 +1,5 @@
 # Copyright 2023 Ecosoft Co., Ltd (https://ecosoft.co.th)
-# Copyright 2024 Quartile (https://www.quartile.co)
+# Copyright 2024-2025 Quartile (https://www.quartile.co)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html)
 
 from odoo import Command, _, models
@@ -22,18 +22,12 @@ class StockMove(models.Model):
                 )
         return res
 
-    def _get_move_lots(self):
-        self.ensure_one()
-        correction_ml = self.env.context.get("correction_move_line")
-        return correction_ml.lot_id if correction_ml else self.lot_ids
-
     def _prepare_common_svl_vals(self):
         """Add lots/serials to the stock valuation layer."""
         self.ensure_one()
         res = super()._prepare_common_svl_vals()
         if self.product_id.cost_method == "fifo" and self.product_id.tracking != "none":
-            lots = self._get_move_lots()
-            res.update({"lot_ids": [Command.set(lots.ids)]})
+            res.update({"lot_ids": [Command.set(self.lot_ids.ids)]})
         return res
 
     def _create_out_svl(self, forced_quantity=None):
@@ -60,9 +54,7 @@ class StockMove(models.Model):
         return layers
 
     def _create_in_svl(self, forced_quantity=None):
-        correction_ml = self.env.context.get("correction_move_line")
-        if forced_quantity and correction_ml:
-            correction_ml.qty_base += forced_quantity
+        if forced_quantity:
             return super()._create_in_svl(forced_quantity=forced_quantity)
         layers = self.env["stock.valuation.layer"]
         for move in self:
@@ -75,6 +67,7 @@ class StockMove(models.Model):
                 continue
             for ml in layer.stock_move_id.move_line_ids:
                 ml.qty_base = ml.qty_done
+                ml.value_origin = ml.qty_base * layer.unit_cost
         return layers
 
     def _get_price_unit(self):
@@ -89,8 +82,7 @@ class StockMove(models.Model):
             return super()._get_price_unit()
         if hasattr(self, "purchase_line_id") and self.purchase_line_id:
             return super()._get_price_unit()
-        lots = self._get_move_lots()
-        if not len(lots) == 1:
+        if not len(self.lot_ids) == 1:
             return super()._get_price_unit()
         # Get the most recent incoming move line for the lot.
         move_line = (
@@ -98,7 +90,7 @@ class StockMove(models.Model):
             .search(
                 [
                     ("product_id", "=", self.product_id.id),
-                    ("lot_id", "=", lots.id),
+                    ("lot_id", "=", self.lot_ids.id),
                     "|",
                     ("qty_consumed", ">", 0),
                     ("qty_remaining", ">", 0),

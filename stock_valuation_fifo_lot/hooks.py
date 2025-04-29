@@ -1,4 +1,4 @@
-# Copyright 2024 Quartile (https://www.quartile.co)
+# Copyright 2024-2025 Quartile (https://www.quartile.co)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html)
 
 from odoo import SUPERUSER_ID, api
@@ -24,16 +24,17 @@ def post_init_hook(cr, registry):
                 # Let the first move line take such adjustments.
                 move.move_line_ids[0].qty_base = remaining_qty
             continue
-        consumed_qty = consumed_qty_bal = sum(svls.mapped("quantity")) - sum(
-            svls.mapped("remaining_qty")
-        )
+        total_qty = sum(svls.mapped("quantity"))
         total_value = sum(svls.mapped("value")) + sum(
             svls.stock_valuation_layer_ids.mapped("value")
         )
+        unit_cost = total_value / total_qty
+        consumed_qty = consumed_qty_bal = total_qty - sum(svls.mapped("remaining_qty"))
         consumed_value = total_value - sum(svls.mapped("remaining_value"))
         product_uom = move.product_id.uom_id
         for ml in move.move_line_ids.sorted("id"):
             ml.qty_base = ml.product_uom_id._compute_quantity(ml.qty_done, product_uom)
+            ml.value_origin = ml.qty_base * unit_cost
             if float_is_zero(consumed_qty_bal, precision_rounding=product_uom.rounding):
                 continue
             qty_to_allocate = min(consumed_qty_bal, ml.qty_base)

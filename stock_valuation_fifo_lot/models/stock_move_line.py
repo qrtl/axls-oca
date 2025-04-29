@@ -1,7 +1,9 @@
-# Copyright 2024 Quartile (https://www.quartile.co)
+# Copyright 2024-2025 Quartile (https://www.quartile.co)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html)
 
-from odoo import api, fields, models
+from odoo import _, api, fields, models
+from odoo.exceptions import UserError, ValidationError
+from odoo.tools.float_utils import float_compare
 
 
 class StockMoveLine(models.Model):
@@ -17,6 +19,9 @@ class StockMoveLine(models.Model):
         "a lot/serial. In product UoM.",
     )
     company_currency_id = fields.Many2one(related="company_id.currency_id")
+    value_origin = fields.Monetary(
+        currency_field="company_currency_id",
+    )
     value_consumed = fields.Monetary(
         currency_field="company_currency_id",
         help="Consumed value by outgoing valuation for FIFO valued products with a "
@@ -44,12 +49,7 @@ class StockMoveLine(models.Model):
         "(in FIFO costing terms).",
     )
 
-    @api.depends(
-        "lot_id",
-        "qty_base",
-        "qty_consumed",
-        "move_id.stock_valuation_layer_ids.remaining_value",
-    )
+    @api.depends("qty_base", "qty_consumed", "value_origin", "value_consumed")
     def _compute_remaining_value(self):
         for rec in self:
             if (
@@ -58,29 +58,38 @@ class StockMoveLine(models.Model):
             ):
                 continue
             rec.qty_remaining = rec.qty_base - rec.qty_consumed
-            layers = rec.move_id.stock_valuation_layer_ids.filtered(
-                lambda x: rec.lot_id in x.lot_ids
-            )
-            remaining_qty = sum(layers.mapped("remaining_qty"))
-            if not remaining_qty:
-                rec.qty_remaining = 0
-                rec.value_remaining = 0
-                continue
-            rec.value_remaining = (
-                sum(layers.mapped("remaining_value"))
-                * rec.qty_remaining
-                / remaining_qty
-            )
-            if not rec.qty_remaining:
-                continue
-            lot_revaluation_value = self.env[
-                "stock.valuation.layer"
-            ]._get_lot_revaluation_value(rec.lot_id, rec.qty_remaining)
-            rec.value_remaining += lot_revaluation_value
+            rec.value_remaining = rec.value_origin - rec.value_consumed
+
+    @api.constrains("qty_remaining", "value_remaining")
+    def _check_remaining_numbers(self):
+        for rec in self:
+            uom_rounding = rec.product_id.uom_id.rounding
+            if (
+                float_compare(rec.qty_remaining, 0.0, precision_rounding=uom_rounding)
+                < 0
+            ):
+                raise ValidationError(
+                    _("Remaining Quantity cannot be negative for a move line.")
+                )
+            currency_rounding = rec.company_currency_id.rounding
+            if (
+                float_compare(
+                    rec.value_remaining, 0.0, precision_rounding=currency_rounding
+                )
+                < 0
+            ):
+                raise ValidationError(
+                    _("Remaining Value cannot be negative for a move line.")
+                )
 
     def _create_correction_svl(self, move, diff):
         # Pass the move line as a context value in case qty_done is overridden in a done
         # transfer, to correctly identify which record should be processed in
         # _run_fifo().
-        move = move.with_context(correction_move_line=self)
+        product = move.product_id
+        if product.cost_method == "fifo" and product.tracking != "none":
+            raise UserError(
+                _("Forced quantity is not allowed for the tracked FIFO product %s.")
+                % product.display_name
+            )
         return super()._create_correction_svl(move, diff)
