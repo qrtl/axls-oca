@@ -9,7 +9,7 @@
     "development_status": "Alpha",
     "license": "AGPL-3",
     "author": "Ecosoft, Quartile, Odoo Community Association (OCA)",
-    "website": "",
+    "website": "https://github.com/OCA/stock-logistics-workflow",
     "depends": ["stock_account"],
     "data": [
         "views/res_config_settings_views.xml",
