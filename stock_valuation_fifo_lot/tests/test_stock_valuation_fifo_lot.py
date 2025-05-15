@@ -312,3 +312,75 @@ class TestStockValuationFifoLot(TestStockValuationFifoCommon):
             1510.0,
             "Remaining value of the origin SVL should be updated",
         )
+
+    def test_fifo_revaluation_lot_remaining_value(self):
+        _, move_in = self.create_picking(
+            self.supplier_location,
+            self.stock_location,
+            self.picking_type_in,
+            ["001", "002", "003"],
+            100.0,
+        )
+        origin_layer = move_in.stock_valuation_layer_ids
+        self.assertEqual(origin_layer.remaining_value, 1500.0)
+        self.assertEqual(origin_layer.remaining_qty, 15.0)
+        lot_001 = self.env["stock.lot"].search(
+            [("product_id", "=", self.product.id), ("name", "=", "001")], limit=1
+        )
+        stock_valuation_account = self.env["account.account"].create(
+            {
+                "name": "Stock Valuation",
+                "code": "StockValuation",
+                "account_type": "asset_current",
+                "reconcile": True,
+            }
+        )
+        revaluation = self.env["stock.valuation.layer.revaluation"].create(
+            {
+                "product_id": self.product.id,
+                "company_id": self.env.company.id,
+                "added_value": 100.0,
+                "lot_id": lot_001.id,
+                "reason": "Test Revaluation Lot 001",
+                "account_id": stock_valuation_account.id,
+            }
+        )
+        revaluation.action_validate_revaluation()
+        reval_layer = self.env["stock.valuation.layer"].search(
+            [
+                ("product_id", "=", self.product.id),
+                ("lot_ids", "in", lot_001.ids),
+                ("stock_valuation_layer_id", "=", origin_layer.id),
+            ],
+            limit=1,
+            order="id desc",
+        )
+        self.assertTrue(reval_layer, "Revaluation SVL should be created")
+        self.assertIn(
+            lot_001, reval_layer.lot_ids, "Revaluation SVL should have correct lot"
+        )
+        self.assertEqual(reval_layer.value, 100.0)
+        self.assertEqual(reval_layer.remaining_value, 0.0)
+        self.assertEqual(
+            origin_layer.remaining_value,
+            1600.0,
+            "Remaining value of the origin SVL should be updated",
+        )
+        _, move_out = self.create_picking(
+            self.stock_location,
+            self.customer_location,
+            self.picking_type_out,
+            ["001"],
+            is_receipt=False,
+        )
+        self.assertEqual(
+            abs(move_out.stock_valuation_layer_ids.value),
+            600.0,
+            "Stock valuation for delivery of lot 001 should be 600.0",
+        )
+        self.assertEqual(
+            origin_layer.remaining_value,
+            1000.0,
+            "Remaining value of the origin SVL should be reduced by the value of lot 001.",
+        )
+        self.assertEqual(origin_layer.remaining_qty, 10.0)
