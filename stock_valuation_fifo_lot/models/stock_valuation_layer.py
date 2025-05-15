@@ -20,11 +20,17 @@ class StockValuationLayer(models.Model):
         """
         ctx = self.env.context
         fifo_lot = ctx.get("fifo_lot")
-        consumed = ctx.get("consumed_value")
+        unit_cost = ctx.get("unit_cost")
         # i.e., the layer is a candidate layer for lot managed FIFO product
-        if fifo_lot and consumed is not None and "remaining_value" in vals:
+        if (
+            fifo_lot
+            and unit_cost is not None
+            and "remaining_qty" in vals
+            and "remaining_value" in vals
+        ):
             self.ensure_one()
-            remaining_value = self.remaining_value - ctx.get("consumed_value")
+            moved_qty = self.remaining_qty - vals.get("remaining_qty")
+            remaining_value = self.remaining_value - moved_qty * unit_cost
             if (
                 float_compare(
                     remaining_value, 0.0, precision_rounding=self.currency_id.rounding
@@ -34,7 +40,6 @@ class StockValuationLayer(models.Model):
                 raise ValidationError(
                     _("Remaining Value cannot be negative for the candidate layer.")
                 )
-
             vals["remaining_value"] = remaining_value
         return super().write(vals)
 

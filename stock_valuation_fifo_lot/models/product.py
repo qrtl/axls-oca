@@ -99,7 +99,7 @@ class ProductProduct(models.Model):
             unit_cost = value_remain_lot / qty_remain_lot
             consumed_value = fifo_qty * unit_cost
             self = self.with_context(
-                fifo_lot=fifo_lot, fifo_qty=fifo_qty, consumed_value=consumed_value
+                fifo_lot=fifo_lot, fifo_qty=fifo_qty, unit_cost=unit_cost
             )
             ml_fifo_vals = super()._run_fifo(fifo_qty, company)
             for key, value in ml_fifo_vals.items():
