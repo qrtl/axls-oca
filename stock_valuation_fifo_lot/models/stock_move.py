@@ -92,7 +92,7 @@ class StockMove(models.Model):
                     ("product_id", "=", self.product_id.id),
                     ("lot_id", "=", self.lot_ids.id),
                     "|",
-                    ("qty_moved", ">", 0),
+                    ("qty_moved", "<", 0),
                     ("qty_remaining", ">", 0),
                     ("company_id", "=", self.company_id.id),
                 ],

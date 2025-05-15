@@ -38,6 +38,6 @@ def post_init_hook(cr, registry):
             if float_is_zero(consumed_qty_bal, precision_rounding=product_uom.rounding):
                 continue
             qty_to_allocate = min(consumed_qty_bal, ml.qty_base)
-            ml.qty_moved += qty_to_allocate
+            ml.qty_moved -= qty_to_allocate
             consumed_qty_bal -= qty_to_allocate
             ml.value_moved -= moved_value * qty_to_allocate / consumed_qty

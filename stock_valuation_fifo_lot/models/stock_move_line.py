@@ -57,7 +57,7 @@ class StockMoveLine(models.Model):
                 or not rec.lot_id
             ):
                 continue
-            rec.qty_remaining = rec.qty_base - rec.qty_moved
+            rec.qty_remaining = rec.qty_base + rec.qty_moved
             rec.value_remaining = rec.value_origin + rec.value_moved
 
     @api.constrains("qty_remaining", "value_remaining")

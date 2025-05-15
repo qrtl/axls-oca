@@ -11,25 +11,23 @@ class StockValuationLayer(models.Model):
         comodel_name="stock.lot",
         string="Lots/Serials",
     )
+    moved_value_tmp = fields.Monetary(
+        help="Technical field to temporarily store the value for computation."
+    )
 
     def write(self, vals):
         """Override the remaining value according to the consumed value of the
         corresponding stock move line for lot-managed FIFO products.
         """
-        ctx = self.env.context
-        fifo_lot = ctx.get("fifo_lot")
-        unit_cost = ctx.get("unit_cost")
         # i.e., the layer is a candidate layer for lot managed FIFO product
         if (
-            fifo_lot
-            and unit_cost is not None
-            and "remaining_qty" in vals
+            "remaining_qty" in vals
             and "remaining_value" in vals
+            and len(self) == 1
+            and self.moved_value_tmp
         ):
-            self.ensure_one()
-            moved_qty = self.remaining_qty - vals.get("remaining_qty")
-            remaining_value = self.remaining_value - moved_qty * unit_cost
-            vals["remaining_value"] = remaining_value
+            vals["remaining_value"] = self.remaining_value - self.moved_value_tmp
+            vals["moved_value_tmp"] = 0
         return super().write(vals)
 
     def _get_unconsumed_in_move_line(self, lot):

@@ -205,7 +205,7 @@ class TestStockValuationFifoLot(TestStockValuationFifoCommon):
         # Intentioanally create inconsistent lot balances between stock.quant and
         # stock.move.line.
         # Move line qty_remaining is changed from 5.0 to 0.0 for lot 001
-        move_line_lot_001.qty_moved = 5.0
+        move_line_lot_001.qty_moved = -5.0
         move_line_lot_001.value_moved = 500.0
         # Move line qty_remaining is changed from 0.0 to 5.0 for lot 001
         move_line_lot_002.qty_moved = 0.0

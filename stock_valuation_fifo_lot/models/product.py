@@ -65,10 +65,13 @@ class ProductProduct(models.Model):
             qty_to_take_on_candidates = min(
                 qty_to_take_on_candidates, candidate_ml.qty_remaining
             )
-            candidate_ml.value_moved -= qty_to_take_on_candidates * (
+            # Temporarily keep the moved value in the candidate so that the value can
+            # be used to re-compute remaining_value in write() later.
+            candidate.moved_value_tmp = qty_to_take_on_candidates * (
                 candidate_ml.value_remaining / candidate_ml.qty_remaining
             )
-            candidate_ml.qty_moved += qty_to_take_on_candidates
+            candidate_ml.value_moved -= candidate.moved_value_tmp
+            candidate_ml.qty_moved -= qty_to_take_on_candidates
         return super()._get_qty_taken_on_candidate(qty_to_take_on_candidates, candidate)
 
     def _run_fifo(self, quantity, company):
@@ -109,11 +112,9 @@ class ProductProduct(models.Model):
                 < 0
             ):
                 raise ValidationError(
-                    _("Remaining Value cannot be negative for the candidate layer.")
+                    _("There is not enough value remaining for the lot.")
                 )
-            self = self.with_context(
-                fifo_lot=fifo_lot, fifo_qty=fifo_qty, unit_cost=unit_cost
-            )
+            self = self.with_context(fifo_lot=fifo_lot, fifo_qty=fifo_qty)
             ml_fifo_vals = super()._run_fifo(fifo_qty, company)
             for key, value in ml_fifo_vals.items():
                 if key == "remaining_qty":
