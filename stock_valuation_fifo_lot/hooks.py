@@ -30,7 +30,7 @@ def post_init_hook(cr, registry):
         )
         unit_cost = total_value / total_qty
         consumed_qty = consumed_qty_bal = total_qty - sum(svls.mapped("remaining_qty"))
-        consumed_value = total_value - sum(svls.mapped("remaining_value"))
+        moved_value = total_value - sum(svls.mapped("remaining_value"))
         product_uom = move.product_id.uom_id
         for ml in move.move_line_ids.sorted("id"):
             ml.qty_base = ml.product_uom_id._compute_quantity(ml.qty_done, product_uom)
@@ -38,6 +38,6 @@ def post_init_hook(cr, registry):
             if float_is_zero(consumed_qty_bal, precision_rounding=product_uom.rounding):
                 continue
             qty_to_allocate = min(consumed_qty_bal, ml.qty_base)
-            ml.qty_consumed += qty_to_allocate
+            ml.qty_moved += qty_to_allocate
             consumed_qty_bal -= qty_to_allocate
-            ml.value_consumed += consumed_value * qty_to_allocate / consumed_qty
+            ml.value_moved -= moved_value * qty_to_allocate / consumed_qty

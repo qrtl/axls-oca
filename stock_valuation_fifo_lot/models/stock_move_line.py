@@ -14,17 +14,17 @@ class StockMoveLine(models.Model):
         "lot/serial; represents the total quantity of the moves with incoming "
         "valuation for the move line. In product UoM.",
     )
-    qty_consumed = fields.Float(
-        help="Consumed quantity by outgoing valuation for FIFO valued products with "
+    qty_moved = fields.Float(
+        help="Moved quantity by outgoing valuation for FIFO valued products with "
         "a lot/serial. In product UoM.",
     )
     company_currency_id = fields.Many2one(related="company_id.currency_id")
     value_origin = fields.Monetary(
         currency_field="company_currency_id",
     )
-    value_consumed = fields.Monetary(
+    value_moved = fields.Monetary(
         currency_field="company_currency_id",
-        help="Consumed value by outgoing valuation for FIFO valued products with a "
+        help="Moved value by outgoing valuation for FIFO valued products with a "
         "lot/serial",
     )
     qty_remaining = fields.Float(
@@ -49,7 +49,7 @@ class StockMoveLine(models.Model):
         "(in FIFO costing terms).",
     )
 
-    @api.depends("qty_base", "qty_consumed", "value_origin", "value_consumed")
+    @api.depends("qty_base", "qty_moved", "value_origin", "value_moved")
     def _compute_remaining_value(self):
         for rec in self:
             if (
@@ -57,8 +57,8 @@ class StockMoveLine(models.Model):
                 or not rec.lot_id
             ):
                 continue
-            rec.qty_remaining = rec.qty_base - rec.qty_consumed
-            rec.value_remaining = rec.value_origin - rec.value_consumed
+            rec.qty_remaining = rec.qty_base - rec.qty_moved
+            rec.value_remaining = rec.value_origin + rec.value_moved
 
     @api.constrains("qty_remaining", "value_remaining")
     def _check_remaining_numbers(self):

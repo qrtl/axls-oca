@@ -1,9 +1,7 @@
 # Copyright 2023 Ecosoft Co., Ltd (https://ecosoft.co.th)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html)
 
-from odoo import _, fields, models
-from odoo.exceptions import ValidationError
-from odoo.tools.float_utils import float_compare
+from odoo import fields, models
 
 
 class StockValuationLayer(models.Model):
@@ -31,15 +29,6 @@ class StockValuationLayer(models.Model):
             self.ensure_one()
             moved_qty = self.remaining_qty - vals.get("remaining_qty")
             remaining_value = self.remaining_value - moved_qty * unit_cost
-            if (
-                float_compare(
-                    remaining_value, 0.0, precision_rounding=self.currency_id.rounding
-                )
-                < 0
-            ):
-                raise ValidationError(
-                    _("Remaining Value cannot be negative for the candidate layer.")
-                )
             vals["remaining_value"] = remaining_value
         return super().write(vals)
 

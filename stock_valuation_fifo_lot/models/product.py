@@ -5,9 +5,10 @@
 from collections import defaultdict
 
 from odoo import _, api, models
-from odoo.exceptions import UserError
+from odoo.exceptions import UserError, ValidationError
 from odoo.osv import expression
 from odoo.tools import float_is_zero
+from odoo.tools.float_utils import float_compare
 
 
 class ProductProduct(models.Model):
@@ -64,10 +65,10 @@ class ProductProduct(models.Model):
             qty_to_take_on_candidates = min(
                 qty_to_take_on_candidates, candidate_ml.qty_remaining
             )
-            candidate_ml.value_consumed += qty_to_take_on_candidates * (
+            candidate_ml.value_moved -= qty_to_take_on_candidates * (
                 candidate_ml.value_remaining / candidate_ml.qty_remaining
             )
-            candidate_ml.qty_consumed += qty_to_take_on_candidates
+            candidate_ml.qty_moved += qty_to_take_on_candidates
         return super()._get_qty_taken_on_candidate(qty_to_take_on_candidates, candidate)
 
     def _run_fifo(self, quantity, company):
@@ -77,6 +78,7 @@ class ProductProduct(models.Model):
             return super()._run_fifo(quantity, company)
         remaining_qty = quantity
         vals = defaultdict(float)
+        vals["value"] = 0
         out_move_lines = fifo_move._get_out_move_lines()
         out_ml_qty = 0
         for out_ml in out_move_lines:
@@ -98,6 +100,17 @@ class ProductProduct(models.Model):
             value_remain_lot = sum(in_move_lines.mapped("value_remaining"))
             unit_cost = value_remain_lot / qty_remain_lot
             consumed_value = fifo_qty * unit_cost
+            if (
+                float_compare(
+                    value_remain_lot,
+                    consumed_value,
+                    precision_rounding=self.currency_id.rounding,
+                )
+                < 0
+            ):
+                raise ValidationError(
+                    _("Remaining Value cannot be negative for the candidate layer.")
+                )
             self = self.with_context(
                 fifo_lot=fifo_lot, fifo_qty=fifo_qty, unit_cost=unit_cost
             )
@@ -107,7 +120,7 @@ class ProductProduct(models.Model):
                     vals[key] += value
                     continue
             vals["unit_cost"] = unit_cost
-            vals["value"] = consumed_value
+            vals["value"] -= consumed_value
             remaining_qty -= fifo_qty
             if float_is_zero(remaining_qty, precision_rounding=self.uom_id.rounding):
                 break

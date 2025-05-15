@@ -92,7 +92,7 @@ class StockMove(models.Model):
                     ("product_id", "=", self.product_id.id),
                     ("lot_id", "=", self.lot_ids.id),
                     "|",
-                    ("qty_consumed", ">", 0),
+                    ("qty_moved", ">", 0),
                     ("qty_remaining", ">", 0),
                     ("company_id", "=", self.company_id.id),
                 ],
@@ -101,7 +101,7 @@ class StockMove(models.Model):
             .filtered(lambda x: x.move_id._is_in())[:1]
         )
         if move_line:
-            if move_line.qty_consumed:
-                return move_line.value_consumed / move_line.qty_consumed
+            if move_line.qty_moved:
+                return move_line.value_moved / move_line.qty_moved
             return move_line.value_remaining / move_line.qty_remaining
         return super()._get_price_unit()
