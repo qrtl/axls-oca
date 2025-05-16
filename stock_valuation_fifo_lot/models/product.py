@@ -5,10 +5,9 @@
 from collections import defaultdict
 
 from odoo import _, api, models
-from odoo.exceptions import UserError, ValidationError
+from odoo.exceptions import UserError
 from odoo.osv import expression
 from odoo.tools import float_is_zero
-from odoo.tools.float_utils import float_compare
 
 
 class ProductProduct(models.Model):
@@ -82,6 +81,7 @@ class ProductProduct(models.Model):
         remaining_qty = quantity
         vals = defaultdict(float)
         vals["value"] = 0
+        vals["unit_cost"] = 0
         out_move_lines = fifo_move._get_out_move_lines()
         out_ml_qty = 0
         for out_ml in out_move_lines:
@@ -103,27 +103,17 @@ class ProductProduct(models.Model):
             value_remain_lot = sum(in_move_lines.mapped("value_remaining"))
             unit_cost = value_remain_lot / qty_remain_lot
             consumed_value = fifo_qty * unit_cost
-            if (
-                float_compare(
-                    value_remain_lot,
-                    consumed_value,
-                    precision_rounding=self.currency_id.rounding,
-                )
-                < 0
-            ):
-                raise ValidationError(
-                    _("There is not enough value remaining for the lot: %s.")
-                    % fifo_lot.name
-                )
             self = self.with_context(fifo_lot=fifo_lot, fifo_qty=fifo_qty)
             ml_fifo_vals = super()._run_fifo(fifo_qty, company)
             for key, value in ml_fifo_vals.items():
                 if key == "remaining_qty":
                     vals[key] += value
                     continue
-            vals["unit_cost"] = unit_cost
+            vals["unit_cost"] += unit_cost
             vals["value"] -= consumed_value
             remaining_qty -= fifo_qty
             if float_is_zero(remaining_qty, precision_rounding=self.uom_id.rounding):
                 break
+        if out_move_lines:
+            vals["unit_cost"] = vals["unit_cost"] / len(out_move_lines)
         return vals
