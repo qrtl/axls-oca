@@ -21,7 +21,7 @@
                 />
                 <field
                     name="qty_moved"
-                    sum="Qty Consumed"
+                    sum="Qty Moved"
                     groups="stock.group_stock_manager"
                     optional="show"
                 />
@@ -33,7 +33,7 @@
                 />
                 <field
                     name="value_moved"
-                    sum="Value Consumed"
+                    sum="Value Moved"
                     groups="stock.group_stock_manager"
                     optional="show"
                 />
