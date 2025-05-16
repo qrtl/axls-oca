@@ -112,7 +112,8 @@ class ProductProduct(models.Model):
                 < 0
             ):
                 raise ValidationError(
-                    _("There is not enough value remaining for the lot.")
+                    _("There is not enough value remaining for the lot: %s.")
+                    % fifo_lot.name
                 )
             self = self.with_context(fifo_lot=fifo_lot, fifo_qty=fifo_qty)
             ml_fifo_vals = super()._run_fifo(fifo_qty, company)
