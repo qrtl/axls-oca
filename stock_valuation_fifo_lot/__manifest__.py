@@ -4,7 +4,7 @@
 
 {
     "name": "Stock Valuation Fifo Lot",
-    "version": "16.0.1.0.0",
+    "version": "16.0.1.0.1",
     "category": "Warehouse Management",
     "development_status": "Alpha",
     "license": "AGPL-3",
