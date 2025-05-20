@@ -25,6 +25,8 @@ def post_init_hook(cr, registry):
                 move.move_line_ids[0].qty_base = remaining_qty
             continue
         total_qty = sum(svls.mapped("quantity"))
+        if not total_qty:
+            continue
         total_value = sum(svls.mapped("value")) + sum(
             svls.stock_valuation_layer_ids.mapped("value")
         )
