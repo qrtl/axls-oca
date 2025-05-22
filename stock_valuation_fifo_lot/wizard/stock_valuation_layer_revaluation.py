@@ -133,7 +133,10 @@ class StockValuationLayerRevaluation(models.TransientModel):
             move_lines |= line
             remain_val -= taken_remain_val
             remain_qty -= line.qty_remaining
-            linked_layer = line.move_id.stock_valuation_layer_ids
+            # To avoid singleton error if there is a landed cost SVL in the move
+            linked_layer = line.move_id.stock_valuation_layer_ids.filtered(
+                lambda svl: svl.quantity > 0
+            )
             linked_layer.remaining_value += taken_remain_val
             line.value_moved += taken_remain_val
             reval_svl_vals = {

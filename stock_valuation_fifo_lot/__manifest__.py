@@ -10,7 +10,7 @@
     "license": "AGPL-3",
     "author": "Ecosoft, Quartile, Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/stock-logistics-workflow",
-    "depends": ["stock_account"],
+    "depends": ["stock_account", "stock_landed_costs"],
     "data": [
         "views/res_config_settings_views.xml",
         "views/stock_move_line_views.xml",
