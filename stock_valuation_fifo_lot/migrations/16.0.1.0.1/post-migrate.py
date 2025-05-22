@@ -38,6 +38,4 @@ def migrate(cr, version):
                 continue
             qty_to_allocate = min(consumed_qty_bal, ml.qty_base)
             consumed_qty_bal -= qty_to_allocate
-            ml.value_moved += ml.qty_base * other_unit_cost - (
-                moved_value * qty_to_allocate / consumed_qty
-            )
+            ml.value_moved -= moved_value * qty_to_allocate / consumed_qty
