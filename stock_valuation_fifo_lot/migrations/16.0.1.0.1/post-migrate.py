@@ -11,9 +11,6 @@ def migrate(cr, version):
         svls = move.stock_valuation_layer_ids
         if move._is_out():
             continue
-        for ml in move.move_line_ids:
-            ml.qty_moved = -ml.qty_moved
-            ml.value_moved = -ml.value_moved
         total_qty = sum(svls.mapped("quantity"))
         if not total_qty:
             continue
