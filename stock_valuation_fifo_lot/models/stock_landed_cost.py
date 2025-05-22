@@ -23,3 +23,4 @@ class StockLandedCost(models.Model):
                 unit_cost = svl.value / total_qty
                 for line in move_lines:
                     line.value_moved += unit_cost * line.qty_remaining
+        return

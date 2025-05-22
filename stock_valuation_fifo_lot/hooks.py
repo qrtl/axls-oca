@@ -27,28 +27,27 @@ def post_init_hook(cr, registry):
         all_svls = svls | svls.mapped("stock_valuation_layer_ids")
         origin_svls = all_svls.filtered(lambda svl: svl.quantity > 0)
         other_svls = all_svls - origin_svls
-        total_qty = sum(all_svls.mapped("quantity"))  # 2
-        origin_qty = sum(origin_svls.mapped("quantity"))  # 2
+        total_qty = sum(all_svls.mapped("quantity"))
+        origin_qty = sum(origin_svls.mapped("quantity"))
         if not total_qty:
             continue
-        total_value = sum(all_svls.mapped("value"))  # 300
+        total_value = sum(all_svls.mapped("value"))
         other_total_value = sum(other_svls.mapped("value"))
         other_unit_cost = other_total_value / total_qty
-        origin_value = sum(origin_svls.mapped("value"))  # 200
-        origin_unit_cost = origin_value / origin_qty  # 100
+        origin_value = sum(origin_svls.mapped("value"))
+        origin_unit_cost = origin_value / origin_qty
         consumed_qty = consumed_qty_bal = total_qty - sum(
             all_svls.mapped("remaining_qty")
-        )  # 2
-        moved_value = total_value - sum(svls.mapped("remaining_value"))  # 300
+        )
+        moved_value = total_value - sum(svls.mapped("remaining_value"))
         product_uom = move.product_id.uom_id
         for ml in move.move_line_ids.sorted("id"):
             ml.qty_base = ml.product_uom_id._compute_quantity(ml.qty_done, product_uom)
             ml.value_origin = ml.qty_base * origin_unit_cost
+            ml.value_moved += ml.qty_base * other_unit_cost
             if float_is_zero(consumed_qty_bal, precision_rounding=product_uom.rounding):
                 continue
             qty_to_allocate = min(consumed_qty_bal, ml.qty_base)
             ml.qty_moved -= qty_to_allocate
             consumed_qty_bal -= qty_to_allocate
-            ml.value_moved += ml.qty_base * other_unit_cost - (
-                moved_value * qty_to_allocate / consumed_qty
-            )
+            ml.value_moved -= moved_value * qty_to_allocate / consumed_qty
