@@ -1,9 +1,9 @@
 # Copyright 2025 Quartile (https://www.quartile.co)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html)
 
-from odoo import Command, _, api, fields, models
+from odoo import _, api, fields, models
 from odoo.exceptions import UserError
-from odoo.tools import float_is_zero
+from odoo.tools import float_compare, float_is_zero
 
 
 class StockValuationLayerRevaluation(models.TransientModel):
@@ -60,6 +60,13 @@ class StockValuationLayerRevaluation(models.TransientModel):
         revaluations = self.filtered(lambda l: l.lot_id)
         for reval in revaluations:
             reval.new_value = reval.current_value_lot + reval.added_value
+            if (
+                float_compare(
+                    reval.new_value, 0.0, precision_rounding=self.currency_id.rounding
+                )
+                < 0
+            ):
+                raise UserError(_("The new value for the lot cannot be negative."))
             if not float_is_zero(
                 reval.current_quantity_lot,
                 precision_rounding=self.product_id.uom_id.rounding,
@@ -78,34 +85,6 @@ class StockValuationLayerRevaluation(models.TransientModel):
         remaining_lots = self._get_remaining_stock_move_lines().mapped("lot_id")
         return {"domain": {"lot_id": [("id", "in", remaining_lots.ids)]}}
 
-    def _prepare_account_move_vals(self, product, reval_svl, origin_val, moved_val):
-        accounts = product.product_tmpl_id.get_product_accounts()
-        sv_acc = accounts.get("stock_valuation") and accounts["stock_valuation"]
-        debit_acc, credit_acc = (
-            (self.account_id, sv_acc) if moved_val < 0 else (sv_acc, self.account_id)
-        )
-        line_name = _(
-            "%(user)s changed stock valuation from %(previous)s to %(new_value)s - %(product)s",
-            user=self.env.user.name,
-            previous=origin_val,
-            new_value=origin_val + self.added_value,
-            product=product.display_name,
-        )
-        debit_vals = {"name": line_name, "product_id": product.id}
-        credit_vals = debit_vals.copy()
-        debit_vals["account_id"] = debit_acc.id
-        credit_vals["account_id"] = credit_acc.id
-        debit_vals["debit"] = credit_vals["credit"] = abs(moved_val)
-        return {
-            "journal_id": self.account_journal_id.id or accounts["stock_journal"].id,
-            "company_id": self.company_id.id,
-            "ref": _("Revaluation of %s", product.display_name),
-            "stock_valuation_layer_ids": [Command.set(reval_svl.ids)],
-            "date": self.date or fields.Date.today(),
-            "move_type": "entry",
-            "line_ids": [Command.create(debit_vals), Command.create(credit_vals)],
-        }
-
     def action_validate_revaluation(self):
         self.ensure_one()
         if not self.lot_id:
@@ -116,43 +95,31 @@ class StockValuationLayerRevaluation(models.TransientModel):
             )
         product = self.product_id.with_company(self.company_id)
         reason_text = self.reason if self.reason else _("No Reason Given")
-        description = _("Manual Stock Valuation: %s.", reason_text)
-        remain_move_lines = self._get_remaining_stock_move_lines(self.lot_id)
-        remain_qty = sum(remain_move_lines.mapped("qty_remaining"))
-        remain_val = self.added_value
-        remain_val_unit = self.currency_id.round(remain_val / remain_qty)
-        move_lines = self.env["stock.move.line"]
-        for line in remain_move_lines:
-            if float_is_zero(
-                line.qty_remaining - remain_qty,
-                precision_rounding=product.uom_id.rounding,
-            ):
-                taken_remain_val = remain_val
-            else:
-                taken_remain_val = remain_val_unit * line.qty_remaining
-            move_lines |= line
-            remain_val -= taken_remain_val
-            remain_qty -= line.qty_remaining
-            # To avoid singleton error if there is a landed cost SVL in the move
-            linked_layer = line.move_id.stock_valuation_layer_ids.filtered(
-                lambda svl: svl.quantity > 0
-            )
-            linked_layer.remaining_value += taken_remain_val
-            line.value_moved += taken_remain_val
-            reval_svl_vals = {
-                "company_id": self.company_id.id,
-                "product_id": product.id,
-                "description": description,
-                "value": taken_remain_val,
-                "lot_ids": [Command.set([self.lot_id.id])],
-                "stock_valuation_layer_id": linked_layer.id,
-            }
-            reval_svl = self.env["stock.valuation.layer"].create(reval_svl_vals)
-            if self.property_valuation != "real_time":
-                continue
-            account_move_vals = self._prepare_account_move_vals(
-                product, reval_svl, self.current_value_lot, taken_remain_val
-            )
-            account_move = self.env["account.move"].create(account_move_vals)
-            account_move._post()
+        description = _("Manual Lot Valuation: %s", reason_text)
+        # We don't use self.new_value_by_qty (monetary) to avoid unwanted rounding
+        new_value_per_qty = self.new_value / self.current_quantity_lot
+        quants = self.env["stock.quant"].search(
+            [
+                ("product_id", "=", product.id),
+                ("lot_id", "=", self.lot_id.id),
+                ("location_id.usage", "=", "internal"),
+            ]
+        )
+        quants = quants.with_context(
+            inventory_name=description, lot_revaluation_account=self.account_id
+        )
+        # Keep the current quant quantities to restore them later
+        quant_qty_dict = {quant: quant.quantity for quant in quants}
+        # Remove the exsiting on-hand quantities first
+        quants.inventory_quantity = 0
+        quants.accounting_date = self.date
+        quants.action_apply_inventory()
+        # Restore the quantities to the quants
+        product.standard_price = new_value_per_qty
+        for quant in quants:
+            quant.write({"inventory_quantity": quant_qty_dict[quant]})
+        quants.accounting_date = self.date
+        # Assign context so that the created stock is valued with product standard price
+        quants = quants.with_context(lot_revaluation=True)
+        quants.action_apply_inventory()
         return True

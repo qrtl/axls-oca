@@ -67,7 +67,6 @@ class StockMove(models.Model):
                 continue
             for ml in layer.stock_move_id.move_line_ids:
                 ml.qty_base = ml.qty_done
-                ml.value_origin = ml.qty_base * layer.unit_cost
         return layers
 
     def _get_price_unit(self):
@@ -78,6 +77,7 @@ class StockMove(models.Model):
         if (
             not self.company_id.use_lot_cost_for_new_stock
             or self.product_id.cost_method != "fifo"
+            or self.env.context.get("lot_revaluation")
         ):
             return super()._get_price_unit()
         if hasattr(self, "purchase_line_id") and self.purchase_line_id:
@@ -92,7 +92,7 @@ class StockMove(models.Model):
                     ("product_id", "=", self.product_id.id),
                     ("lot_id", "=", self.lot_ids.id),
                     "|",
-                    ("qty_moved", "<", 0),
+                    ("qty_consumed", ">", 0),
                     ("qty_remaining", ">", 0),
                     ("company_id", "=", self.company_id.id),
                 ],
@@ -101,7 +101,19 @@ class StockMove(models.Model):
             .filtered(lambda x: x.move_id._is_in())[:1]
         )
         if move_line:
-            if move_line.qty_moved:
-                return move_line.value_moved / move_line.qty_moved
+            if move_line.qty_consumed:
+                return move_line.value_consumed / move_line.qty_consumed
             return move_line.value_remaining / move_line.qty_remaining
         return super()._get_price_unit()
+
+    def _get_src_account(self, accounts_data):
+        lot_revaluation_account = self.env.context.get("lot_revaluation_account")
+        if lot_revaluation_account:
+            return lot_revaluation_account.id
+        return super()._get_src_account(accounts_data)
+
+    def _get_dest_account(self, accounts_data):
+        lot_revaluation_account = self.env.context.get("lot_revaluation_account")
+        if lot_revaluation_account:
+            return lot_revaluation_account.id
+        return super()._get_dest_account(accounts_data)

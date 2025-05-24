@@ -64,13 +64,10 @@ class ProductProduct(models.Model):
             qty_to_take_on_candidates = min(
                 qty_to_take_on_candidates, candidate_ml.qty_remaining
             )
-            # Temporarily keep the moved value in the candidate so that the value can
-            # be used to re-compute remaining_value in write() later.
-            candidate.moved_value_tmp = qty_to_take_on_candidates * (
-                candidate_ml.value_remaining / candidate_ml.qty_remaining
+            candidate_ml.qty_consumed += qty_to_take_on_candidates
+            candidate_ml.value_consumed += qty_to_take_on_candidates * (
+                candidate.remaining_value / candidate.remaining_qty
             )
-            candidate_ml.value_moved -= candidate.moved_value_tmp
-            candidate_ml.qty_moved -= qty_to_take_on_candidates
         return super()._get_qty_taken_on_candidate(qty_to_take_on_candidates, candidate)
 
     def _run_fifo(self, quantity, company):
@@ -80,40 +77,20 @@ class ProductProduct(models.Model):
             return super()._run_fifo(quantity, company)
         remaining_qty = quantity
         vals = defaultdict(float)
-        vals["value"] = 0
-        vals["unit_cost"] = 0
         out_move_lines = fifo_move._get_out_move_lines()
-        out_ml_qty = 0
-        for out_ml in out_move_lines:
-            fifo_lot = out_ml.force_fifo_lot_id or out_ml.lot_id
-            out_ml_qty = out_ml.product_uom_id._compute_quantity(
-                out_ml.qty_done, self.uom_id
-            )
-            fifo_qty = min(remaining_qty, out_ml_qty)
-            in_move_lines = self.env["stock.move.line"].search(
-                [
-                    ("product_id", "=", self.id),
-                    ("lot_id", "=", fifo_lot.id),
-                    ("qty_remaining", ">", 0),
-                ]
-            )
-            qty_remain_lot = sum(in_move_lines.mapped("qty_remaining"))
-            if float_is_zero(qty_remain_lot, precision_rounding=self.uom_id.rounding):
-                self._raise_no_fifo_candidate_ml_error(fifo_lot)
-            value_remain_lot = sum(in_move_lines.mapped("value_remaining"))
-            unit_cost = value_remain_lot / qty_remain_lot
-            consumed_value = fifo_qty * unit_cost
+        moved_qty = 0
+        for ml in out_move_lines:
+            fifo_lot = ml.force_fifo_lot_id or ml.lot_id
+            moved_qty = ml.product_uom_id._compute_quantity(ml.qty_done, self.uom_id)
+            fifo_qty = min(remaining_qty, moved_qty)
             self = self.with_context(fifo_lot=fifo_lot, fifo_qty=fifo_qty)
             ml_fifo_vals = super()._run_fifo(fifo_qty, company)
             for key, value in ml_fifo_vals.items():
-                if key == "remaining_qty":
+                if key in ("remaining_qty", "value"):
                     vals[key] += value
                     continue
-            vals["unit_cost"] += unit_cost
-            vals["value"] -= consumed_value
+                vals[key] = value  # unit_cost
             remaining_qty -= fifo_qty
             if float_is_zero(remaining_qty, precision_rounding=self.uom_id.rounding):
                 break
-        if out_move_lines:
-            vals["unit_cost"] = vals["unit_cost"] / len(out_move_lines)
         return vals
