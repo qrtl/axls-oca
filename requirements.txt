@@ -2,6 +2,5 @@
 astor
 cryptography
 openpyxl
-openupgradelib
 xlrd
 xlsxwriter

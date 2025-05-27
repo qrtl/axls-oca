@@ -9,4 +9,4 @@ class ResCurrency(models.Model):
 
     def _convert(self, from_amount, to_currency, company, date, round=True):
         date = self.env.context.get("actual_date") or date
-        return super()._convert(from_amount, to_currency, company, date, round)
+        return super()._convert(from_amount, to_currency, company, date, round=round)
