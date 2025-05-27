@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-27 10:42+0000\n"
-"PO-Revision-Date: 2025-05-27 10:42+0000\n"
+"POT-Creation-Date: 2025-05-27 10:11+0000\n"
+"PO-Revision-Date: 2025-05-27 10:11+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -32,12 +32,12 @@ msgstr ""
 #. module: stock_valuation_fifo_lot
 #: model:ir.model,name:stock_valuation_fifo_lot.model_res_company
 msgid "Companies"
-msgstr ""
+msgstr "会社"
 
 #. module: stock_valuation_fifo_lot
 #: model:ir.model,name:stock_valuation_fifo_lot.model_res_config_settings
 msgid "Config Settings"
-msgstr ""
+msgstr "コンフィグ設定"
 
 #. module: stock_valuation_fifo_lot
 #: model:ir.model.fields,help:stock_valuation_fifo_lot.field_stock_move_line__qty_consumed
@@ -56,22 +56,22 @@ msgstr ""
 #. module: stock_valuation_fifo_lot
 #: model:ir.model.fields,field_description:stock_valuation_fifo_lot.field_stock_move_line__company_currency_id
 msgid "Currency"
-msgstr ""
+msgstr "通貨"
 
 #. module: stock_valuation_fifo_lot
 #: model:ir.model.fields,field_description:stock_valuation_fifo_lot.field_stock_valuation_layer_revaluation__current_quantity_lot
 msgid "Current Quantity"
-msgstr ""
+msgstr "現在数量"
 
 #. module: stock_valuation_fifo_lot
 #: model:ir.model.fields,field_description:stock_valuation_fifo_lot.field_stock_valuation_layer_revaluation__current_value_lot
 msgid "Current Value "
-msgstr ""
+msgstr "現在価値"
 
 #. module: stock_valuation_fifo_lot
 #: model_terms:ir.ui.view,arch_db:stock_valuation_fifo_lot.stock_valuation_layer_revaluation_form_view_inherit
 msgid "Current Value for Lot"
-msgstr ""
+msgstr "ロットの現在価値"
 
 #. module: stock_valuation_fifo_lot
 #: model:ir.model.fields,field_description:stock_valuation_fifo_lot.field_stock_valuation_layer_revaluation__display_lot_id
@@ -81,7 +81,7 @@ msgstr ""
 #. module: stock_valuation_fifo_lot
 #: model:ir.model.fields,field_description:stock_valuation_fifo_lot.field_stock_move_line__force_fifo_lot_id
 msgid "Force FIFO Lot/Serial"
-msgstr ""
+msgstr "強制FIFOロット/シリアル"
 
 #. module: stock_valuation_fifo_lot
 #. odoo-python
@@ -93,7 +93,7 @@ msgstr ""
 #. module: stock_valuation_fifo_lot
 #: model_terms:ir.ui.view,arch_db:stock_valuation_fifo_lot.stock_move_line_view_search
 msgid "Has Remaining Qty"
-msgstr ""
+msgstr "残数量があるか"
 
 #. module: stock_valuation_fifo_lot
 #: model:ir.model.fields,field_description:stock_valuation_fifo_lot.field_stock_lot__is_force_fifo_candidate
@@ -103,29 +103,29 @@ msgstr ""
 #. module: stock_valuation_fifo_lot
 #: model_terms:ir.ui.view,arch_db:stock_valuation_fifo_lot.view_inventory_valuation_search
 msgid "Lot"
-msgstr ""
+msgstr "ロット"
 
 #. module: stock_valuation_fifo_lot
 #: model:ir.model,name:stock_valuation_fifo_lot.model_stock_lot
 msgid "Lot/Serial"
-msgstr ""
+msgstr "ロット/シリアル"
 
 #. module: stock_valuation_fifo_lot
 #: model:ir.model.fields,field_description:stock_valuation_fifo_lot.field_stock_valuation_layer_revaluation__lot_id
 msgid "Lot/Serial Number"
-msgstr ""
+msgstr "ロット/シリアル番号"
 
 #. module: stock_valuation_fifo_lot
 #: model:ir.model.fields,field_description:stock_valuation_fifo_lot.field_stock_valuation_layer__lot_ids
 msgid "Lots/Serials"
-msgstr ""
+msgstr "ロット/シリアル"
 
 #. module: stock_valuation_fifo_lot
 #. odoo-python
 #: code:addons/stock_valuation_fifo_lot/wizard/stock_valuation_layer_revaluation.py:0
 #, python-format
 msgid "Manual Lot Valuation: %s"
-msgstr ""
+msgstr "手動ロット評価: %s"
 
 #. module: stock_valuation_fifo_lot
 #. odoo-python
@@ -139,35 +139,35 @@ msgstr ""
 #: code:addons/stock_valuation_fifo_lot/wizard/stock_valuation_layer_revaluation.py:0
 #, python-format
 msgid "No Reason Given"
-msgstr ""
+msgstr "理由が指定されていません"
 
 #. module: stock_valuation_fifo_lot
 #: model:ir.model,name:stock_valuation_fifo_lot.model_stock_move_line
 msgid "Product Moves (Stock Move Line)"
-msgstr ""
+msgstr "製品の移動(在庫移動ライン)"
 
 #. module: stock_valuation_fifo_lot
 #: model:ir.model,name:stock_valuation_fifo_lot.model_product_product
 msgid "Product Variant"
-msgstr ""
+msgstr "プロダクトバリアント"
 
 #. module: stock_valuation_fifo_lot
 #: model:ir.model.fields,field_description:stock_valuation_fifo_lot.field_stock_move_line__qty_base
 #: model_terms:ir.ui.view,arch_db:stock_valuation_fifo_lot.view_move_line_tree
 msgid "Qty Base"
-msgstr ""
+msgstr "基準数量"
 
 #. module: stock_valuation_fifo_lot
 #: model:ir.model.fields,field_description:stock_valuation_fifo_lot.field_stock_move_line__qty_consumed
 #: model_terms:ir.ui.view,arch_db:stock_valuation_fifo_lot.view_move_line_tree
 msgid "Qty Consumed"
-msgstr ""
+msgstr "消費数量"
 
 #. module: stock_valuation_fifo_lot
 #: model:ir.model.fields,field_description:stock_valuation_fifo_lot.field_stock_move_line__qty_remaining
 #: model_terms:ir.ui.view,arch_db:stock_valuation_fifo_lot.view_move_line_tree
 msgid "Qty Remaining"
-msgstr ""
+msgstr "残数量"
 
 #. module: stock_valuation_fifo_lot
 #: model:ir.model.fields,help:stock_valuation_fifo_lot.field_stock_move_line__qty_remaining
@@ -194,12 +194,12 @@ msgstr ""
 #. module: stock_valuation_fifo_lot
 #: model:ir.model,name:stock_valuation_fifo_lot.model_stock_move
 msgid "Stock Move"
-msgstr ""
+msgstr "在庫移動"
 
 #. module: stock_valuation_fifo_lot
 #: model:ir.model,name:stock_valuation_fifo_lot.model_stock_valuation_layer
 msgid "Stock Valuation Layer"
-msgstr ""
+msgstr "在庫評価レイヤ"
 
 #. module: stock_valuation_fifo_lot
 #: model:ir.model.fields,help:stock_valuation_fifo_lot.field_stock_lot__is_force_fifo_candidate
@@ -248,20 +248,20 @@ msgstr ""
 #: model:ir.model.fields,field_description:stock_valuation_fifo_lot.field_stock_move_line__value_consumed
 #: model_terms:ir.ui.view,arch_db:stock_valuation_fifo_lot.view_move_line_tree
 msgid "Value Consumed"
-msgstr ""
+msgstr "消費額"
 
 #. module: stock_valuation_fifo_lot
 #: model:ir.model.fields,field_description:stock_valuation_fifo_lot.field_stock_move_line__value_remaining
 #: model_terms:ir.ui.view,arch_db:stock_valuation_fifo_lot.view_move_line_tree
 msgid "Value Remaining"
-msgstr ""
+msgstr "残額"
 
 #. module: stock_valuation_fifo_lot
 #: model:ir.model,name:stock_valuation_fifo_lot.model_stock_valuation_layer_revaluation
 msgid "Wizard model to reavaluate a stock inventory for a product"
-msgstr ""
+msgstr "プロダクトの在庫を再評価するウィザードモデル"
 
 #. module: stock_valuation_fifo_lot
 #: model_terms:ir.ui.view,arch_db:stock_valuation_fifo_lot.stock_valuation_layer_revaluation_form_view_inherit
 msgid "for"
-msgstr ""
+msgstr "に対して"
