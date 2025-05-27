@@ -46,8 +46,8 @@
             </xpath>
         </field>
     </record>
-    <record id="stock_scrap_view_form2_mrp_inherit_mrp" model="ir.ui.view">
-        <field name="name">stock.scrap.view.form2.inherit.mrp</field>
+    <record id="stock_scrap_form_view2" model="ir.ui.view">
+        <field name="name">stock.scrap.form2</field>
         <field name="model">stock.scrap</field>
         <field name="inherit_id" ref="stock.stock_scrap_form_view2" />
         <field name="arch" type="xml">

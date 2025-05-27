@@ -6,7 +6,7 @@ from odoo import models
 
 class StockPicking(models.Model):
     _name = "stock.picking"
-    _inherit = ["stock.picking", "actual.date.mixin"]
+    _inherit = ["stock.picking", "stock.actual.date.mixin"]
 
     def _get_actual_date_update_triggers(self):
         return super()._get_actual_date_update_triggers() + ["date_done", "move_ids"]

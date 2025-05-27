@@ -23,12 +23,11 @@ class StockMove(models.Model):
         # This handles the case where a move is created separately after the parent record.
         # For example, in mrp_stock_actual_date, the actual_date is passed via context
         # when validating an unbuild order or a scrap.
-        res = super().create(vals_list)
+        moves = super().create(vals_list)
         actual_date_source = self.env.context.get("actual_date_source")
         if actual_date_source:
-            for rec in res:
-                rec.actual_date_source = actual_date_source
-        return res
+            moves.actual_date_source = actual_date_source
+        return moves
 
     @api.depends("date", "actual_date_source")
     def _compute_actual_date(self):

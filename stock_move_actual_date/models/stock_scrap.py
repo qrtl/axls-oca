@@ -6,7 +6,7 @@ from odoo import models
 
 class StockScrap(models.Model):
     _name = "stock.scrap"
-    _inherit = ["stock.scrap", "actual.date.mixin"]
+    _inherit = ["stock.scrap", "stock.actual.date.mixin"]
 
     def _get_stock_moves(self):
         self.ensure_one()

@@ -1,4 +1,4 @@
-# Copyright 2024 Quartile (https://www.quartile.co)
+# Copyright 2025 Quartile (https://www.quartile.co)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 from datetime import date
@@ -56,7 +56,6 @@ class TestStockMoveActualDate(TransactionCase):
                             "location_dest_id": self.stock_location.id,
                             "product_id": self.product_1.id,
                             "product_uom_qty": 10.0,
-                            "price_unit": 10,
                             "move_line_ids": [
                                 Command.create(
                                     {
@@ -136,12 +135,44 @@ class TestStockMoveActualDate(TransactionCase):
         self.assertEqual(move.actual_date, date(2025, 3, 1))
         self.assertFalse(move.account_move_ids)
 
-    @freeze_time("2024-09-20 23:00:00")
+    @freeze_time("2025-05-08 23:00:00")
     def test_stock_move_without_actual_date_from_picking_or_scrap(self):
         self.env.user.tz = "Asia/Tokyo"
         receipt, move = self.create_picking()
-        self.assertEqual(move.actual_date, date(2024, 9, 21))
-        self.assertEqual(move.account_move_ids.date, date(2024, 9, 21))
+        self.assertEqual(move.actual_date, date(2025, 5, 9))
+        self.assertEqual(move.account_move_ids.date, date(2025, 5, 9))
         scrap = self.create_scrap(receipt)
-        self.assertEqual(scrap.move_id.actual_date, date(2024, 9, 21))
-        self.assertEqual(scrap.move_id.account_move_ids.date, date(2024, 9, 21))
+        self.assertEqual(scrap.move_id.actual_date, date(2025, 5, 9))
+        self.assertEqual(scrap.move_id.account_move_ids.date, date(2025, 5, 9))
+        valuation_layer = move.stock_valuation_layer_ids
+        self.assertEqual(valuation_layer.actual_date, date(2025, 5, 9))
+        account_move = valuation_layer.account_move_id
+        account_move.button_draft()
+        account_move.name = "/"
+        account_move.date = "2025-08-31"
+        account_move.action_post()
+        self.assertEqual(valuation_layer.actual_date, date(2025, 8, 31))
+
+    def test_svl_actual_date_manual_periodic(self):
+        # Not using freeze_time() in this test since it cannot be applied to create_date
+        # without a hack.
+        self.product_1.product_tmpl_id.categ_id.property_valuation = "manual_periodic"
+        _, move = self.create_picking()
+        valuation_layer = move.stock_valuation_layer_ids
+        self.assertEqual(
+            valuation_layer.actual_date, valuation_layer.create_date.date()
+        )
+
+    def test_fifo_svl_actual_date(self):
+        self.product_1.standard_price = 0.0
+        _, move = self.create_picking(date(2025, 3, 10))
+        svl = move.stock_valuation_layer_ids
+        self.assertTrue(svl, "SVL should be created for the product.")
+        self.assertFalse(
+            svl.account_move_id, "SVL should not have a related account move."
+        )
+        self.assertEqual(
+            svl.actual_date,
+            date(2025, 3, 10),
+            "SVL accounting date should match the move actual date.",
+        )
