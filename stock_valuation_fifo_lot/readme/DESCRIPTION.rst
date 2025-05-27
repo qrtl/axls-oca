@@ -46,11 +46,28 @@ Main UI Changes
     - 'Force FIFO Lot/Serial': Used when you are stuck by not being able to find a FIFO
       balance for the lot in an outgoing move line.
  
- .. [*] Updated only for products with FIFO costing method only, for valued incoming
-        moves, and outgoing moves where the qty_done has been reduced in the completed
+ .. [*] Updated only for products with FIFO costing method, for valued incoming
+        moves, and for outgoing moves where the qty_done has been reduced in the completed
         state.
         For these outgoing moves, the system generates positive stock valuation layers
         with a remaining balance, which need to be reflected in the related move line.
         The values here represent the theoretical figures in terms of FIFO costing,
         meaning that they may differ from the actual stock situation especially for
         those updated at the installation of this module.
+
+Revaluation Process
+~~~~~~~~~~~~~~~~~~~
+
+Revaluation of a specific FIFO lot is supported using Odoo’s standard revaluation wizard
+by specifying the lot in the wizard. However, the behavior differs from standard
+product-level revaluation.
+
+The process will create two inventory adjustments: one for an "OUT" and another for an
+"IN" operation.
+
+- OUT: Removes all existing quantities for the specified lot.
+- IN: Re-adds the same quantity with the newly revaluated value.
+
+Because of this, a landed cost applied to the related receipt after revaluing
+a lot will not be included in the lot's valuation (this scenario, however, is
+unlikely to occur in real-world operations).
