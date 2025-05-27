@@ -98,10 +98,9 @@ The process will create two inventory adjustments: one for an "OUT" and another 
 - OUT: Removes all existing quantities for the specified lot.
 - IN: Re-adds the same quantity with the newly revaluated value.
 
-This method effectively resets the lot’s value but may not align with standard
-revaluation flows. However, it provides an optimal approach for revaluing a specific lot
-without introducing complexity in calculating the remaining value of move lines
-associated with that lot.
+Because of this, a landed cost applied to the related receipt after revaluing
+a lot will not be included in the lot's valuation (this scenario, however, is
+unlikely to occur in real-world operations).
 
 .. IMPORTANT::
    This is an alpha version, the data model and design can change at any time without warning.
@@ -147,9 +146,6 @@ Known issues / Roadmap
 Updating the "Done" quantity of completed stock move lines for valued and tracked FIFO
 products is not supported, in order to avoid overcomplicating the logic. Attempting to
 perform such an operation will result in a user error.
-
-Creating a landed cost for a specific receipt after revaluing a specific lot may not work
-correctly. However, this scenario is highly unlikely to occur in real-world operations.
 
 Bug Tracker
 ===========

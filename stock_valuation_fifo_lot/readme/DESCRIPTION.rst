@@ -68,7 +68,6 @@ The process will create two inventory adjustments: one for an "OUT" and another 
 - OUT: Removes all existing quantities for the specified lot.
 - IN: Re-adds the same quantity with the newly revaluated value.
 
-This method effectively resets the lot’s value but may not align with standard
-revaluation flows. However, it provides an optimal approach for revaluing a specific lot
-without introducing complexity in calculating the remaining value of move lines
-associated with that lot.
+Because of this, a landed cost applied to the related receipt after revaluing
+a lot will not be included in the lot's valuation (this scenario, however, is
+unlikely to occur in real-world operations).
