@@ -106,14 +106,17 @@ class StockMove(models.Model):
             return move_line.value_remaining / move_line.qty_remaining
         return super()._get_price_unit()
 
-    def _get_src_account(self, accounts_data):
+    def _get_accounting_data_for_valuation(self):
+        (
+            journal_id,
+            acc_src,
+            acc_dest,
+            acc_valuation,
+        ) = super()._get_accounting_data_for_valuation()
         lot_revaluation_account = self.env.context.get("lot_revaluation_account")
         if lot_revaluation_account:
-            return lot_revaluation_account.id
-        return super()._get_src_account(accounts_data)
-
-    def _get_dest_account(self, accounts_data):
-        lot_revaluation_account = self.env.context.get("lot_revaluation_account")
-        if lot_revaluation_account:
-            return lot_revaluation_account.id
-        return super()._get_dest_account(accounts_data)
+            acc_src = acc_dest = lot_revaluation_account.id
+        lot_revaluation_journal = self.env.context.get("lot_revaluation_journal")
+        if lot_revaluation_journal:
+            journal_id = lot_revaluation_journal.id
+        return journal_id, acc_src, acc_dest, acc_valuation

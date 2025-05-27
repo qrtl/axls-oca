@@ -106,7 +106,9 @@ class StockValuationLayerRevaluation(models.TransientModel):
             ]
         )
         quants = quants.with_context(
-            inventory_name=description, lot_revaluation_account=self.account_id
+            inventory_name=description,
+            lot_revaluation_account=self.account_id,
+            lot_revaluation_journal=self.account_journal_id,
         )
         # Keep the current quant quantities to restore them later
         quant_qty_dict = {quant: quant.quantity for quant in quants}

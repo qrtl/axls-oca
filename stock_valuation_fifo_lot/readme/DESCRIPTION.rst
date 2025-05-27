@@ -54,3 +54,21 @@ Main UI Changes
         The values here represent the theoretical figures in terms of FIFO costing,
         meaning that they may differ from the actual stock situation especially for
         those updated at the installation of this module.
+
+Revaluation Process
+~~~~~~~~~~~~~~~~~~~
+
+Revaluation of a specific FIFO lot is supported using Odoo’s standard revaluation wizard
+by specifying the lot in the wizard. However, the behavior differs from standard
+product-level revaluation.
+
+The process will create two inventory adjustments: one for an "OUT" and another for an
+"IN" operation.
+
+- OUT: Removes all existing quantities for the specified lot.
+- IN: Re-adds the same quantity with the newly revaluated value.
+
+This method effectively resets the lot’s value but may not align with standard
+revaluation flows. However, it provides an optimal approach for revaluing a specific lot
+without introducing complexity in calculating the remaining value of move lines
+associated with that lot.
