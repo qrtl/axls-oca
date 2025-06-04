@@ -1,7 +1,7 @@
-# Copyright 2023 Quartile Limited (https://www.quartile.co)
+# Copyright 2023 Quartile (https://www.quartile.co)
 # License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl.html).
 
-from odoo import fields, models
+from odoo import Command, api, fields, models
 
 
 class AnalyticMixin(models.AbstractModel):
@@ -20,6 +20,7 @@ class AnalyticMixin(models.AbstractModel):
         "included in the exported data.",
     )
 
+    @api.depends("analytic_distribution")
     def _compute_analytic_account_ids(self):
         for rec in self:
             if not rec.analytic_distribution:
@@ -27,7 +28,7 @@ class AnalyticMixin(models.AbstractModel):
                 rec.analytic_account_names = False
                 continue
             account_ids = [int(key) for key in rec.analytic_distribution.keys()]
-            rec.analytic_account_ids = [(6, 0, account_ids)]
+            rec.analytic_account_ids = [Command.set(account_ids)]
             rec.analytic_account_names = ", ".join(
                 account.display_name for account in rec.analytic_account_ids
             )
