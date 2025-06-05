@@ -20,3 +20,8 @@ class StockPicking(models.Model):
             ]
         )
         quants.check_negative_qty()
+    
+    def _create_backorder(self):
+        if self.env.context.get("no_backorder"):
+            return self.env['stock.picking']
+        return super()._create_backorder()
