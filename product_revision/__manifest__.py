@@ -8,7 +8,7 @@
     "license": "AGPL-3",
     "category": "Inventory",
     "version": "16.0.1.0.0",
-    "depends": ["base", "product", "mail", "stock"],
+    "depends": ["stock"],
     "data": [
         "views/product_revision_views.xml",
         "views/product_product_views.xml",
