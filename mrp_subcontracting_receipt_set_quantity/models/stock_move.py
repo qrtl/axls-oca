@@ -12,5 +12,6 @@ class StockMove(models.Model):
             if move.is_subcontract:
                 move = move.with_context(move_dest_qty=move.product_uom_qty)
                 self -= move
-                return super(StockMove, move)._set_quantities_to_reservation()
-        return super()._set_quantities_to_reservation()
+                super(StockMove, move)._set_quantities_to_reservation()
+        super()._set_quantities_to_reservation()
+        return
