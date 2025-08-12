@@ -71,15 +71,19 @@
                             />
                             <field name="sequence" />
                             <field name="approve_sequence" />
-                            <label for="approve_sequence_bypass" invisible="1" />
+                            <label
+                                for="approve_sequence_bypass"
+                                class="o_form_label"
+                                attrs="{'invisible': [('approve_sequence', '=', False)]}"
+                            />
                             <div
                                 name="approve_sequence_bypass_div"
-                                class="o_row"
+                                class="o_wrap_field d-flex d-sm-contents flex-column mb-3 mb-sm-0"
                                 attrs="{'invisible': [('approve_sequence', '=', False)]}"
                             >
                                 <field name="approve_sequence_bypass" />
                                 <span
-                                >Bypassed, if previous tier was validated by same reviewer</span>
+                                >Bypass, if previous tier was validated by same reviewer</span>
                             </div>
                         </group>
                     </group>
@@ -103,6 +107,7 @@
                                     <field name="notify_on_rejected" />
                                     <field name="notify_on_restarted" />
                                     <field name="has_comment" />
+                                    <field name="notify_reminder_delay" />
                                 </group>
                             </group>
                         </page>
