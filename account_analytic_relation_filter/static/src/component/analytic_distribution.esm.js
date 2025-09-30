@@ -2,17 +2,19 @@
 
 import {AnalyticDistribution} from "@analytic/components/analytic_distribution/analytic_distribution";
 import {patch} from "web.utils";
-import {useState} from "@odoo/owl";
+import {onMounted, onWillUnmount, useState} from "@odoo/owl";
 
 patch(AnalyticDistribution.prototype, "custom.analytic_distribution.patch", {
     setup() {
         this._super(...arguments);
         this.relatedAccountIDs = useState([]);
-    },
-
-    async willStart() {
-        await this._super(...arguments);
-        await this._updateRelatedAccountIDs();
+        this.__alive = true;
+        onWillUnmount(() => {
+            this.__alive = false;
+        });
+        onMounted(() => {
+            this._updateRelatedAccountIDs();
+        });
     },
 
     async onSelect(option, params, tag) {
@@ -44,17 +46,25 @@ patch(AnalyticDistribution.prototype, "custom.analytic_distribution.patch", {
     },
 
     async _updateRelatedAccountIDs() {
+        if (!this.__alive) return;
         if (!this.existingAnalyticAccountIDs.length) {
             this.relatedAccountIDs.splice(0);
             return;
         }
-        const relatedIds = await this.orm.call(
-            "account.analytic.account",
-            "get_related_account_ids",
-            [this.existingAnalyticAccountIDs]
-        );
+        let relatedIds = [];
+        try {
+            relatedIds = await this.orm.call(
+                "account.analytic.account",
+                "get_related_account_ids",
+                [this.existingAnalyticAccountIDs]
+            );
+        } catch (e) {
+            if (!this.__alive) return;
+            throw e;
+        }
+        if (!this.__alive) return;
         this.relatedAccountIDs.splice(0);
-        this.relatedAccountIDs.push(...relatedIds);
+        this.relatedAccountIDs.push(...(relatedIds || []));
     },
 
     analyticAccountDomain(groupId = null) {
