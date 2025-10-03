@@ -1,4 +1,5 @@
 # Copyright 2021 Tecnativa - Víctor Martínez
+# Copyright 2025 Quartile (https://www.quartile.co)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl)
 
 from datetime import timedelta
@@ -6,12 +7,10 @@ from datetime import timedelta
 from odoo import fields
 from odoo.tests import Form
 
-from odoo.addons.purchase_stock_picking_show_currency_rate.tests import (
-    test_purchase_stock_picking,
-)
+from odoo.addons.purchase_stock_picking_show_currency_rate.tests import common
 
 
-class TestPurchaseStockPicking(test_purchase_stock_picking.TestPurchaseStockPicking):
+class TestPurchaseStockPicking(common.TestPurchaseStockPickingCommon):
     def test_purchase_currency_rate_date(self):
         yesterday = fields.Date.today() - timedelta(days=1)
         self._create_currency_rate(self.currency_extra, yesterday, 3.0)
