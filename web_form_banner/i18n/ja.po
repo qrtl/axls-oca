@@ -24,23 +24,6 @@ msgstr ""
 #. module: web_form_banner
 #: model_terms:ir.ui.view,arch_db:web_form_banner.view_web_form_banner_rule_form
 msgid ""
-"<code style=\"white-space: pre-wrap\">\n"
-"domain = [(\"partner_id\", \"=\", draft.partner_id.id)]\n"
-"if record_id:\n"
-"  domain += [(\"id\", \"&amp;lt;\", record_id)]\n"
-"last = model.search(domain, order=\"date_order desc, id desc\", limit=1)\n"
-"if last:\n"
-"  html = \"&amp;lt;strong&amp;gt;Previous order:&amp;lt;/strong&amp;gt; &amp;"
-"lt;a href='%s'&amp;gt;%s&amp;lt;/a&amp;gt;\" % (url_for(last), last.name)\n"
-"  result = {\"visible\": True, \"html\": html}\n"
-"else:\n"
-"  result = {\"visible\": False}\n"
-"</code>"
-msgstr ""
-
-#. module: web_form_banner
-#: model_terms:ir.ui.view,arch_db:web_form_banner.view_web_form_banner_rule_form
-msgid ""
 "<code>context_today(ts=None)</code>: User-timezone “today” (date) for "
 "reliable date comparisons."
 msgstr ""
@@ -57,7 +40,7 @@ msgstr ""
 msgid ""
 "<code>current_id</code>: Integer id of the record being edited, or "
 "<code>False</code> if the form\n"
-"                                            is creating a new record."
+"                                    is creating a new record."
 msgstr ""
 
 #. module: web_form_banner
@@ -72,13 +55,13 @@ msgstr ""
 msgid ""
 "<code>draft</code>: The persisted field values of the ORM record (before "
 "applying the current\n"
-"                                            form's unsaved changes) + the "
-"current unsaved changes on trigger fields.\n"
-"                                            Should be used instead of "
-"<code>record</code> when your rule is triggered dynamically by an\n"
-"                                            update to a trigger field. It "
-"doesn't include any values from complex fields\n"
-"                                            (x2many/reference, etc)."
+"                                    form's unsaved changes) + the current "
+"unsaved changes on trigger fields.\n"
+"                                    Should be used instead of <code>record</"
+"code> when your rule is triggered dynamically by an\n"
+"                                    update to a trigger field. It doesn't "
+"include any values from complex fields\n"
+"                                    (one2many/reference, etc)."
 msgstr ""
 
 #. module: web_form_banner
@@ -376,6 +359,21 @@ msgstr "マッチした1つ目のノードへのプレイスホルダーの相�
 #: model:ir.model.fields,help:web_form_banner.field_web_form_banner_rule__target_xpath
 msgid "XPath of the node to insert the banner."
 msgstr "バナー挿入対象ノードのXPath"
+
+#. module: web_form_banner
+#: model_terms:ir.ui.view,arch_db:web_form_banner.view_web_form_banner_rule_form
+msgid ""
+"domain = [(\"partner_id\", \"=\", draft.partner_id.id)]\n"
+"if record_id:\n"
+"    domain += [(\"id\", \"&lt;\", record_id)]\n"
+"last = model.search(domain, order=\"date_order desc, id desc\", limit=1)\n"
+"if last:\n"
+"    html = \"&lt;strong&gt;Previous order:&lt;/strong&gt; &lt;a href='%s'&gt;"
+"%s&lt;/a&gt;\" % (url_for(last), last.name)\n"
+"    result = {\"visible\": True, \"html\": html}\n"
+"else:\n"
+"    result = {\"visible\": False}"
+msgstr ""
 
 #. module: web_form_banner
 #: model_terms:ir.ui.view,arch_db:web_form_banner.view_web_form_banner_rule_form
