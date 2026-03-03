@@ -3,6 +3,7 @@
 
 from datetime import datetime, timedelta as td
 
+from odoo import Command
 from odoo.tests import common
 
 
@@ -35,9 +36,7 @@ class TestStockMoveOriginalDate(common.TransactionCase):
                 "location_dest_id": cls.stock_location.id,
                 "scheduled_date": date_move,
                 "move_ids": [
-                    (
-                        0,
-                        0,
+                    Command.create(
                         {
                             "name": "Test move",
                             "product_id": product.id,
@@ -46,7 +45,7 @@ class TestStockMoveOriginalDate(common.TransactionCase):
                             "product_uom_qty": qty,
                             "location_id": cls.supplier_location.id,
                             "location_dest_id": cls.stock_location.id,
-                        },
+                        }
                     )
                 ],
             }

@@ -4,7 +4,7 @@
 from odoo import api, fields, models
 
 
-class StockMove(models.Model):
+class StockPicking(models.Model):
     _inherit = "stock.picking"
 
     original_scheduled_date = fields.Datetime(
