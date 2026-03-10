@@ -30,12 +30,12 @@ msgstr "当初計画日"
 msgid ""
 "Original Scheduled date for the first part of the shipment to be processed "
 "at transfer confirmation."
-msgstr "運送確認時に最初に処理された荷物の当初の計画日。"
+msgstr "出荷の最初の部分が処理される当初の予定日時。"
 
 #. module: stock_move_original_date
 #: model:ir.model.fields,help:stock_move_original_date.field_stock_move__original_date
 msgid "Original Scheduled date on the confirmation of the stock move."
-msgstr "在庫移動の確認時に設定された当初の計画日。"
+msgstr "在庫移動の確認された時点での当初の予定日時。"
 
 #. module: stock_move_original_date
 #: model:ir.model,name:stock_move_original_date.model_stock_move
