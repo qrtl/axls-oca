@@ -1,72 +1,86 @@
 # Copyright 2026 Quartile
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
+from odoo.exceptions import ValidationError
 from odoo.tests.common import TransactionCase
 
 
 class TestMrpUnbuildLotLocation(TransactionCase):
-    def setUp(self):
-        super().setUp()
-        self.stock_location = self.env.ref("stock.warehouse0").lot_stock_id
-        self.test_location = self.env["stock.location"].create(
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.warehouse = cls.env["stock.warehouse"].create(
             {
-                "name": "Test Shelf",
-                "location_id": self.stock_location.id,
+                "name": "Test Warehouse",
+                "code": "TWH",
+                "company_id": cls.env.company.id,
+            }
+        )
+        cls.location_1 = cls.env["stock.location"].create(
+            {
+                "name": "Location 1",
+                "location_id": cls.warehouse.lot_stock_id.id,
                 "usage": "internal",
             }
         )
-        self.product = self.env["product.product"].create(
+        cls.location_2 = cls.env["stock.location"].create(
+            {
+                "name": "Location 2",
+                "location_id": cls.warehouse.lot_stock_id.id,
+                "usage": "internal",
+            }
+        )
+        cls.product = cls.env["product.product"].create(
             {"name": "Test Product", "type": "product", "tracking": "lot"}
         )
-        self.lot_single = self.env["stock.lot"].create(
+        cls.lot_1 = cls.env["stock.lot"].create(
             {
-                "name": "lot_single",
-                "product_id": self.product.id,
-                "company_id": self.env.company.id,
+                "name": "lot_1",
+                "product_id": cls.product.id,
+                "company_id": cls.env.company.id,
             }
         )
-        self.lot_multiple = self.env["stock.lot"].create(
+        cls.lot_2 = cls.env["stock.lot"].create(
             {
-                "name": "lot_multiple",
-                "product_id": self.product.id,
-                "company_id": self.env.company.id,
+                "name": "lot_2",
+                "product_id": cls.product.id,
+                "company_id": cls.env.company.id,
             }
         )
-        self.lot_no_stock = self.env["stock.lot"].create(
+        cls.lot_3 = cls.env["stock.lot"].create(
             {
-                "name": "lot_no_stock",
-                "product_id": self.product.id,
-                "company_id": self.env.company.id,
+                "name": "lot_3",
+                "product_id": cls.product.id,
+                "company_id": cls.env.company.id,
             }
         )
-        self.env["stock.quant"]._update_available_quantity(
-            self.product, self.test_location, 5, lot_id=self.lot_single
+        cls.env["stock.quant"]._update_available_quantity(
+            cls.product, cls.location_1, 5, lot_id=cls.lot_1
         )
-        self.env["stock.quant"]._update_available_quantity(
-            self.product, self.stock_location, 3, lot_id=self.lot_multiple
+        cls.env["stock.quant"]._update_available_quantity(
+            cls.product, cls.location_1, 2, lot_id=cls.lot_2
         )
-        self.env["stock.quant"]._update_available_quantity(
-            self.product, self.test_location, 2, lot_id=self.lot_multiple
+        cls.env["stock.quant"]._update_available_quantity(
+            cls.product, cls.location_2, 3, lot_id=cls.lot_2
         )
-        self.unbuild = self.env["mrp.unbuild"].new({"product_id": self.product.id})
+        cls.unbuild = cls.env["mrp.unbuild"].create({"product_id": cls.product.id})
 
     def test_location_id_domain_no_lot(self):
-        """location_id_domain is empty when lot_id is not set."""
-        self.assertFalse(self.unbuild.location_id_domain)
+        # When lot_id is not set, domain returns all internal/transit locations.
+        locations = self.env["stock.location"].search(self.unbuild.location_id_domain)
+        self.assertIn(self.location_1, locations)
+        self.assertIn(self.location_2, locations)
 
-    def test_onchange_lot_id_single_location(self):
-        """When lot has stock in one location, location_id is auto-filled."""
-        self.unbuild.lot_id = self.lot_single
-        self.unbuild._onchange_lot_id()
-        self.assertEqual(self.unbuild.location_id._origin, self.test_location)
-
-    def test_onchange_lot_id_multiple_locations(self):
-        """When lot has stock in multiple locations, location_id is not auto-filled."""
-        self.unbuild.lot_id = self.lot_multiple
-        self.assertEqual(len(self.unbuild.location_id_domain), 2)
-
-    def test_onchange_lot_id_no_stock_warning(self):
-        """When lot has no stock, _onchange_lot_id returns a warning."""
-        self.unbuild.lot_id = self.lot_no_stock
-        result = self.unbuild._onchange_lot_id()
-        self.assertTrue(result.get("warning"))
+    def test_lot_location_resolution(self):
+        # When lot has stock in one location, location_id is auto-filled.
+        self.unbuild.lot_id = self.lot_1
+        locations = self.env["stock.location"].search(self.unbuild.location_id_domain)
+        self.assertEqual(self.unbuild.location_id, self.location_1)
+        # When lot has stock in multiple locations, location_id is not auto-filled.
+        self.unbuild.lot_id = self.lot_2
+        locations = self.env["stock.location"].search(self.unbuild.location_id_domain)
+        self.assertIn(self.location_1, locations)
+        self.assertIn(self.location_2, locations)
+        # When lot has no stock, saving raises a ValidationError.
+        with self.assertRaises(ValidationError):
+            self.unbuild.lot_id = self.lot_3
