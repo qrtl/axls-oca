@@ -22,6 +22,10 @@ class StockMoveLine(models.Model):
                 and record.product_id.tracking == "serial"
                 # Check should be done only in the scenario where new serial is created.
                 and record.picking_type_id.use_create_lots
+                # Only check for moves bringing stock IN (destination is internal)
+                and record.location_dest_id.usage == "internal"
+                # Only check for moves from non-internal locations (receipts/production)
+                and record.location_id.usage != "internal"
             ):
                 lot_id = record.lot_id
                 if not lot_id:
@@ -32,10 +36,11 @@ class StockMoveLine(models.Model):
                             ("company_id", "=", record.company_id.id),
                         ]
                     )
-                message, dummy = self.env["stock.quant"]._check_serial_number(
-                    record.product_id,
-                    lot_id,
-                    record.company_id,
-                )
-                if message:
-                    raise ValidationError(_(message))
+                if lot_id:
+                    message, _dummy = self.env["stock.quant"]._check_serial_number(
+                        record.product_id,
+                        lot_id,
+                        record.company_id,
+                    )
+                    if message:
+                        raise ValidationError(_(message))
