@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="product_template_form_view" model="ir.ui.view">
+        <field name="name">product.template.form.restricted.tracking</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view" />
+        <field name="arch" type="xml">
+            <field name="categ_id" position="attributes">
+                <attribute name="domain">categ_id_domain</attribute>
+            </field>
+            <field name="categ_id" position="before">
+                <field name="categ_id_domain" invisible="1" />
+            </field>
+        </field>
+    </record>
+</odoo>
