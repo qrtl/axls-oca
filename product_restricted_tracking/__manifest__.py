@@ -11,7 +11,6 @@
     "depends": ["stock"],
     "data": [
         "views/product_category_views.xml",
-        "views/product_views.xml",
     ],
     "installable": True,
     "maintainers": ["aungkokolin1997", "yostashiro"],

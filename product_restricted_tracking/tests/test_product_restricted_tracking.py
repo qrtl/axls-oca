@@ -63,18 +63,3 @@ class TestProductRestrictedTracking(TransactionCase):
     def test_category_restriction_clear_succeeds(self):
         self.category_serial.restricted_tracking = False
         self.assertFalse(self.category_serial.restricted_tracking)
-
-    def test_categ_id_domain_filters_by_tracking(self):
-        product = self.env["product.template"].create(
-            {
-                "name": "Serial Product",
-                "tracking": "serial",
-                "categ_id": self.category_unrestricted.id,
-            }
-        )
-        expected_domain = [
-            "|",
-            ("restricted_tracking", "=", False),
-            ("restricted_tracking", "=", "serial"),
-        ]
-        self.assertEqual(product.categ_id_domain, expected_domain)
