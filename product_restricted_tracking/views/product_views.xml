@@ -5,12 +5,6 @@
         <field name="model">product.template</field>
         <field name="inherit_id" ref="product.product_template_form_view" />
         <field name="arch" type="xml">
-            <field name="categ_id" position="attributes">
-                <attribute name="domain">categ_id_domain</attribute>
-            </field>
-            <field name="categ_id" position="before">
-                <field name="categ_id_domain" invisible="1" />
-            </field>
         </field>
     </record>
 </odoo>
