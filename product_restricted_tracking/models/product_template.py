@@ -1,27 +1,12 @@
 # Copyright 2026 Quartile (https://www.quartile.co)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
-from odoo import _, api, fields, models
+from odoo import _, api, models
 from odoo.exceptions import ValidationError
 
 
 class ProductTemplate(models.Model):
     _inherit = "product.template"
-
-    categ_id_domain = fields.Binary(
-        string="Category Domain",
-        compute="_compute_categ_id_domain",
-        help="Dynamic domain used for filtering allowed categories based on tracking",
-    )
-
-    @api.depends("tracking")
-    def _compute_categ_id_domain(self):
-        for record in self:
-            record.categ_id_domain = [
-                "|",
-                ("restricted_tracking", "=", False),
-                ("restricted_tracking", "=", record.tracking),
-            ]
 
     @api.constrains("tracking", "categ_id")
     def _check_tracking_matches_category(self):
