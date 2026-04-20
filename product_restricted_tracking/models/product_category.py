@@ -11,7 +11,7 @@ class ProductCategory(models.Model):
     restricted_tracking = fields.Selection(
         selection=lambda self: self.env["product.template"]
         ._fields["tracking"]
-        .selection,
+        ._description_selection(self.env),
     )
 
     @api.constrains("restricted_tracking")
@@ -32,7 +32,9 @@ class ProductCategory(models.Model):
                     )
                 ).get(categ.restricted_tracking)
                 tracking_selection_dict = dict(
-                    conflicting_products._fields["tracking"].selection
+                    conflicting_products._fields["tracking"]._description_selection(
+                        self.env
+                    )
                 )
                 total_count = len(conflicting_products)
                 product_list = "\n".join(
