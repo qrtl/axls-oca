@@ -9,7 +9,9 @@ class ProductCategory(models.Model):
 
     restricted_product_type = fields.Selection(
         string="Restricted Product Type ",
-        selection=lambda self: self.env["product.template"]._fields["type"].selection,
+        selection=lambda self: self.env["product.template"]
+        ._fields["type"]
+        ._description_selection(self.env),
     )
 
     @api.constrains("restricted_product_type")
