@@ -23,7 +23,7 @@ msgid ""
 "A product (or multiple products) in the category have different type than "
 "the selected restricted product type"
 msgstr ""
-"カテゴリ内のプロダクト（または複数のプロダクト）が、選択された指定プロダクトタイプと異なるタイプを持っています"
+"カテゴリ内のプロダクト（または複数のプロダクト）が、選択されたプロダクトタイプの制限と異なるタイプを持っています"
 
 #. module: product_restricted_type
 #: model:ir.model.fields,field_description:product_restricted_type.field_product_product__allowed_categ_ids
@@ -54,7 +54,7 @@ msgstr "プロダクトバリアント"
 #. module: product_restricted_type
 #: model:ir.model.fields,field_description:product_restricted_type.field_product_category__restricted_product_type
 msgid "Restricted Product Type "
-msgstr "指定プロダクトタイプ "
+msgstr "プロダクトタイプの制限 "
 
 #. module: product_restricted_type
 #: model:ir.model.fields.selection,name:product.selection__product_template__type__service
@@ -75,5 +75,5 @@ msgid ""
 "The Product Type (%(product_type)s) must be equal to the Restricted Product "
 "Type defined in the Product Category (%(product_categ_restricted_type)s)."
 msgstr ""
-"プロダクトタイプ (%(product_type)s) は、プロダクトカテゴリで定義された指定プロダクトタイプ "
+"プロダクトタイプ (%(product_type)s) は、プロダクトカテゴリで定義されたプロダクトタイプの制限 "
 "(%(product_categ_restricted_type)s) と一致する必要があります。"
