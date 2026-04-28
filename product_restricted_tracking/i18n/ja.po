@@ -44,7 +44,7 @@ msgid ""
 "Cannot set restricted tracking to '%(tracking)s' because %(count)s product(s) in this category have different tracking:\n"
 "%(products)s%(more)s"
 msgstr ""
-"このカテゴリの %(count)s 件のプロダクトが異なる追跡方法を持っているため、指定追跡方法を '%(tracking)s' に設定できません:\n"
+"このカテゴリの %(count)s 件のプロダクトが異なる追跡を持っているため、追跡の制限を '%(tracking)s' に設定できません:\n"
 "%(products)s%(more)s"
 
 #. module: product_restricted_tracking
@@ -65,7 +65,7 @@ msgid ""
 "Product '%(product)s' has tracking '%(tracking)s' but is assigned to "
 "category '%(category)s' which requires tracking '%(required_tracking)s'."
 msgstr ""
-"プロダクト '%(product)s' は追跡方法 '%(tracking)s' を持っていますが、追跡方法 '%(required_tracking)s' が必要なカテゴリ '%(category)s' に割り当てられています。"
+"プロダクト '%(product)s' は追跡 '%(tracking)s' を持っていますが、追跡 '%(required_tracking)s' が必要なカテゴリ '%(category)s' に割り当てられています。"
 
 #. module: product_restricted_tracking
 #: model:ir.model,name:product_restricted_tracking.model_product_category
@@ -75,4 +75,4 @@ msgstr "プロダクトカテゴリ"
 #. module: product_restricted_tracking
 #: model:ir.model.fields,field_description:product_restricted_tracking.field_product_category__restricted_tracking
 msgid "Restricted Tracking"
-msgstr "指定追跡方法"
+msgstr "追跡の制限"
