@@ -2,7 +2,7 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html)
 
 from odoo import _, api, fields, models
-from odoo.exceptions import UserError
+from odoo.exceptions import UserError, ValidationError
 from odoo.tools import float_compare, float_is_zero
 
 
@@ -105,6 +105,13 @@ class StockValuationLayerRevaluation(models.TransientModel):
                 ("location_id.usage", "=", "internal"),
             ]
         )
+        if not quants:
+            raise ValidationError(
+                _(
+                    "No quant found for the given lot and can't do revaluation. "
+                    "Please ensure the lot is in an internal location."
+                )
+            )
         quants = quants.with_context(
             inventory_name=description,
             lot_revaluation_account=self.account_id,
