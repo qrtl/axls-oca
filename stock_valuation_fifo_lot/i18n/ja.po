@@ -142,6 +142,15 @@ msgid "No Reason Given"
 msgstr "理由が指定されていません"
 
 #. module: stock_valuation_fifo_lot
+#. odoo-python
+#: code:addons/stock_valuation_fifo_lot/wizard/stock_valuation_layer_revaluation.py:0
+#, python-format
+msgid ""
+"No quant found for the given lot and can't do revaluation. Please ensure the"
+" lot is in an internal location."
+msgstr "指定ロットの在庫数量が見つからず、再評価できません。ロットが内部ロケーションにあることを確認してください。"
+
+#. module: stock_valuation_fifo_lot
 #: model:ir.model,name:stock_valuation_fifo_lot.model_stock_move_line
 msgid "Product Moves (Stock Move Line)"
 msgstr "製品の移動(在庫移動ライン)"

@@ -105,6 +105,13 @@ class StockValuationLayerRevaluation(models.TransientModel):
                 ("location_id.usage", "=", "internal"),
             ]
         )
+        if not quants:
+            raise UserError(
+                _(
+                    "No quant found for the given lot and can't do revaluation. "
+                    "Please ensure the lot is in an internal location."
+                )
+            )
         quants = quants.with_context(
             inventory_name=description,
             lot_revaluation_account=self.account_id,
