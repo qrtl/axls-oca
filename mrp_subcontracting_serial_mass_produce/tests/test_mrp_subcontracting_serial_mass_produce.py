@@ -49,15 +49,18 @@ class TestMrpSubcontractingSerialMassProduce(TransactionCase):
         cls.receipt = picking_form.save()
         cls.receipt.action_confirm()
 
-    def test_mass_produce_auto_records_components(self):
+    def _run_mass_produce(self, count=2, starting_serial="SN0001"):
         production = self.receipt.move_ids.move_orig_ids.production_id
         production.action_assign()
         action = production.action_serial_mass_produce_wizard()
         wizard = Form(self.env["stock.assign.serial"].with_context(**action["context"]))
-        wizard.next_serial_number = "SN0001"
-        wizard.next_serial_count = 2
+        wizard.next_serial_number = starting_serial
+        wizard.next_serial_count = count
         action = wizard.save().generate_serial_numbers_production()
-        wizard = Form(self.env["stock.assign.serial"].browse(action["res_id"]))
+        return Form(self.env["stock.assign.serial"].browse(action["res_id"]))
+
+    def test_mass_produce_auto_records_components(self):
+        wizard = self._run_mass_produce()
         wizard.save().apply()
         productions = self.receipt.move_ids.move_orig_ids.production_id.sorted("id")
         self.assertEqual(len(productions), 2)
@@ -75,4 +78,36 @@ class TestMrpSubcontractingSerialMassProduce(TransactionCase):
             sorted(self.receipt.move_line_ids.mapped("lot_id.name")),
             ["SN0001", "SN0002"],
             "Serial numbers should be synced to receipt move lines",
+        )
+
+    def test_mass_produce_skips_strict_consumption_warning(self):
+        # Mass Produce records each split MO with skip_consumption=True, since the
+        # consumed qty is set by _split_productions rather than the BoM. Without it,
+        # a strict-consumption discrepancy makes subcontracting_record_component
+        # return a consumption-wizard action that this automated flow discards,
+        # silently leaving the MO unrecorded.
+        # Here we fabricate that discrepancy by adding a BoM line after MO creation.
+        comp3 = self.env["product.product"].create(
+            {"name": "Component 3", "type": "product"}
+        )
+        self.env["stock.quant"]._update_available_quantity(
+            comp3, self.subcontract_location, 10
+        )
+        self.bom.write(
+            {
+                "consumption": "strict",
+                "bom_line_ids": [
+                    Command.create({"product_id": comp3.id, "product_qty": 1})
+                ],
+            }
+        )
+        wizard = self._run_mass_produce()
+        wizard.save().apply()
+        productions = self.receipt.move_ids.move_orig_ids.production_id
+        self.assertEqual(len(productions), 2)
+        self.assertEqual(
+            productions.mapped("subcontracting_has_been_recorded"),
+            [True, True],
+            "skip_consumption=True should bypass strict BoM consumption "
+            "checks so every split MO is recorded",
         )

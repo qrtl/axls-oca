@@ -8,13 +8,13 @@ class StockAssignSerialNumbers(models.TransientModel):
     _inherit = "stock.assign.serial"
 
     def _assign_serial_numbers(self, cancel_remaining_quantity=False):
+        res = super()._assign_serial_numbers(cancel_remaining_quantity)
         if (
             not self.production_id._get_subcontract_move()
             or self.production_id.product_id.tracking != "serial"
         ):
-            return super()._assign_serial_numbers(cancel_remaining_quantity)
+            return res
         serial_numbers = set(self._get_serial_numbers())
-        res = super()._assign_serial_numbers(cancel_remaining_quantity)
         if not serial_numbers:
             return res
         assigned_lots = self.env["stock.lot"].search(
@@ -33,7 +33,8 @@ class StockAssignSerialNumbers(models.TransientModel):
             )
         )
         for production in productions:
+            # Skip consumption warning since qty is set by _split_productions
             production.with_context(
-                cancel_backorder=False
+                cancel_backorder=False, skip_consumption=True
             ).subcontracting_record_component()
         return res
