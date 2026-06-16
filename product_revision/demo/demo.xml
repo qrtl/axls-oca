@@ -1,0 +1,14 @@
+<odoo>
+    <!-- Examples of product.revision records -->
+    <!--
+    <record id="product_revision_example_1" model="product.revision">
+        <field name="name">Product A Rev 1</field>
+        <field name="revision_number">1</field>
+        <field name="change_date" eval="(DateTime.today())"/>
+        <field name="product_tmpl_id" ref="product.product_product_4_product_template"/>
+        <field name="internal_product_id">PROD-A-001</field>
+        <field name="active" eval="True"/>
+        <field name="notes">Initial revision for Product A</field>
+    </record>
+    -->
+</odoo>

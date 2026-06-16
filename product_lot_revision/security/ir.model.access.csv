@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_assign_revision_wizard,access_assign_revision_wizard,model_assign_revision_wizard,base.group_user,1,1,1,1
