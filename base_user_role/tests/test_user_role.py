@@ -137,12 +137,9 @@ class TestUserRole(TransactionCase):
         self.assertEqual(user_group_ids, role_group_ids)
 
     def test_role_unlink(self):
-        # Get role1 groups
-        role1_group_ids = (
-            self.role1_id.implied_ids.ids + self.role1_id.trans_implied_ids.ids
-        )
-        role1_group_ids.append(self.role1_id.group_id.id)
-        role1_group_ids = sorted(set(role1_group_ids))
+        # Get role1 and role2 groups
+        role1_groups = self.role1_id.trans_implied_ids | self.role1_id.group_id
+        role2_groups = self.role2_id.trans_implied_ids | self.role2_id.group_id
 
         # Configure the user with role1 and role2
         self.user_id.write(
@@ -153,22 +150,24 @@ class TestUserRole(TransactionCase):
                 ]
             }
         )
+        # Check user has groups from role1 and role2
+        self.assertLessEqual(role1_groups, self.user_id.groups_id)
+        self.assertLessEqual(role2_groups, self.user_id.groups_id)
         # Remove role2
         self.role2_id.unlink()
-        user_group_ids = sorted({group.id for group in self.user_id.groups_id})
-        self.assertEqual(user_group_ids, role1_group_ids)
+        # Check user has groups from only role1
+        self.assertLessEqual(role1_groups, self.user_id.groups_id)
+        self.assertFalse(role2_groups <= self.user_id.groups_id)
         # Remove role1
         self.role1_id.unlink()
-        user_group_ids = sorted({group.id for group in self.user_id.groups_id})
-        self.assertEqual(user_group_ids, [])
+        # Check user has no groups from role1 and role2
+        self.assertFalse(role1_groups <= self.user_id.groups_id)
+        self.assertFalse(role2_groups <= self.user_id.groups_id)
 
     def test_role_line_unlink(self):
-        # Get role1 groups
-        role1_group_ids = (
-            self.role1_id.implied_ids.ids + self.role1_id.trans_implied_ids.ids
-        )
-        role1_group_ids.append(self.role1_id.group_id.id)
-        role1_group_ids = sorted(set(role1_group_ids))
+        # Get role1 and role2 groups
+        role1_groups = self.role1_id.trans_implied_ids | self.role1_id.group_id
+        role2_groups = self.role2_id.trans_implied_ids | self.role2_id.group_id
 
         # Configure the user with role1 and role2
         self.user_id.write(
@@ -179,18 +178,23 @@ class TestUserRole(TransactionCase):
                 ]
             }
         )
+        # Check user has groups from role1 and role2
+        self.assertLessEqual(role1_groups, self.user_id.groups_id)
+        self.assertLessEqual(role2_groups, self.user_id.groups_id)
         # Remove role2 from the user
         self.user_id.role_line_ids.filtered(
             lambda l: l.role_id.id == self.role2_id.id
         ).unlink()
-        user_group_ids = sorted({group.id for group in self.user_id.groups_id})
-        self.assertEqual(user_group_ids, role1_group_ids)
+        # Check user has groups from only role1
+        self.assertLessEqual(role1_groups, self.user_id.groups_id)
+        self.assertFalse(role2_groups <= self.user_id.groups_id)
         # Remove role1 from the user
         self.user_id.role_line_ids.filtered(
             lambda l: l.role_id.id == self.role1_id.id
         ).unlink()
-        user_group_ids = sorted({group.id for group in self.user_id.groups_id})
-        self.assertEqual(user_group_ids, [])
+        # Check user has no groups from role1 and role2
+        self.assertFalse(role1_groups <= self.user_id.groups_id)
+        self.assertFalse(role2_groups <= self.user_id.groups_id)
 
     def test_default_user_roles(self):
         self.default_user.write(
@@ -257,16 +261,48 @@ class TestUserRole(TransactionCase):
         self.assertFalse(self.user_id.show_alert)
 
     def test_group_groups_into_role(self):
-        user_group_ids = [group.id for group in self.user_id.groups_id]
+        user_group_ids = self.user_id.groups_id.ids
         # Check that there is not a role with name: Test Role
         self.assertFalse(self.role_model.search([("name", "=", "Test Role")]))
         # Call create_role function to group groups into a role
         wizard = self.wiz_model.with_context(active_ids=user_group_ids).create(
             {"name": "Test Role"}
         )
-        wizard.create_role()
+        res = wizard.create_role()
         # Check that a role with name: Test Role has been created
-        new_role = self.role_model.search([("name", "=", "Test Role")])
-        self.assertTrue(new_role)
-        # Check that the role has the correct groups
+        new_role = self.env[res["res_model"]].browse(res["res_id"])
+        self.assertEqual(new_role.name, "Test Role")
+        # Check that the role has the correct groups (even if the order is not equal)
         self.assertEqual(set(new_role.implied_ids.ids), set(user_group_ids))
+
+    def test_role_default_user(self):
+        """
+        Test that portal user has the right role and groups based on the portal
+        template.
+        """
+        self.default_user.write(
+            {
+                "role_line_ids": [
+                    (0, 0, {"role_id": self.role1_id.id}),
+                    (0, 0, {"role_id": self.role2_id.id}),
+                ]
+            }
+        )
+
+        portal_template = self.env.ref("base.template_portal_user_id")
+        portal_group = self.env.ref("base.group_portal")
+        vals = {
+            "name": "Portal Role",
+            "implied_ids": [(6, 0, [portal_group.id])],
+        }
+        portal_role = self.role_model.create(vals)
+        portal_template.write({"role_line_ids": [(0, 0, {"role_id": portal_role.id})]})
+        portal_user = portal_template.copy(
+            {
+                "name": "New portal user",
+                "active": True,
+            }
+        )
+        portal_user = portal_user.with_context(active_test=False)
+        self.assertNotIn(self.group_user_id, set(portal_user.groups_id))
+        self.assertIn(portal_role.group_id, set(portal_user.groups_id))
