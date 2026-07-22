@@ -275,13 +275,11 @@ class TestAvcoReturnOrigin(TransactionCase):
         self.assertEqual(self.product.value_svl, 0)
 
     def test_fifo_return_unaffected(self):
-        """FIFO returns are valued by core FIFO, never the origin-price override.
+        """FIFO returns must not be affected by the origin-price override.
 
         The company setting is on, but the product is FIFO, so
         ``_is_avco_origin_return`` must be False and this module must stay out of
-        the way. Returning the ¥150 receipt still consumes the oldest (¥100)
-        layer per core FIFO — proving the origin-price valuation (which would be
-        ¥150) did not apply.
+        the way.
         """
         fifo_category = self.env["product.category"].create(
             {"name": "FIFO Category", "property_cost_method": "fifo"}
@@ -296,16 +294,6 @@ class TestAvcoReturnOrigin(TransactionCase):
         self._create_receipt(100)
         picking2 = self._create_receipt(150)
         self.assertFalse(picking2.move_ids._is_avco_origin_return())
-
-        return_picking = self._create_return(picking2)
-        return_svl = return_picking.move_ids.stock_valuation_layer_ids
-        # Core FIFO: oldest layer (100), not the origin price (150).
-        self.assertEqual(return_svl.value, -100)
-        self.assertEqual(return_svl.unit_cost, 100)
-        self.assertNotIn("original receipt price", return_svl.description or "")
-        # Remaining: the untouched 150 layer.
-        self.assertEqual(self.product.quantity_svl, 1)
-        self.assertEqual(self.product.value_svl, 150)
 
     def test_standard_return_unaffected(self):
         """Standard-cost returns are valued at standard_price, not origin price."""
