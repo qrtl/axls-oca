@@ -19,6 +19,7 @@ class StockLot(models.Model):
     )
     def _compute_is_force_fifo_candidate(self):
         for lot in self:
+            lot.is_force_fifo_candidate = False
             if lot.product_id.cost_method != "fifo":
                 continue
             if not self.env["stock.move.line"].search(

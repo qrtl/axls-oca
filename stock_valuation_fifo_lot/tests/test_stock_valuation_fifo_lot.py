@@ -86,6 +86,10 @@ class TestStockValuationFifoLot(TestStockValuationFifoCommon):
         ml_in_002.qty_consumed = 0.0
         self.assertEqual(ml_in_002.qty_remaining, 5.0)
         self.assertEqual(ml_in_002.value_remaining, 500.0)
+        # Lot 002 has no on-hand quantity but still has a remaining value, so it can
+        # be selected as a forced FIFO lot.
+        lot_002 = ml_in_002.lot_id
+        self.assertTrue(lot_002.is_force_fifo_candidate)
         # Create delivery for lot 001
         with self.assertRaises(UserError):
             self.create_picking("out", ["001"], ml_qty=5.0)
@@ -93,6 +97,9 @@ class TestStockValuationFifoLot(TestStockValuationFifoCommon):
             "out", ["001"], ml_qty=5.0, force_lot_name="002"
         )
         self.assertEqual(move_out_001.stock_valuation_layer_ids.value, -500.0)
+        # Lot 002 is no longer a candidate once its remaining value is consumed.
+        self.assertEqual(ml_in_002.qty_remaining, 0.0)
+        self.assertFalse(lot_002.is_force_fifo_candidate)
 
     def test_avco_product_receipt(self):
         self.product.categ_id.property_cost_method = "average"
