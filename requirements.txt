@@ -3,5 +3,6 @@ astor
 cryptography
 odoo_test_helper
 openpyxl
+python-barcode
 xlrd
 xlsxwriter
