@@ -74,7 +74,7 @@ msgstr "前払会社通貨金額"
 #: model:ir.model.fields,field_description:purchase_deposit_company_amount.field_account_move__is_deposit
 #: model:ir.model.fields,field_description:purchase_deposit_company_amount.field_account_payment__is_deposit
 msgid "Is a Deposit Bill"
-msgstr "前払請求書である"
+msgstr "前払請求書"
 
 #. module: purchase_deposit_company_amount
 #: model:ir.model,name:purchase_deposit_company_amount.model_account_move
