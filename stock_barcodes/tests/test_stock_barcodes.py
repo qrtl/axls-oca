@@ -114,7 +114,8 @@ class TestStockBarcodes(TestCommonStockBarcodes):
 
         self.assertEqual(self.barcode_action_invalid._count_elements(), 0)
         self.barcode_action_valid.context = "{'search_default_code': 1}"
-        self.assertEqual(self.barcode_action_valid._count_elements(), 6)
+        # No operation type has 1 as code, so nothing is counted
+        self.assertEqual(self.barcode_action_valid._count_elements(), 0)
         field_value_name = (
             self.barcode_action_valid.context.strip("{}").split(",")[0].split(":")
         )

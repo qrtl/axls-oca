@@ -97,10 +97,9 @@ class StockBarcodesAction(models.Model):
                         if field_value_format.isdigit()
                         else field_value_format
                     )
-                    if hasattr(
-                        self.action_window_id.res_model,
-                        FIELDS_NAME.get(field_name, field_name),
-                    ):
+                    if self.action_window_id.res_model and FIELDS_NAME.get(
+                        field_name, field_name
+                    ) in self.env[self.action_window_id.res_model]._fields:
                         return (
                             "{}".format(FIELDS_NAME.get(field_name, field_name)),
                             "=",
@@ -117,11 +116,7 @@ class StockBarcodesAction(models.Model):
                     map(lambda x: _map_context_values(x), context_values)
                 )
             ]
-            search_count = (
-                list(filter(lambda x: x, domain))
-                if all(val_d is True for val_d in domain)
-                else []
-            )
+            search_count = list(filter(lambda x: x, domain))
             return (
                 self.env[self.action_window_id.res_model].search_count(search_count)
                 if self.action_window_id.res_model
