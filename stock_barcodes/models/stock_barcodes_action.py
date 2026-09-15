@@ -97,16 +97,17 @@ class StockBarcodesAction(models.Model):
                         if field_value_format.isdigit()
                         else field_value_format
                     )
-                    if self.action_window_id.res_model and FIELDS_NAME.get(
-                        field_name, field_name
-                    ) in self.env[self.action_window_id.res_model]._fields:
-                        return (
-                            "{}".format(FIELDS_NAME.get(field_name, field_name)),
-                            "=",
-                            field_value,
-                        )
-                    else:
-                        return False
+                    if field_name in FIELDS_NAME:
+                        # The key is a search view filter, so the value is only
+                        # the flag enabling it. Mirror the filter domain.
+                        return (FIELDS_NAME[field_name], "!=", False)
+                    if (
+                        self.action_window_id.res_model
+                        and field_name
+                        in self.env[self.action_window_id.res_model]._fields
+                    ):
+                        return (field_name, "=", field_value)
+                    return False
                 else:
                     return ()
 

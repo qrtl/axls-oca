@@ -129,6 +129,11 @@ class TestStockBarcodes(TestCommonStockBarcodes):
         )
         field_values = field_value_name[1].strip()
         self.assertTrue(field_values.isdigit())
+        self.barcode_action_valid.context = "{'search_default_code': 'incoming'}"
+        self.assertEqual(
+            self.barcode_action_valid._count_elements(),
+            self.env["stock.picking.type"].search_count([("code", "=", "incoming")]),
+        )
 
         with self.assertRaises(IndexError):
             self.barcode_action_invalid.context = "{'search_default_'}"
