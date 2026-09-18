@@ -1,0 +1,2245 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* stock_barcodes
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 16.0\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2025-08-15 10:25+0000\n"
+"Last-Translator: Ömer KÜLAK <omer.kulak@kitayazilim.com>\n"
+"Language-Team: none\n"
+"Language: tr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.10.4\n"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,help:stock_barcodes.field_wiz_candidate_picking__state
+#: model:ir.model.fields,help:stock_barcodes.field_wiz_stock_barcodes_read_picking__picking_state
+#: model:ir.model.fields,help:stock_barcodes.field_wiz_stock_barcodes_read_todo__picking_state
+msgid ""
+" * Draft: The transfer is not confirmed yet. Reservation doesn't apply.\n"
+" * Waiting another operation: This transfer is waiting for another operation "
+"before being ready.\n"
+" * Waiting: The transfer is waiting for the availability of some products.\n"
+"(a) The shipping policy is \"As soon as possible\": no product could be "
+"reserved.\n"
+"(b) The shipping policy is \"When all products are ready\": not all the "
+"products could be reserved.\n"
+" * Ready: The transfer is ready to be processed.\n"
+"(a) The shipping policy is \"As soon as possible\": at least one product has "
+"been reserved.\n"
+"(b) The shipping policy is \"When all products are ready\": all product have "
+"been reserved.\n"
+" * Done: The transfer has been processed.\n"
+" * Cancelled: The transfer has been cancelled."
+msgstr ""
+" * Taslak: Transfer henüz onaylanmadı. Rezervasyon geçerli değildir.\n"
+" * Başka bir işlem bekleniyor: Bu transfer hazır olmadan önce başka bir "
+"işlemi bekliyor.\n"
+" * Bekliyor: Transfer bazı ürünlerin kullanılabilirliğini bekliyor.\n"
+"(a) Gönderim politikası \"Mümkün olan en kısa sürede\" şeklindedir: hiçbir "
+"ürün rezerve edilemez.\n"
+"(b) Gönderim politikası \"Tüm ürünler hazır olduğunda\" şeklindedir: tüm "
+"ürünler rezerve edilemez.\n"
+" * Hazır: Aktarım işlenmeye hazır.\n"
+"(a) Gönderim politikası \"Mümkün olan en kısa sürede\" şeklindedir: en az "
+"bir ürün rezerve edilmiştir.\n"
+"(b) Gönderim politikası \"Tüm ürünler hazır olduğunda\" şeklindedir: tüm "
+"ürünler rezerve edilmiştir.\n"
+" * Bitti: Aktarım işlendi.\n"
+" * İptal Edildi: Transfer iptal edildi."
+
+#. module: stock_barcodes
+#. odoo-python
+#: code:addons/stock_barcodes/models/stock_barcodes_action.py:0
+#, python-format
+msgid " Barcode has already been assigned to the action(s): {}."
+msgstr ""
+
+#. module: stock_barcodes
+#. odoo-python
+#: code:addons/stock_barcodes/models/stock_barcodes_action.py:0
+#, python-format
+msgid ""
+" The barcode {} is not correct.Use numbers, letters and dashes, without "
+"spaces.E.g. 15753, BC-5789,er-56 "
+msgstr ""
+
+#. module: stock_barcodes
+#. odoo-python
+#: code:addons/stock_barcodes/wizard/stock_barcodes_read.py:0
+#, python-format
+msgid "%(barcode)s (%(message)s)"
+msgstr "%(barcode)s (%(message)s)"
+
+#. module: stock_barcodes
+#: model:ir.actions.report,print_report_name:stock_barcodes.action_report_barcode_actions
+msgid "'Barcodes - %s' % (object.name)"
+msgstr ""
+
+#. module: stock_barcodes
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_stock_barcodes_new_lot
+msgid "1 - Scan or input product barcode"
+msgstr "1 - Ürün barkodunu tarayın veya girin"
+
+#. module: stock_barcodes
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_stock_barcodes_new_lot
+msgid "2 - Scan or input product lot barcode"
+msgstr "2 - Ürün lot barkodunu tarayın veya girin"
+
+#. module: stock_barcodes
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.stock_picking_type_kanban
+msgid "<i class=\"fa fa-barcode fa-2x\" title=\"Start barcode interface\"/>"
+msgstr "<i class=\"fa fa-barcode fa-2x\" title=\"Barkod arayüzünü başlat\"/>"
+
+#. module: stock_barcodes
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_stock_barcodes_read_inventory_form
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_stock_barcodes_read_picking_form
+msgid "<i class=\"fa fa-pencil\" title=\"Edit inventory quantity\"/>"
+msgstr ""
+
+#. module: stock_barcodes
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.stock_picking_type_kanban
+msgid ""
+"<i class=\"fa fa-plus\" title=\"Scan new picking \"/>\n"
+"                        <small>New</small>"
+msgstr ""
+"<i class=\"fa fa-plus\" title=\"Yeni bir teslimat taratın \"/>\n"
+"                        <small>Yeni</small>"
+
+#. module: stock_barcodes
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_stock_barcodes_read_picking_form
+msgid "<i class=\"fa fa-trash\" title=\"Remove\"/>"
+msgstr ""
+
+#. module: stock_barcodes
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_stock_barcodes_read_inventory_form
+msgid "<i class=\"fa fa-trash\" title=\"Reset inventory quantity\"/>"
+msgstr ""
+
+#. module: stock_barcodes
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_stock_barcodes_read_form
+msgid ""
+"<span attrs=\"{'invisible': [('result_package_id', '=', False)]}\">-&gt;\n"
+"                                    </span>"
+msgstr ""
+
+#. module: stock_barcodes
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_stock_barcodes_read_inventory_form
+msgid ""
+"<span class=\"d-none d-lg-block\">Apply</span>\n"
+"                    (<span class=\"count_apply_inventory\"/>)"
+msgstr ""
+
+#. module: stock_barcodes
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_stock_barcodes_read_picking_form
+msgid "<span class=\"d-none d-lg-block\">Put in back</span>"
+msgstr ""
+
+#. module: stock_barcodes
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_stock_barcodes_read_picking_form
+msgid "<span class=\"d-none d-lg-block\">Validate</span>"
+msgstr ""
+
+#. module: stock_barcodes
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_stock_barcodes_read_picking_form
+msgid ""
+"<span class=\"fa fa-6x mb-4 fa-exclamation-triangle\"/>\n"
+"                    <span class=\"fa fa-2x fa-exclamation-triangle\">\n"
+"                        This picking is already done\n"
+"                    </span>"
+msgstr ""
+
+#. module: stock_barcodes
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_stock_barcodes_read_packaging_form
+msgid ""
+"<span class=\"fa fa-archive d-sm-none oe_span_small_icon\" title=\"Source "
+"Location\" attrs=\"{'invisible': [('product_packaging_ids', '=', [])]}\"/>"
+msgstr ""
+"<span class=\"fa fa-archive d-sm-none oe_span_small_icon\" title=\"Kaynak "
+"Konum\" attrs=\"{'invisible': [('product_packaging_ids', '=', [])]}\"/>"
+
+#. module: stock_barcodes
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_stock_barcodes_read_form
+msgid "<span class=\"fa fa-barcode fa-2x mt-2 mx-3\" title=\"Barcode\"/>"
+msgstr ""
+
+#. module: stock_barcodes
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_stock_barcodes_todo_kanban
+msgid "<span class=\"fa fa-map-marker\" title=\"Location name\"/>"
+msgstr "<span class=\"fa fa-map-marker\" title=\"Konum adı\"/>"
+
+#. module: stock_barcodes
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_stock_barcodes_todo_kanban
+msgid "<span class=\"fa fa-tags\" title=\"Lot S/N\"/>"
+msgstr "<span class=\"fa fa-tags\" title=\"Lot S/N\"/>"
+
+#. module: stock_barcodes
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_stock_barcodes_read_form
+msgid "<span class=\"fs-1 d-none d-lg-block\">Clean Values</span>"
+msgstr ""
+
+#. module: stock_barcodes
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_stock_barcodes_read_form
+msgid "<span class=\"fs-1 d-none d-lg-block\">Confirm</span>"
+msgstr ""
+
+#. module: stock_barcodes
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_stock_barcodes_read_form
+msgid "<span class=\"fs-1 d-none d-lg-block\">Product</span>"
+msgstr ""
+
+#. module: stock_barcodes
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_picking_form
+msgid "<span class=\"o_stat_text\">Scan barcodes</span>"
+msgstr "<span class=\"o_stat_text\">Barkod okut</span>"
+
+#. module: stock_barcodes
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_stock_barcodes_read_picking_form
+msgid ""
+"<strong class=\" d-none d-sm-block\">Dest. Location</strong>\n"
+"                    <span class=\"fa fa-2x fa-share text-center d-sm-none "
+"oe_span_small_icon\" title=\"Destination Location\"/>"
+msgstr ""
+
+#. module: stock_barcodes
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_stock_barcodes_read_form
+msgid ""
+"<strong class=\" d-none d-sm-block\">Source Location\n"
+"                                    </strong>\n"
+"                                    <span class=\"fa fa-map-marker fa-2x d-"
+"sm-none oe_span_small_icon\" title=\"Source Location\"/>"
+msgstr ""
+
+#. module: stock_barcodes
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_stock_barcodes_read_form
+msgid ""
+"<strong class=\"d-none d-sm-block\">Lot S/N</strong>\n"
+"                                    <span class=\"fa fa-tags fa-2x d-sm-none "
+"oe_span_small_icon\" title=\"Lot S/N\"/>"
+msgstr ""
+
+#. module: stock_barcodes
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_stock_barcodes_read_inventory_form
+msgid ""
+"<strong class=\"d-none d-sm-block\">Package</strong>\n"
+"                    <span class=\"fa fa-inbox fa-2x d-sm-none "
+"oe_span_small_icon\" title=\"package\"/>"
+msgstr ""
+
+#. module: stock_barcodes
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_stock_barcodes_read_form
+msgid ""
+"<strong class=\"d-none d-sm-block\">Product</strong>\n"
+"                                    <span class=\"fa fa-th-list fa-2x d-sm-"
+"none oe_span_small_icon\" title=\"Product\"/>"
+msgstr ""
+
+#. module: stock_barcodes
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_stock_barcodes_read_form
+msgid ""
+"<strong class=\"d-none d-sm-block\">Source Package -&gt; Result Package\n"
+"                                    </strong>\n"
+"                                    <span class=\"fa fa-cubes d-sm-none "
+"oe_span_small_icon\" title=\"Source Package to Result Package\"/>"
+msgstr ""
+
+#. module: stock_barcodes
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_stock_barcodes_read_form
+msgid ""
+"<strong class=\"d-none d-sm-block\">Total Qty</strong>\n"
+"                                    <span class=\"fa fa-hashtag d-sm-none "
+"oe_span_small_icon\" title=\"Total Quantity\"/>"
+msgstr ""
+"<strong class=\"d-none d-sm-block\">Toplam Ad.</strong>\n"
+"                                    <span class=\"fa fa-hashtag d-sm-none "
+"oe_span_small_icon\" title=\"Toplam Adet\"/>"
+
+#. module: stock_barcodes
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_stock_barcodes_read_form
+msgid "ADD PRODUCT"
+msgstr ""
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_stock_barcodes_option_group__accumulate_read_quantity
+msgid "Accumulate Read Quantity"
+msgstr "Okunan Miktarı Biriktir"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read__action_ids
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_inventory__action_ids
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_picking__action_ids
+msgid "Action"
+msgstr "İşlem"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_stock_barcodes_action__action_window_id
+msgid "Action window"
+msgstr "İşlem Penceresi"
+
+#. module: stock_barcodes
+#: model:ir.model,name:stock_barcodes.model_stock_barcodes_action
+msgid "Actions for barcode interface"
+msgstr "Barkod arayüzü için işlemler"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_stock_barcodes_action__active
+msgid "Active"
+msgstr "Aktif"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_stock_barcodes_option_group__allow_negative_quant
+msgid "Allow Negative Quant"
+msgstr "Negatif Miktara İzin Ver"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read__create_lot
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_inventory__create_lot
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_picking__create_lot
+msgid "Allow create lot"
+msgstr "Lot oluşturmaya izin ver"
+
+#. module: stock_barcodes
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_stock_barcodes_read_picking_form
+msgid "Are you sure to validate the picking ?"
+msgstr "Sevkiyatı onaylamak istediğinize emin misiniz?"
+
+#. module: stock_barcodes
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_stock_barcodes_read_picking_form
+msgid "Assign Serial Numbers"
+msgstr "Seri Numaralarını Ata"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_stock_barcodes_option_group__auto_put_in_pack
+msgid "Auto put in pack"
+msgstr "Otomatik Paketle"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,help:stock_barcodes.field_stock_barcodes_option_group__auto_put_in_pack
+msgid "Auto put in pack before picking validation"
+msgstr "Onaydan önce otomatik paketle"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_stock_move__barcode_backorder_action
+msgid "Backorder action"
+msgstr "Ön Teslimat işlemi"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_stock_barcodes_action__barcode
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read__barcode
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_inventory__barcode
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_picking__barcode
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.stock_location_form_inherit
+msgid "Barcode"
+msgstr "Barkod"
+
+#. module: stock_barcodes
+#: model:ir.model,name:stock_barcodes.model_barcodes_barcode_events_mixin
+msgid "Barcode Event Mixin"
+msgstr ""
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_stock_picking_type__barcode_option_group_id
+msgid "Barcode Option Group"
+msgstr "Barkod Seçenek Grubu"
+
+#. module: stock_barcodes
+#. odoo-python
+#: code:addons/stock_barcodes/models/stock_picking.py:0
+#, python-format
+msgid ""
+"Barcode Option Group is not configured on Operation Type '%(pick_type)s'."
+msgstr ""
+
+#. module: stock_barcodes
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_pickingtype_filter
+msgid "Barcode Options"
+msgstr "Barkod Seçenekleri"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_stock_quant___barcode_scanned
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_new_lot___barcode_scanned
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read___barcode_scanned
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_inventory___barcode_scanned
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_picking___barcode_scanned
+msgid "Barcode Scanned"
+msgstr "Taranan Barkod"
+
+#. module: stock_barcodes
+#. odoo-javascript
+#: code:addons/stock_barcodes/static/src/views/actions/stock_barcode_main_menu.xml:0
+#, python-format
+msgid "Barcode Scanner"
+msgstr ""
+
+#. module: stock_barcodes
+#: model:ir.ui.menu,name:stock_barcodes.menu_action_stock_barcodes
+msgid "Barcode actions"
+msgstr "Barkod işlemleri"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_stock_barcodes_action__barcode_image
+msgid "Barcode image"
+msgstr ""
+
+#. module: stock_barcodes
+#. odoo-python
+#: code:addons/stock_barcodes/wizard/stock_barcodes_read.py:0
+#, python-format
+msgid "Barcode not found"
+msgstr "Barkod bulunamadı"
+
+#. module: stock_barcodes
+#. odoo-python
+#: code:addons/stock_barcodes/wizard/stock_barcodes_read.py:0
+#, python-format
+msgid "Barcode not found or field already filled"
+msgstr "Barkod bulunamadı veya alan zaten dolu"
+
+#. module: stock_barcodes
+#. odoo-python
+#: code:addons/stock_barcodes/wizard/stock_barcodes_read.py:0
+#, python-format
+msgid "Barcode not found with this screen values"
+msgstr "Bu ekran değerleriyle barkod bulunamadı"
+
+#. module: stock_barcodes
+#: model:ir.ui.menu,name:stock_barcodes.menu_action_stock_barcodes_option_group
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_stock_barcodes_option_group_form
+msgid "Barcode options"
+msgstr "Barkod seçenekleri"
+
+#. module: stock_barcodes
+#: model:ir.model.fields.selection,name:stock_barcodes.selection__wiz_stock_barcodes_read__message_type__success
+#: model:ir.model.fields.selection,name:stock_barcodes.selection__wiz_stock_barcodes_read_inventory__message_type__success
+#: model:ir.model.fields.selection,name:stock_barcodes.selection__wiz_stock_barcodes_read_picking__message_type__success
+msgid "Barcode read correctly"
+msgstr "Barkod başarıyla okundu"
+
+#. module: stock_barcodes
+#: model:ir.model.fields.selection,name:stock_barcodes.selection__wiz_stock_barcodes_read__message_type__info
+#: model:ir.model.fields.selection,name:stock_barcodes.selection__wiz_stock_barcodes_read_inventory__message_type__info
+#: model:ir.model.fields.selection,name:stock_barcodes.selection__wiz_stock_barcodes_read_picking__message_type__info
+msgid "Barcode read with additional info"
+msgstr "Barkod ek bilgiyle okundu"
+
+#. module: stock_barcodes
+#. odoo-python
+#: code:addons/stock_barcodes/wizard/stock_barcodes_read_picking.py:0
+#, python-format
+msgid "Barcode reader"
+msgstr "Barkod okuyucu"
+
+#. module: stock_barcodes
+#: model:ir.actions.act_window,name:stock_barcodes.action_stock_barcodes_action_kanban
+#: model:ir.actions.client,name:stock_barcodes.action_stock_barcodes_action_client
+#: model:ir.ui.menu,name:stock_barcodes.stock_barcodes_root
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_picking_type_form
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_stock_barcodes_read_form
+msgid "Barcodes"
+msgstr "Barkodlar"
+
+#. module: stock_barcodes
+#: model:ir.actions.report,name:stock_barcodes.action_report_barcode_actions
+msgid "Barcodes (PDF)"
+msgstr ""
+
+#. module: stock_barcodes
+#: model:ir.actions.act_window,name:stock_barcodes.action_stock_barcodes_read
+#: model:ir.actions.act_window,name:stock_barcodes.action_stock_barcodes_read_inventory
+#: model:ir.actions.act_window,name:stock_barcodes.action_stock_barcodes_read_picking
+msgid "Barcodes Read"
+msgstr "Okunan Barkodlar"
+
+#. module: stock_barcodes
+#: model:ir.actions.act_window,name:stock_barcodes.action_stock_barcodes
+#: model:ir.actions.act_window,name:stock_barcodes.action_stock_barcodes_action
+msgid "Barcodes actions"
+msgstr "Barkod işlemleri"
+
+#. module: stock_barcodes
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_stock_barcodes_read_form_manual_qty
+msgid "Barcodes manual quantities"
+msgstr "Barkod elle miktar girme"
+
+#. module: stock_barcodes
+#: model:ir.actions.act_window,name:stock_barcodes.action_stock_barcodes_menu
+msgid "Barcodes menu"
+msgstr "Barkod menüsü"
+
+#. module: stock_barcodes
+#: model:ir.actions.act_window,name:stock_barcodes.action_stock_barcodes_option
+msgid "Barcodes options"
+msgstr "Barkod seçenekleri"
+
+#. module: stock_barcodes
+#: model:ir.actions.act_window,name:stock_barcodes.action_stock_barcodes_option_group
+msgid "Barcodes options groups"
+msgstr "Barkod seçenek grupları"
+
+#. module: stock_barcodes
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_stock_barcodes_option_group_form
+msgid "Behavior settings"
+msgstr "Davranış ayarları"
+
+#. module: stock_barcodes
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_stock_barcodes_new_lot
+msgid "Cancel"
+msgstr "İptal"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_candidate_picking__name
+msgid "Candidate Picking"
+msgstr "Aday Sevkiyat"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_picking__candidate_picking_ids
+msgid "Candidate pickings"
+msgstr "Aday Sevkiyatlar"
+
+#. module: stock_barcodes
+#: model:ir.model,name:stock_barcodes.model_wiz_candidate_picking
+msgid "Candidate pickings for barcode interface"
+msgstr "Barkod arayüzü için aday sevkiyatlar"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_picking__candidate_picking_id
+msgid "Candidate stock picking"
+msgstr ""
+
+#. module: stock_barcodes
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_stock_barcodes_todo_kanban
+msgid "Clean"
+msgstr "Temizle"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_stock_barcodes_option__clean_after_done
+msgid "Clean After Done"
+msgstr "Tamamlandıktan Sonra Temizle"
+
+#. module: stock_barcodes
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_stock_barcodes_read_form
+msgid "Clean Values"
+msgstr "Değerleri Temizle"
+
+#. module: stock_barcodes
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_stock_barcodes_read_form
+msgid "Clean lot"
+msgstr "Lotu Temizle"
+
+#. module: stock_barcodes
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_stock_barcodes_read_form
+msgid "Clean package info"
+msgstr "Paket bilgisini temizle"
+
+#. module: stock_barcodes
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_stock_barcodes_read_form
+msgid "Clean product"
+msgstr "Ürünü Temizle"
+
+#. module: stock_barcodes
+#. odoo-python
+#: code:addons/stock_barcodes/wizard/stock_barcodes_read_picking.py:0
+#, python-format
+msgid "Click on picking pushpin to lock it"
+msgstr "Kilitlemek için sevkiyat raptiyesine tıklayın"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_stock_barcodes_option_group__code
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_pickingtype_filter
+msgid "Code"
+msgstr "Kod"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_picking__company_id
+msgid "Company"
+msgstr "Şirket"
+
+#. module: stock_barcodes
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_stock_barcodes_new_lot
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_stock_barcodes_read_form
+msgid "Confirm"
+msgstr "Onayla"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_stock_barcodes_option_group__confirmed_moves
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read__confirmed_moves
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_inventory__confirmed_moves
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_picking__confirmed_moves
+msgid "Confirmed moves"
+msgstr "Onaylanmış hareketler"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_picking__partner_id
+msgid "Contact"
+msgstr ""
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_stock_barcodes_action__context
+msgid "Context"
+msgstr "Bağlam"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_stock_barcodes_action__count_elements
+msgid "Count Elements"
+msgstr ""
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_inventory__count_inventory_quants
+msgid "Count Inventory Quants"
+msgstr ""
+
+#. module: stock_barcodes
+#: model:ir.model.fields.selection,name:stock_barcodes.selection__stock_move__barcode_backorder_action__create_backorder
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_stock_barcodes_todo_kanban
+msgid "Create Backorder"
+msgstr "Ön Teslimat Oluştur"
+
+#. module: stock_barcodes
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_stock_barcodes_read_form
+msgid "Create lot"
+msgstr "Lot Oluştur"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_stock_barcodes_option_group__create_lot
+msgid "Create lots if not match"
+msgstr "Eşleşmezse lot oluştur"
+
+#. module: stock_barcodes
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_stock_barcodes_read_form
+msgid "Create new lot"
+msgstr "Yeni lot oluştur"
+
+#. module: stock_barcodes
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_stock_barcodes_read_form
+msgid "Create new package"
+msgstr "Yeni paket oluştur"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_report_stock_barcodes_report_barcode_actions__create_uid
+#: model:ir.model.fields,field_description:stock_barcodes.field_stock_barcodes_action__create_uid
+#: model:ir.model.fields,field_description:stock_barcodes.field_stock_barcodes_option__create_uid
+#: model:ir.model.fields,field_description:stock_barcodes.field_stock_barcodes_option_group__create_uid
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_candidate_picking__create_uid
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_new_lot__create_uid
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_inventory__create_uid
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_picking__create_uid
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_todo__create_uid
+msgid "Created by"
+msgstr "Oluşturan"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_report_stock_barcodes_report_barcode_actions__create_date
+#: model:ir.model.fields,field_description:stock_barcodes.field_stock_barcodes_action__create_date
+#: model:ir.model.fields,field_description:stock_barcodes.field_stock_barcodes_option__create_date
+#: model:ir.model.fields,field_description:stock_barcodes.field_stock_barcodes_option_group__create_date
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_candidate_picking__create_date
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_new_lot__create_date
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_inventory__create_date
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_picking__create_date
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_todo__create_date
+msgid "Created on"
+msgstr "Oluşturulma"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_candidate_picking__date
+msgid "Creation Date"
+msgstr "Oluşturulma Tarihi"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,help:stock_barcodes.field_wiz_candidate_picking__date
+msgid "Creation Date, usually the time of the order"
+msgstr "Oluşturulma Tarihi, genellikle sipariş zamanı"
+
+#. module: stock_barcodes
+#: model:ir.model.fields.selection,name:stock_barcodes.selection__wiz_stock_barcodes_read_picking__picking_type_code__outgoing
+msgid "Customers"
+msgstr "Müşteriler"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,help:stock_barcodes.field_stock_barcodes_option_group__manual_entry
+msgid "Default value when open scan interface"
+msgstr "Tarama arayüzü açıldığında varsayılan değer"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_candidate_picking__product_uom_qty
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_todo__product_uom_qty
+msgid "Demand"
+msgstr "Talep"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_todo__location_dest_name
+msgid "Destinatino Name"
+msgstr "Hedef Adı"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_picking__picking_location_dest_id
+#: model:ir.model.fields.selection,name:stock_barcodes.selection__stock_barcodes_option_group__location_field_to_sort__location_dest_id
+msgid "Destination Location"
+msgstr "Hedef Konum"
+
+#. module: stock_barcodes
+#: model:ir.model.fields.selection,name:stock_barcodes.selection__stock_barcodes_option_group__source_pending_moves__move_line_ids
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_stock_barcodes_read_picking_form
+msgid "Detailed operations"
+msgstr "Detaylı işlemler"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read__display_assign_serial
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_inventory__display_assign_serial
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_picking__display_assign_serial
+msgid "Display Assign Serial"
+msgstr "Seri Numarası Atamasını Göster"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read__display_menu
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_inventory__display_menu
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_picking__display_menu
+msgid "Display Menu"
+msgstr "Menüyü Göster"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_report_stock_barcodes_report_barcode_actions__display_name
+#: model:ir.model.fields,field_description:stock_barcodes.field_stock_barcodes_action__display_name
+#: model:ir.model.fields,field_description:stock_barcodes.field_stock_barcodes_option__display_name
+#: model:ir.model.fields,field_description:stock_barcodes.field_stock_barcodes_option_group__display_name
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_candidate_picking__display_name
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_new_lot__display_name
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_inventory__display_name
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_picking__display_name
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_todo__display_name
+msgid "Display Name"
+msgstr "Görünen Ad"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_stock_barcodes_option_group__display_notification
+msgid "Display Odoo notifications"
+msgstr "Odoo bildirimlerini göster"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_stock_barcodes_option_group__no_increase_qty_done
+msgid "Do not increase qty done on each scan"
+msgstr ""
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_candidate_picking__product_qty_done
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_todo__qty_done
+#: model:ir.model.fields.selection,name:stock_barcodes.selection__stock_move_line__barcode_scan_state__done
+#: model:ir.model.fields.selection,name:stock_barcodes.selection__wiz_stock_barcodes_read_todo__state__done
+msgid "Done"
+msgstr "Tamamlandı"
+
+#. module: stock_barcodes
+#: model:ir.model.fields.selection,name:stock_barcodes.selection__stock_move_line__barcode_scan_state__done_forced
+#: model:ir.model.fields.selection,name:stock_barcodes.selection__wiz_stock_barcodes_read_todo__state__done_forced
+msgid "Done forced"
+msgstr "Zorla tamamlandı"
+
+#. module: stock_barcodes
+#. odoo-python
+#: code:addons/stock_barcodes/wizard/stock_barcodes_read.py:0
+#, python-format
+msgid "Empty field"
+msgstr "Boş alan"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read__enable_add_product
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_inventory__enable_add_product
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_picking__enable_add_product
+msgid "Enable Add Product"
+msgstr ""
+
+#. module: stock_barcodes
+#: model:ir.model.fields,help:stock_barcodes.field_wiz_stock_barcodes_read__product_tracking
+#: model:ir.model.fields,help:stock_barcodes.field_wiz_stock_barcodes_read_inventory__product_tracking
+#: model:ir.model.fields,help:stock_barcodes.field_wiz_stock_barcodes_read_picking__product_tracking
+msgid "Ensure the traceability of a storable product in your warehouse."
+msgstr "Depodaki stoklanabilir ürünün izlenebilirliğini sağlayın."
+
+#. module: stock_barcodes
+#: model:ir.model.fields,help:stock_barcodes.field_wiz_stock_barcodes_read__manual_entry
+#: model:ir.model.fields,help:stock_barcodes.field_wiz_stock_barcodes_read_inventory__manual_entry
+#: model:ir.model.fields,help:stock_barcodes.field_wiz_stock_barcodes_read_picking__manual_entry
+msgid "Entry manual data"
+msgstr "Manuel veri girişi"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_stock_barcodes_option__field_name
+msgid "Field Name"
+msgstr "Alan Adı"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_stock_barcodes_option_group__fill_fields_from_lot
+msgid "Fill Fields From Lot"
+msgstr "Alanları Lottan Doldur"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_stock_barcodes_option__filled_default
+msgid "Filled Default"
+msgstr "Varsayılan olarak dolduruldu"
+
+#. module: stock_barcodes
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_stock_barcodes_read_form
+msgid "Force done"
+msgstr "Zorla tamamla"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_stock_barcodes_option__forced
+msgid "Forced"
+msgstr "Zorlandı"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_picking__forced_todo_key
+msgid "Forced Todo Key"
+msgstr "Zorunlu Yapılacak Anahtarı"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_stock_barcodes_option_group__auto_lot
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read__auto_lot
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_inventory__auto_lot
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_picking__auto_lot
+msgid "Get lots automatically"
+msgstr "Lotları otomatik al"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,help:stock_barcodes.field_wiz_stock_barcodes_read__product_packaging_ids
+#: model:ir.model.fields,help:stock_barcodes.field_wiz_stock_barcodes_read_inventory__product_packaging_ids
+#: model:ir.model.fields,help:stock_barcodes.field_wiz_stock_barcodes_read_picking__product_packaging_ids
+msgid "Gives the different ways to package the same product."
+msgstr "Aynı ürünü paketlemenin farklı yollarını sunar."
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_stock_barcodes_option_group__group_key_for_todo_records
+msgid "Group Key For Todo Records"
+msgstr "Yapılacak Kayıtlar için Grup Anahtarı"
+
+#. module: stock_barcodes
+#: model:ir.model.fields.selection,name:stock_barcodes.selection__stock_barcodes_option_group__barcode_guided_mode__guided
+msgid "Guided"
+msgstr "Kılavuzlu"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read__guided_location_id
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_inventory__guided_location_id
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_picking__guided_location_id
+msgid "Guided Location"
+msgstr "Kılavuzlu Konum"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read__guided_location_dest_id
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_inventory__guided_location_dest_id
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_picking__guided_location_dest_id
+msgid "Guided Location Dest"
+msgstr "Kılavuzlu Hedef Konum"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read__guided_lot_id
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_inventory__guided_lot_id
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_picking__guided_lot_id
+msgid "Guided Lot"
+msgstr "Kılavuzlu Lot"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read__guided_product_id
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_inventory__guided_product_id
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_picking__guided_product_id
+msgid "Guided Product"
+msgstr "Kılavuzlu Ürün"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_report_stock_barcodes_report_barcode_actions__id
+#: model:ir.model.fields,field_description:stock_barcodes.field_stock_barcodes_action__id
+#: model:ir.model.fields,field_description:stock_barcodes.field_stock_barcodes_option__id
+#: model:ir.model.fields,field_description:stock_barcodes.field_stock_barcodes_option_group__id
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_candidate_picking__id
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_new_lot__id
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_inventory__id
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_picking__id
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_todo__id
+msgid "ID"
+msgstr "ID"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_stock_barcodes_action__icon_class
+msgid "Icon Class"
+msgstr "İkon Sınıfı"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,help:stock_barcodes.field_stock_barcodes_option_group__accumulate_read_quantity
+msgid ""
+"If checked quantity will be accumulated to the existing record instead of "
+"overwrite it with the new quantity value"
+msgstr ""
+"İşaretlenirse miktar, mevcut kayda eklenir; yeni değerle üzerine yazılmaz"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,help:stock_barcodes.field_stock_barcodes_option_group__auto_lot
+#: model:ir.model.fields,help:stock_barcodes.field_wiz_stock_barcodes_read__auto_lot
+#: model:ir.model.fields,help:stock_barcodes.field_wiz_stock_barcodes_read_inventory__auto_lot
+#: model:ir.model.fields,help:stock_barcodes.field_wiz_stock_barcodes_read_picking__auto_lot
+msgid ""
+"If checked the lot will be set automatically with the same removal startegy"
+msgstr "İşaretlenirse lot, aynı kaldırma stratejisiyle otomatik atanır"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,help:stock_barcodes.field_stock_barcodes_option_group__create_lot
+msgid ""
+"If checked the lot will created automatically with the scanned barcode if "
+"not exists "
+msgstr ""
+"İşaretlenirse, lot mevcut değilse taranan barkod ile otomatik oluşturulur "
+
+#. module: stock_barcodes
+#: model:ir.model.fields,help:stock_barcodes.field_stock_barcodes_option_group__show_detailed_operations
+#: model:ir.model.fields,help:stock_barcodes.field_wiz_stock_barcodes_read_picking__show_detailed_operations
+msgid "If checked the picking detailed operations are displayed"
+msgstr "İşaretlenirse sevkiyatın detaylı işlemleri gösterilir"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,help:stock_barcodes.field_stock_barcodes_option_group__keep_screen_values
+#: model:ir.model.fields,help:stock_barcodes.field_wiz_stock_barcodes_read_picking__keep_screen_values
+msgid ""
+"If checked the wizard values are kept until the pending move is completed"
+msgstr ""
+"İşaretlenirse sihirbaz değerleri, bekleyen hareket tamamlanana kadar saklanır"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,help:stock_barcodes.field_stock_barcodes_option_group__fill_fields_from_lot
+msgid ""
+"If checked, the fields in the interface will be filled from the scanned lot"
+msgstr "İşaretlenirse arayüzdeki alanlar taranan lottan doldurulur"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,help:stock_barcodes.field_stock_barcodes_option_group__is_manual_qty
+msgid ""
+"If it is checked, it always shows the product quantity field in edit mode"
+msgstr ""
+"İşaretlenirse ürün miktarı alanı her zaman düzenleme modunda gösterilir"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,help:stock_barcodes.field_stock_barcodes_option_group__allow_negative_quant
+msgid ""
+"If it is checked, it will allow the creation of movements that generate "
+"negative stock"
+msgstr ""
+"İşaretlenirse negatif stok oluşturan hareketlerin oluşturulmasına izin "
+"verilir"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,help:stock_barcodes.field_stock_barcodes_option_group__ignore_quant_location
+msgid ""
+"If it is checked, quant location will be ignored when reading lot/package"
+msgstr "İşaretlenirse lot/paket okunurken miktar lokasyonu dikkate alınmaz"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,help:stock_barcodes.field_stock_barcodes_option_group__is_manual_confirm
+msgid "If it is marked, the movement must always be confirmed from a button"
+msgstr "İşaretlenirse hareket mutlaka bir butonla onaylanmalıdır"
+
+#. module: stock_barcodes
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_stock_barcodes_read_form
+msgid "If locked keep result package"
+msgstr "Kilitliyse sonuç paketini koru"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_stock_barcodes_option_group__ignore_quant_location
+msgid "Ignore Quant Location"
+msgstr "Miktar Lokasyonunu Yoksay"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_stock_barcodes_option_group__ignore_filled_fields
+msgid "Ignore filled fields"
+msgstr "Dolu alanları yoksay"
+
+#. module: stock_barcodes
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_stock_barcodes_todo_kanban
+msgid "Ignore rest"
+msgstr "Kalanları yoksay"
+
+#. module: stock_barcodes
+#: model:ir.model.fields.selection,name:stock_barcodes.selection__wiz_stock_barcodes_read__message_type__info_page
+#: model:ir.model.fields.selection,name:stock_barcodes.selection__wiz_stock_barcodes_read_inventory__message_type__info_page
+#: model:ir.model.fields.selection,name:stock_barcodes.selection__wiz_stock_barcodes_read_picking__message_type__info_page
+msgid "Info page"
+msgstr ""
+
+#. module: stock_barcodes
+#: model:ir.model.fields.selection,name:stock_barcodes.selection__wiz_stock_barcodes_read_picking__picking_type_code__internal
+msgid "Internal"
+msgstr "İç"
+
+#. module: stock_barcodes
+#: model:stock.barcodes.action,name:stock_barcodes.stock_barcodes_action_inventory
+msgid "Inventory"
+msgstr "Stok"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_inventory__inventory_quant_ids
+msgid "Inventory Quant"
+msgstr "Stok Miktarı"
+
+#. module: stock_barcodes
+#. odoo-python
+#: code:addons/stock_barcodes/wizard/stock_barcodes_read_inventory.py:0
+#, python-format
+msgid "Inventory line with more than one unit in serial tracked product"
+msgstr "Seri takibi yapılan üründe birden fazla birim içeren envanter satırı"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_inventory__inventory_product_qty
+msgid "Inventory quantities"
+msgstr "Stok miktarları"
+
+#. module: stock_barcodes
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_stock_barcodes_read_inventory_form
+msgid "Inventory quants"
+msgstr "Stok miktarları (quants)"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_picking__todo_line_is_extra_line
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_todo__is_extra_line
+msgid "Is Extra Line"
+msgstr "Ek Satır mı"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_stock_barcodes_option_group__is_manual_confirm
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read__is_manual_confirm
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_inventory__is_manual_confirm
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_picking__is_manual_confirm
+msgid "Is Manual Confirm"
+msgstr "Manuel Onay mı"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_stock_barcodes_option_group__is_manual_qty
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read__is_manual_qty
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_inventory__is_manual_qty
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_picking__is_manual_qty
+msgid "Is Manual Qty"
+msgstr "Manuel Miktar mı"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_candidate_picking__is_pending
+msgid "Is Pending"
+msgstr "Beklemede"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_todo__is_stock_move_line_origin
+msgid "Is Stock Move Line Origin"
+msgstr "Stok Hareket Satırı Kaynağı mı"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,help:stock_barcodes.field_stock_barcodes_option_group__confirmed_moves
+#: model:ir.model.fields,help:stock_barcodes.field_wiz_stock_barcodes_read__confirmed_moves
+#: model:ir.model.fields,help:stock_barcodes.field_wiz_stock_barcodes_read_inventory__confirmed_moves
+#: model:ir.model.fields,help:stock_barcodes.field_wiz_stock_barcodes_read_picking__confirmed_moves
+msgid ""
+"It allows to work with movements without reservation (Without detailed "
+"operations)"
+msgstr ""
+"Rezervasyon olmadan (detaylı işlem olmadan) hareketlerle çalışmaya olanak "
+"tanır"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read__keep_result_package
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_inventory__keep_result_package
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_picking__keep_result_package
+msgid "Keep Result Package"
+msgstr "Sonuç Paketini Koru"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_stock_barcodes_option_group__keep_screen_values
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_picking__keep_screen_values
+msgid "Keep Screen Values"
+msgstr "Ekran Değerlerini Koru"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_stock_barcodes_action__key_char_shortcut
+msgid "Key Char Shortcut"
+msgstr "Karakter Kısayolu"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_stock_barcodes_action__key_shortcut
+msgid "Key Shortcut"
+msgstr "Kısayol Tuşu"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_report_stock_barcodes_report_barcode_actions____last_update
+#: model:ir.model.fields,field_description:stock_barcodes.field_stock_barcodes_action____last_update
+#: model:ir.model.fields,field_description:stock_barcodes.field_stock_barcodes_option____last_update
+#: model:ir.model.fields,field_description:stock_barcodes.field_stock_barcodes_option_group____last_update
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_candidate_picking____last_update
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_new_lot____last_update
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_inventory____last_update
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_picking____last_update
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_todo____last_update
+msgid "Last Modified on"
+msgstr "Son Değiştirilme"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_report_stock_barcodes_report_barcode_actions__write_uid
+#: model:ir.model.fields,field_description:stock_barcodes.field_stock_barcodes_action__write_uid
+#: model:ir.model.fields,field_description:stock_barcodes.field_stock_barcodes_option__write_uid
+#: model:ir.model.fields,field_description:stock_barcodes.field_stock_barcodes_option_group__write_uid
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_candidate_picking__write_uid
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_new_lot__write_uid
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_inventory__write_uid
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_picking__write_uid
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_todo__write_uid
+msgid "Last Updated by"
+msgstr "Son Güncelleyen"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_report_stock_barcodes_report_barcode_actions__write_date
+#: model:ir.model.fields,field_description:stock_barcodes.field_stock_barcodes_action__write_date
+#: model:ir.model.fields,field_description:stock_barcodes.field_stock_barcodes_option__write_date
+#: model:ir.model.fields,field_description:stock_barcodes.field_stock_barcodes_option_group__write_date
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_candidate_picking__write_date
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_new_lot__write_date
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_inventory__write_date
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_picking__write_date
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_todo__write_date
+msgid "Last Updated on"
+msgstr "Son Güncellenme"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_todo__line_ids
+msgid "Line"
+msgstr "Satır"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read__location_id
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_inventory__location_id
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_picking__location_id
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_todo__location_id
+msgid "Location"
+msgstr "Konum"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_todo__location_dest_id
+msgid "Location Dest"
+msgstr "Hedef Konum"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_stock_barcodes_option_group__location_field_to_sort
+msgid "Location Field To Sort"
+msgstr "Sıralama için Konum Alanı"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_todo__location_name
+msgid "Location Name"
+msgstr "Konum Adı"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read__location_dest_id
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_inventory__location_dest_id
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_picking__location_dest_id
+msgid "Location dest."
+msgstr "Hedef Konum"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read__lot_id
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_inventory__lot_id
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_picking__lot_id
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_todo__lot_id
+msgid "Lot"
+msgstr "Lot"
+
+#. module: stock_barcodes
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_stock_barcodes_read_inventory_form
+msgid "Lot S/N:"
+msgstr ""
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_new_lot__lot_name
+msgid "Lot name"
+msgstr "Lot adı"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read__lot_name
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_inventory__lot_name
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_picking__lot_name
+msgid "Lot/Serial Number Name"
+msgstr "Lot/Seri No Adı"
+
+#. module: stock_barcodes
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_stock_barcodes_read_picking_form
+msgid "Lot:"
+msgstr "Lot:"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read__manual_entry
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_inventory__manual_entry
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_picking__manual_entry
+msgid "Manual"
+msgstr "Manuel"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_stock_barcodes_option_group__manual_entry_field_focus
+msgid "Manual Entry Field Focus"
+msgstr "Manuel Giriş Odak Alanı"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_stock_barcodes_option_group__manual_entry
+msgid "Manual entry"
+msgstr "Manuel giriş"
+
+#. module: stock_barcodes
+#. odoo-python
+#: code:addons/stock_barcodes/wizard/stock_barcodes_read.py:0
+#, python-format
+msgid "Manual entry OK"
+msgstr "Manuel giriş TAMAM"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_stock_barcodes_option__message
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read__message
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_inventory__message
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_picking__message
+msgid "Message"
+msgstr "Mesaj"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read__message_step
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_inventory__message_step
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_picking__message_step
+msgid "Message Step"
+msgstr "Mesaj Adımı"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read__message_type
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_inventory__message_type
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_picking__message_type
+msgid "Message Type"
+msgstr "Mesaj Türü"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_stock_barcodes_option_group__barcode_guided_mode
+msgid "Mode"
+msgstr "Mod"
+
+#. module: stock_barcodes
+#. odoo-python
+#: code:addons/stock_barcodes/wizard/stock_barcodes_read.py:0
+#, python-format
+msgid ""
+"More than one lot found\n"
+"Scan product before"
+msgstr ""
+"Birden fazla lot bulundu\n"
+"Önce ürünü tara"
+
+#. module: stock_barcodes
+#: model:ir.model.fields.selection,name:stock_barcodes.selection__wiz_stock_barcodes_read__message_type__more_match
+#: model:ir.model.fields.selection,name:stock_barcodes.selection__wiz_stock_barcodes_read_inventory__message_type__more_match
+#: model:ir.model.fields.selection,name:stock_barcodes.selection__wiz_stock_barcodes_read_picking__message_type__more_match
+msgid "More than one matches found"
+msgstr "Birden fazla eşleşme bulundu"
+
+#. module: stock_barcodes
+#. odoo-python
+#: code:addons/stock_barcodes/wizard/stock_barcodes_read.py:0
+#, python-format
+msgid "More than one package found"
+msgstr "Birden fazla paket bulundu"
+
+#. module: stock_barcodes
+#. odoo-python
+#: code:addons/stock_barcodes/wizard/stock_barcodes_read.py:0
+#, python-format
+msgid "More than one product found"
+msgstr "Birden fazla ürün bulundu"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_picking__move_line_ids
+msgid "Move Line"
+msgstr "Hareket Satırı"
+
+#. module: stock_barcodes
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_stock_barcodes_todo_kanban
+msgid "NOT AVAILABLE"
+msgstr "MEVCUT DEĞİL"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_stock_barcodes_action__name
+#: model:ir.model.fields,field_description:stock_barcodes.field_stock_barcodes_option__name
+#: model:ir.model.fields,field_description:stock_barcodes.field_stock_barcodes_option_group__name
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_todo__name
+msgid "Name"
+msgstr "Adı"
+
+#. module: stock_barcodes
+#: model:ir.actions.act_window,name:stock_barcodes.action_stock_barcodes_new_lot
+msgid "New Lot"
+msgstr "Yeni Lot"
+
+#. module: stock_barcodes
+#. odoo-python
+#: code:addons/stock_barcodes/wizard/stock_barcodes_read_picking.py:0
+#, python-format
+msgid "New Move:"
+msgstr "Yeni Hareket:"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_stock_picking_type__new_picking_barcode_option_group_id
+msgid "New Picking Barcode Option Group"
+msgstr "Yeni Sevkiyat Barkod Seçenek Grubu"
+
+#. module: stock_barcodes
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_stock_barcodes_todo_kanban
+msgid "Next"
+msgstr "İleri"
+
+#. module: stock_barcodes
+#: model:ir.model.fields.selection,name:stock_barcodes.selection__stock_move__barcode_backorder_action__skip_backorder
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_stock_barcodes_todo_kanban
+msgid "No Backorder"
+msgstr "Ön Teslimat Yok"
+
+#. module: stock_barcodes
+#. odoo-javascript
+#: code:addons/stock_barcodes/static/src/views/actions/stock_barcode_main_menu.esm.js:0
+#, python-format
+msgid "No action found with barcode: "
+msgstr ""
+
+#. module: stock_barcodes
+#: model:ir.model.fields.selection,name:stock_barcodes.selection__wiz_stock_barcodes_read__message_type__not_found
+#: model:ir.model.fields.selection,name:stock_barcodes.selection__wiz_stock_barcodes_read_inventory__message_type__not_found
+#: model:ir.model.fields.selection,name:stock_barcodes.selection__wiz_stock_barcodes_read_picking__message_type__not_found
+msgid "No barcode found"
+msgstr "Barkod bulunamadı"
+
+#. module: stock_barcodes
+#. odoo-python
+#: code:addons/stock_barcodes/wizard/stock_barcodes_read_picking.py:0
+#, python-format
+msgid "No pending lines for this product"
+msgstr "Bu ürün için bekleyen satır yok"
+
+#. module: stock_barcodes
+#. odoo-python
+#: code:addons/stock_barcodes/wizard/stock_barcodes_read.py:0
+#, python-format
+msgid "No stock available for this lot with screen values"
+msgstr "Bu lot için mevcut ekran değerleriyle stok yok"
+
+#. module: stock_barcodes
+#: model_terms:ir.actions.act_window,help:stock_barcodes.stock_barcodes_action_picking_tree_ready
+msgid "No transfer found. Let's create one!"
+msgstr ""
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_candidate_picking__note
+msgid "Notes"
+msgstr "Notlar"
+
+#. module: stock_barcodes
+#. odoo-python
+#: code:addons/stock_barcodes/wizard/stock_barcodes_read.py:0
+#, python-format
+msgid "OK"
+msgstr "Tamam"
+
+#. module: stock_barcodes
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_stock_barcodes_todo_kanban
+msgid "Odoo will not create a backorder for this move. Are you sure?"
+msgstr "Odoo bu hareket için artık sipariş oluşturmayacak. Emin misiniz?"
+
+#. module: stock_barcodes
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_stock_barcodes_read_form
+msgid "Open actions"
+msgstr "İşlemleri aç"
+
+#. module: stock_barcodes
+#: model:ir.actions.act_window,name:stock_barcodes.stock_barcodes_action_picking_tree_ready
+#: model:ir.model.fields.selection,name:stock_barcodes.selection__stock_barcodes_option_group__source_pending_moves__move_ids
+#: model:stock.barcodes.action,name:stock_barcodes.stock_barcodes_action_barcode_operations
+msgid "Operations"
+msgstr "Operasyonlar"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_stock_barcodes_option_group__option_ids
+msgid "Option"
+msgstr "Seçenek"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_stock_barcodes_option__option_group_id
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read__option_group_id
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_inventory__option_group_id
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_picking__option_group_id
+msgid "Option Group"
+msgstr "Seçenek Grubu"
+
+#. module: stock_barcodes
+#: model:ir.model,name:stock_barcodes.model_stock_barcodes_option
+msgid "Options for barcode interface"
+msgstr "Barkod arayüzü için seçenekler"
+
+#. module: stock_barcodes
+#: model:ir.model,name:stock_barcodes.model_stock_barcodes_option_group
+msgid "Options group for barcode interface"
+msgstr "Barkod arayüzü için seçenek grubu"
+
+#. module: stock_barcodes
+#: model:ir.model.fields.selection,name:stock_barcodes.selection__stock_barcodes_option_group__location_field_to_sort__location_id
+msgid "Origin Location"
+msgstr "Kaynak Konum"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,help:stock_barcodes.field_stock_barcodes_option_group__source_pending_moves
+msgid "Origin of the data to generate the movements to process"
+msgstr "İşlenecek hareketleri oluşturacak verinin kaynağı"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read__owner_id
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_inventory__owner_id
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_picking__owner_id
+msgid "Owner"
+msgstr "Sahip"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read__package_id
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_inventory__package_id
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_picking__package_id
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_todo__package_id
+msgid "Package"
+msgstr "Paket"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_todo__package_product_qty
+msgid "Package Product Qty"
+msgstr "Paketteki Ürün Miktarı"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read__packaging_qty
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_inventory__packaging_qty
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_picking__packaging_qty
+msgid "Package Qty"
+msgstr "Paket Miktarı"
+
+#. module: stock_barcodes
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_stock_barcodes_read_picking_form
+msgid "Package:"
+msgstr "Paket:"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read__packaging_id
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_inventory__packaging_id
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_picking__packaging_id
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_stock_barcodes_read_packaging_form
+msgid "Packaging"
+msgstr "Paketleme"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_candidate_picking__partner_id
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_todo__partner_id
+msgid "Partner"
+msgstr "İş Ortağı"
+
+#. module: stock_barcodes
+#: model:ir.model.fields.selection,name:stock_barcodes.selection__stock_move__barcode_backorder_action__pending
+#: model:ir.model.fields.selection,name:stock_barcodes.selection__stock_move_line__barcode_scan_state__pending
+#: model:ir.model.fields.selection,name:stock_barcodes.selection__wiz_stock_barcodes_read_todo__state__pending
+msgid "Pending"
+msgstr "Bekliyor"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_picking__pending_move_ids
+msgid "Pending Move"
+msgstr "Bekleyen Hareket"
+
+#. module: stock_barcodes
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_stock_barcodes_read_picking_form
+msgid "Pending moves"
+msgstr "Bekleyen Hareketler"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_candidate_picking__picking_id
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_picking__picking_id
+msgid "Picking"
+msgstr "Sevkiyat"
+
+#. module: stock_barcodes
+#: model:stock.barcodes.action,name:stock_barcodes.stock_barcodes_action_picking_in
+msgid "Picking IN"
+msgstr "Giriş Sevkiyatı"
+
+#. module: stock_barcodes
+#: model:stock.barcodes.action,name:stock_barcodes.stock_barcodes_action_picking_int
+msgid "Picking INTERNAL"
+msgstr "İç Transfer"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_picking__picking_mode
+msgid "Picking Mode"
+msgstr "Sevkiyat Modu"
+
+#. module: stock_barcodes
+#: model:stock.barcodes.action,name:stock_barcodes.stock_barcodes_action_picking_out
+msgid "Picking OUT"
+msgstr "Çıkış Sevkiyatı"
+
+#. module: stock_barcodes
+#: model:ir.model,name:stock_barcodes.model_stock_picking_type
+msgid "Picking Type"
+msgstr "Sevkiyat Türü"
+
+#. module: stock_barcodes
+#: model:ir.model.fields.selection,name:stock_barcodes.selection__wiz_stock_barcodes_read_picking__picking_mode__picking
+msgid "Picking mode"
+msgstr "Sevkiyat modu"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_picking__picking_product_qty
+msgid "Picking quantities"
+msgstr "Sevkiyat Miktarları"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_picking__picking_ids
+msgid "Pickings"
+msgstr "Sevkiyatlar"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_todo__position_index
+msgid "Position Index"
+msgstr "Pozisyon İndeksi"
+
+#. module: stock_barcodes
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_stock_barcodes_todo_kanban
+msgid "Previous"
+msgstr "Önceki"
+
+#. module: stock_barcodes
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_stock_barcodes_action_tree
+msgid "Print barcodes"
+msgstr ""
+
+#. module: stock_barcodes
+#: model:ir.model,name:stock_barcodes.model_report_stock_barcodes_report_barcode_actions
+msgid "Print barcodes from barcode actions"
+msgstr ""
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_new_lot__product_id
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read__product_id
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_inventory__product_id
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_picking__product_id
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_todo__product_id
+msgid "Product"
+msgstr "Ürün"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read__total_product_uom_qty
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_inventory__total_product_uom_qty
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_picking__total_product_uom_qty
+msgid "Product Demand"
+msgstr "Ürün Talebi"
+
+#. module: stock_barcodes
+#: model:ir.model,name:stock_barcodes.model_stock_move_line
+msgid "Product Moves (Stock Move Line)"
+msgstr "Ürün Hareketleri (Stok Hareket Satırı)"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read__product_packaging_ids
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_inventory__product_packaging_ids
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_picking__product_packaging_ids
+msgid "Product Packages"
+msgstr "Ürün Paketleri"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read__product_qty
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_inventory__product_qty
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_picking__product_qty
+msgid "Product Qty"
+msgstr "Ürün Miktarı"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read__total_product_qty_done
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_inventory__total_product_qty_done
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_picking__total_product_qty_done
+msgid "Product Qty. Done"
+msgstr "Tamamlanan Ürün Miktarı"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read__product_uom_id
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_inventory__product_uom_id
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_picking__product_uom_id
+msgid "Product Uom"
+msgstr "Birim"
+
+#. module: stock_barcodes
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_stock_barcodes_read_picking_form
+msgid "Put in Pack"
+msgstr "Pakete Koy"
+
+#. module: stock_barcodes
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_stock_barcodes_read_picking_form
+msgid "Put in pack"
+msgstr "Pakete koy"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_picking__qty_available
+msgid "Qty Available"
+msgstr "Uygun Miktar"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_todo__qty_done_rest
+msgid "Qty Done Rest"
+msgstr ""
+
+#. module: stock_barcodes
+#. odoo-python
+#: code:addons/stock_barcodes/wizard/stock_barcodes_read_picking.py:0
+#, python-format
+msgid "Quantities not available in location"
+msgstr "Lokasyonda mevcut olmayan miktarlar"
+
+#. module: stock_barcodes
+#. odoo-python
+#: code:addons/stock_barcodes/wizard/stock_barcodes_read_picking.py:0
+#, python-format
+msgid "Quantities scanned are higher than necessary"
+msgstr "Okunan miktar gerekli olandan fazla"
+
+#. module: stock_barcodes
+#: model:ir.model,name:stock_barcodes.model_stock_quant
+msgid "Quants"
+msgstr "Miktarlar (Quants)"
+
+#. module: stock_barcodes
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_stock_barcodes_read_picking_form
+msgid "Range"
+msgstr "Aralık"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_inventory__display_read_quant
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_stock_barcodes_read_inventory_form
+msgid "Read items"
+msgstr "Öğeleri oku"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_stock_barcodes_option_group__display_read_quant
+msgid "Read items on inventory mode"
+msgstr "Envanter modunda öğeleri oku"
+
+#. module: stock_barcodes
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_stock_barcodes_read_form_manual_qty
+msgid "Reopen"
+msgstr "Yeniden aç"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_stock_barcodes_option__required
+msgid "Required"
+msgstr "Zorunlu"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read__res_id
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_inventory__res_id
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_picking__res_id
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_todo__res_ids
+msgid "Res"
+msgstr "Kayıt"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read__res_model_id
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_inventory__res_model_id
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_picking__res_model_id
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_todo__res_model_id
+msgid "Res Model"
+msgstr "Kayıt Modeli"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_candidate_picking__product_qty_reserved
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_todo__product_qty_reserved
+msgid "Reserved"
+msgstr "Rezerve Edildi"
+
+#. module: stock_barcodes
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_stock_barcodes_todo_kanban
+msgid "Restore to pending"
+msgstr "Beklemeye geri al"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read__result_package_id
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_inventory__result_package_id
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_picking__result_package_id
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_todo__result_package_id
+msgid "Result Package"
+msgstr "Sonuç Paketi"
+
+#. module: stock_barcodes
+#. odoo-python
+#: code:addons/stock_barcodes/wizard/stock_barcodes_read.py:0
+#, python-format
+msgid "Review and confirm"
+msgstr "Gözden geçir ve onayla"
+
+#. module: stock_barcodes
+#. odoo-python
+#: code:addons/stock_barcodes/wizard/stock_barcodes_read_picking.py:0
+#, python-format
+msgid "S/N Already in picking"
+msgstr "S/N zaten sevkiyatta"
+
+#. module: stock_barcodes
+#. odoo-python
+#: code:addons/stock_barcodes/wizard/stock_barcodes_read_picking.py:0
+#, python-format
+msgid "S/N already created"
+msgstr "S/N zaten oluşturulmuş"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_candidate_picking__scan_count
+msgid "Scan Count"
+msgstr "Tarama Sayısı"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_stock_move_line__barcode_scan_state
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_todo__state
+msgid "Scan State"
+msgstr "Tarama Durumu"
+
+#. module: stock_barcodes
+#. odoo-javascript
+#: code:addons/stock_barcodes/static/src/views/kanban/stock_barcodes_kanban.xml:0
+#, python-format
+msgid "Scan a"
+msgstr ""
+
+#. module: stock_barcodes
+#. odoo-javascript
+#: code:addons/stock_barcodes/static/src/views/actions/stock_barcode_main_menu.xml:0
+#, python-format
+msgid "Scan a barcode actions"
+msgstr ""
+
+#. module: stock_barcodes
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.report_barcode_actions
+msgid "Scan your actions and streamline your actions."
+msgstr ""
+
+#. module: stock_barcodes
+#. odoo-python
+#: code:addons/stock_barcodes/wizard/stock_barcodes_read.py:0
+#, python-format
+msgid "Scan {}"
+msgstr "{} Tara"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_picking__selected_pending_move_id
+msgid "Selected Pending Move"
+msgstr "Seçili Bekleyen Hareket"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_stock_barcodes_action__sequence
+#: model:ir.model.fields,field_description:stock_barcodes.field_stock_barcodes_option__sequence
+msgid "Sequence"
+msgstr "Sıra"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,help:stock_barcodes.field_stock_barcodes_option_group__manual_entry_field_focus
+msgid "Set field to set focus when manual entry mode is enabled"
+msgstr "Manuel giriş modu etkinken odaklanacak alanı ayarla"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_stock_barcodes_option_group__show_detailed_operations
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_picking__show_detailed_operations
+msgid "Show Detailed Operations"
+msgstr "Detaylı İşlemleri Göster"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_stock_barcodes_option_group__show_form_scan
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read__show_form_scan
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_inventory__show_form_scan
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_picking__show_form_scan
+msgid "Show Form Scan"
+msgstr ""
+
+#. module: stock_barcodes
+#: model:ir.model.fields,help:stock_barcodes.field_wiz_stock_barcodes_read__create_lot
+#: model:ir.model.fields,help:stock_barcodes.field_wiz_stock_barcodes_read_inventory__create_lot
+#: model:ir.model.fields,help:stock_barcodes.field_wiz_stock_barcodes_read_picking__create_lot
+msgid "Show lot name field"
+msgstr "Lot adı alanını göster"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_stock_barcodes_option_group__show_pending_moves
+msgid "Show pending moves"
+msgstr "Bekleyen hareketleri göster"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,help:stock_barcodes.field_stock_barcodes_option_group__show_pending_moves
+msgid "Shows a list of movements to process"
+msgstr "İşlenecek hareketlerin listesini gösterir"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_picking__picking_location_id
+msgid "Source Location"
+msgstr "Kaynak Konum"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_stock_barcodes_option_group__source_pending_moves
+msgid "Source Pending Moves"
+msgstr "Kaynak Bekleyen Hareketler"
+
+#. module: stock_barcodes
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_picking_form
+msgid "Start barcode interface"
+msgstr "Barkod arayüzünü başlat"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_candidate_picking__state
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_picking__picking_state
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_todo__picking_state
+msgid "Status"
+msgstr "Durum"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_stock_barcodes_option__step
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read__step
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_inventory__step
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_picking__step
+msgid "Step"
+msgstr "Adım"
+
+#. module: stock_barcodes
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_stock_barcodes_option_group_form
+msgid "Steps to scan"
+msgstr "Tarama adımları"
+
+#. module: stock_barcodes
+#: model:ir.model,name:stock_barcodes.model_stock_move
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_todo__stock_move_ids
+msgid "Stock Move"
+msgstr "Stok Hareketi"
+
+#. module: stock_barcodes
+#. odoo-javascript
+#: code:addons/stock_barcodes/static/src/views/views.esm.js:0
+#, python-format
+msgid "The inventory adjustment has been validated"
+msgstr ""
+
+#. module: stock_barcodes
+#. odoo-python
+#: code:addons/stock_barcodes/wizard/stock_barcodes_read.py:0
+#, python-format
+msgid "The product type is not allowed"
+msgstr "Ürün tipine izin verilmiyor"
+
+#. module: stock_barcodes
+#. odoo-python
+#: code:addons/stock_barcodes/wizard/stock_barcodes_read.py:0
+#, python-format
+msgid "The quantity is huge"
+msgstr "Miktar çok büyük"
+
+#. module: stock_barcodes
+#. odoo-javascript
+#: code:addons/stock_barcodes/static/src/views/views.esm.js:0
+#, python-format
+msgid "The transfer has been validated"
+msgstr ""
+
+#. module: stock_barcodes
+#. odoo-python
+#: code:addons/stock_barcodes/models/stock_barcodes_action.py:0
+#, python-format
+msgid "There can be no spaces at the beginning or end."
+msgstr ""
+
+#. module: stock_barcodes
+#: model:ir.model.fields,help:stock_barcodes.field_stock_picking_type__new_picking_barcode_option_group_id
+msgid ""
+"This Barcode Option Group will be selected when clicking the 'New' button in "
+"an operation type. It will be used to create a non planned picking."
+msgstr ""
+"Bu Barkod Seçenek Grubu, bir işlem türünde 'Yeni' butonuna tıklandığında "
+"seçilecek. Planlanmamış bir sevkiyat oluşturmak için kullanılacak."
+
+#. module: stock_barcodes
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_stock_barcodes_todo_kanban
+msgid "This move will be set to pending. Are you sure?"
+msgstr "Bu hareket beklemeye alınacak. Emin misiniz?"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_picking__todo_line_ids
+msgid "To Do Lines"
+msgstr "Yapılacak Satırlar"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_stock_barcodes_option__to_scan
+msgid "To Scan"
+msgstr "Tarancaklar"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_picking__todo_line_id
+msgid "Todo Line"
+msgstr "Yapılacak Satır"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_picking__todo_line_display_ids
+msgid "Todo Line Display"
+msgstr "Yapılacak Satır Görünümü"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read__product_tracking
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_inventory__product_tracking
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_picking__product_tracking
+msgid "Tracking"
+msgstr "İzlenebilirlik"
+
+#. module: stock_barcodes
+#: model:ir.model,name:stock_barcodes.model_stock_picking
+msgid "Transfer"
+msgstr "Transfer"
+
+#. module: stock_barcodes
+#: model_terms:ir.actions.act_window,help:stock_barcodes.stock_barcodes_action_picking_tree_ready
+msgid "Transfers allow you to move products from one location to another."
+msgstr ""
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_picking__picking_type_code
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_todo__picking_code
+msgid "Type of Operation"
+msgstr "Operasyon Türü"
+
+#. module: stock_barcodes
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_pickingtype_filter
+msgid "Type of operation"
+msgstr "Operasyon türü"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_todo__uom_id
+msgid "Uom"
+msgstr "Birim"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_stock_barcodes_option_group__use_location_dest_putaway
+msgid "Use location dest. putaway"
+msgstr "Hedef konum yerleştirmesini kullan"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,help:stock_barcodes.field_stock_quant___barcode_scanned
+#: model:ir.model.fields,help:stock_barcodes.field_wiz_stock_barcodes_new_lot___barcode_scanned
+#: model:ir.model.fields,help:stock_barcodes.field_wiz_stock_barcodes_read___barcode_scanned
+#: model:ir.model.fields,help:stock_barcodes.field_wiz_stock_barcodes_read_inventory___barcode_scanned
+#: model:ir.model.fields,help:stock_barcodes.field_wiz_stock_barcodes_read_picking___barcode_scanned
+msgid "Value of the last barcode scanned."
+msgstr "Son taranan barkodun değeri."
+
+#. module: stock_barcodes
+#: model:ir.model.fields.selection,name:stock_barcodes.selection__wiz_stock_barcodes_read_picking__picking_type_code__incoming
+msgid "Vendors"
+msgstr "Tedarikçiler"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read__visible_force_done
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_inventory__visible_force_done
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_picking__visible_force_done
+msgid "Visible Force Done"
+msgstr "Zorla Tamamla Görünsün"
+
+#. module: stock_barcodes
+#. odoo-python
+#: code:addons/stock_barcodes/wizard/stock_barcodes_read.py:0
+#, python-format
+msgid "Waiting location"
+msgstr "Bekleyen konum"
+
+#. module: stock_barcodes
+#. odoo-python
+#: code:addons/stock_barcodes/wizard/stock_barcodes_read.py:0
+#, python-format
+msgid "Waiting lot"
+msgstr "Bekleyen lot"
+
+#. module: stock_barcodes
+#. odoo-python
+#: code:addons/stock_barcodes/wizard/stock_barcodes_read.py:0
+#, python-format
+msgid "Waiting product"
+msgstr "Bekleyen ürün"
+
+#. module: stock_barcodes
+#. odoo-python
+#: code:addons/stock_barcodes/wizard/stock_barcodes_read.py:0
+#, python-format
+msgid "Waiting quantities"
+msgstr "Bekleyen miktarlar"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,help:stock_barcodes.field_stock_barcodes_option_group__barcode_guided_mode
+msgid ""
+"When guided mode is selected, information will appear with the movement to "
+"be processed"
+msgstr ""
+"Kılavuzlu mod seçildiğinde, işlenecek hareketle birlikte bilgi görünecek"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_candidate_picking__wiz_barcode_id
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_stock_barcodes_read_todo__wiz_barcode_id
+msgid "Wiz Barcode"
+msgstr "Barkod Sihirbazı"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,field_description:stock_barcodes.field_wiz_candidate_picking__wiz_picking_id
+msgid "Wizard Picking"
+msgstr "Sevkiyat Sihirbazı"
+
+#. module: stock_barcodes
+#: model:ir.model,name:stock_barcodes.model_wiz_stock_barcodes_new_lot
+msgid "Wizard to create new lot from barcode scanner"
+msgstr "Barkod okuyucu ile yeni lot oluşturma sihirbazı"
+
+#. module: stock_barcodes
+#: model:ir.model,name:stock_barcodes.model_wiz_stock_barcodes_read
+msgid "Wizard to read barcode"
+msgstr "Barkod okuma sihirbazı"
+
+#. module: stock_barcodes
+#: model:ir.model,name:stock_barcodes.model_wiz_stock_barcodes_read_inventory
+msgid "Wizard to read barcode on inventory"
+msgstr "Envanterde barkod okuma sihirbazı"
+
+#. module: stock_barcodes
+#: model:ir.model,name:stock_barcodes.model_wiz_stock_barcodes_read_picking
+msgid "Wizard to read barcode on picking batch"
+msgstr "Toplu sevkiyatta barkod okuma sihirbazı"
+
+#. module: stock_barcodes
+#: model:ir.model,name:stock_barcodes.model_wiz_stock_barcodes_read_todo
+msgid "Wizard to read barcode todo"
+msgstr "Yapılacaklar için barkod okuma sihirbazı"
+
+#. module: stock_barcodes
+#. odoo-python
+#: code:addons/stock_barcodes/wizard/stock_barcodes_read.py:0
+#, python-format
+msgid "Wrong location"
+msgstr "Hatalı konum"
+
+#. module: stock_barcodes
+#. odoo-python
+#: code:addons/stock_barcodes/wizard/stock_barcodes_read.py:0
+#, python-format
+msgid "Wrong location dest"
+msgstr "Hatalı hedef konum"
+
+#. module: stock_barcodes
+#. odoo-python
+#: code:addons/stock_barcodes/wizard/stock_barcodes_read.py:0
+#, python-format
+msgid "Wrong lot"
+msgstr "Hatalı lot"
+
+#. module: stock_barcodes
+#. odoo-python
+#: code:addons/stock_barcodes/wizard/stock_barcodes_read.py:0
+#: code:addons/stock_barcodes/wizard/stock_barcodes_read_picking.py:0
+#, python-format
+msgid "Wrong product"
+msgstr "Hatalı ürün"
+
+#. module: stock_barcodes
+#: model:ir.model.fields,help:stock_barcodes.field_stock_barcodes_option_group__group_key_for_todo_records
+msgid ""
+"You can establish a list of fields that will act as a grouping key to "
+"generate the movements to be process.\n"
+"The object variable is used to refer to the source record\n"
+"For example, object.location_id,object.product_id,object.lot_id"
+msgstr ""
+"İşlenecek hareketleri oluşturmak için gruplayıcı anahtar olarak kullanılacak "
+"alanların bir listesini belirleyebilirsiniz.\n"
+"object değişkeni, kaynak kaydı ifade etmek için kullanılır\n"
+"Örneğin, object.location_id, object.product_id, object.lot_id"
+
+#. module: stock_barcodes
+#. odoo-python
+#: code:addons/stock_barcodes/wizard/stock_barcodes_read_picking.py:0
+#, python-format
+msgid "You can not add extra moves if you have not set a picking"
+msgstr "Bir sevkiyat belirlemeden ek hareket ekleyemezsiniz"
+
+#. module: stock_barcodes
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_stock_barcodes_todo_kanban
+msgid ""
+"You have not set any quantity to this operation and it will be removed from "
+"pending moves. Are you sure?"
+msgstr ""
+"Bu işlem için herhangi bir miktar belirlemediniz ve bekleyen hareketlerden "
+"kaldırılacak. Emin misiniz?"
+
+#. module: stock_barcodes
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_stock_barcodes_read_picking_form
+msgid "lock picking"
+msgstr "Sevkiyatı kilitle"
+
+#. module: stock_barcodes
+#. odoo-javascript
+#: code:addons/stock_barcodes/static/src/views/kanban/stock_barcodes_kanban.xml:0
+#, python-format
+msgid "lot"
+msgstr ""
+
+#. module: stock_barcodes
+#. odoo-javascript
+#: code:addons/stock_barcodes/static/src/views/kanban/stock_barcodes_kanban.xml:0
+#, python-format
+msgid "or a"
+msgstr ""
+
+#. module: stock_barcodes
+#. odoo-javascript
+#: code:addons/stock_barcodes/static/src/views/kanban/stock_barcodes_kanban.xml:0
+#, python-format
+msgid "product"
+msgstr ""
+
+#. module: stock_barcodes
+#. odoo-javascript
+#: code:addons/stock_barcodes/static/src/views/kanban/stock_barcodes_kanban.xml:0
+#, python-format
+msgid "to filter your records"
+msgstr ""
+
+#. module: stock_barcodes
+#. odoo-javascript
+#: code:addons/stock_barcodes/static/src/views/kanban/stock_barcodes_kanban.xml:0
+#, python-format
+msgid "transfer"
+msgstr ""
+
+#. module: stock_barcodes
+#: model_terms:ir.ui.view,arch_db:stock_barcodes.view_stock_barcodes_read_picking_form
+msgid "unlock picking"
+msgstr "Sevkiyatın kilidini aç"
+
+#. module: stock_barcodes
+#. odoo-python
+#: code:addons/stock_barcodes/wizard/stock_barcodes_read.py:0
+#, python-format
+msgid "{name} is required"
+msgstr "{name} zorunlu"
+
+#~ msgid ""
+#~ "<i class=\"fa fa-pencil\" title=\"Edit inventory quantity\" style=\"font-"
+#~ "size:1.5em\"/>"
+#~ msgstr ""
+#~ "<i class=\"fa fa-pencil\" title=\"Stok adedini düzenle\" style=\"font-"
+#~ "size:1.5em\"/>"
+
+#~ msgid ""
+#~ "<i class=\"fa fa-trash\" title=\"Remove\" style=\"font-size:1.5em\"/>"
+#~ msgstr "<i class=\"fa fa-trash\" title=\"Sil\" style=\"font-size:1.5em\"/>"
+
+#~ msgid ""
+#~ "<i class=\"fa fa-upload\" title=\"Fill from pencil\" style=\"font-"
+#~ "size:1.5em\"/>"
+#~ msgstr ""
+#~ "<i class=\"fa fa-upload\" title=\"Doldur\" style=\"font-size:1.5em\"/>"
+
+#~ msgid ""
+#~ "<span attrs=\"{'invisible': [('result_package_id', '=', False)]}\">-&gt;</"
+#~ "span>"
+#~ msgstr ""
+#~ "<span attrs=\"{'invisible': [('result_package_id', '=', False)]}\">-&gt;</"
+#~ "span>"
+
+#~ msgid "<span>Apply</span>"
+#~ msgstr "<span>Uygula</span>"
+
+#~ msgid ""
+#~ "<strong class=\" d-none d-sm-block\">Dest. Location</strong>\n"
+#~ "                    <span class=\"fa fa-share text-center d-sm-none "
+#~ "oe_span_small_icon\" title=\"Destination Location\"/>"
+#~ msgstr ""
+#~ "<strong class=\" d-none d-sm-block\">Hedef Konum</strong>\n"
+#~ "                    <span class=\"fa fa-share text-center d-sm-none "
+#~ "oe_span_small_icon\" title=\"Hedef Konum\"/>"
+
+#~ msgid ""
+#~ "<strong class=\" d-none d-sm-block\">Source Location</strong>\n"
+#~ "                                    <span class=\"fa fa-map-marker d-sm-"
+#~ "none oe_span_small_icon\" title=\"Source Location\"/>"
+#~ msgstr ""
+#~ "<strong class=\" d-none d-sm-block\">Kaynak Konum</strong>\n"
+#~ "                                    <span class=\"fa fa-map-marker d-sm-"
+#~ "none oe_span_small_icon\" title=\"Kaynak Konum\"/>"
+
+#~ msgid ""
+#~ "<strong class=\"d-none d-sm-block\">Lot S/N</strong>\n"
+#~ "                                    <span class=\"fa fa-tags d-sm-none "
+#~ "oe_span_small_icon\" title=\"Lot S/N\"/>"
+#~ msgstr ""
+#~ "<strong class=\"d-none d-sm-block\">Lot S/N</strong>\n"
+#~ "                                    <span class=\"fa fa-tags d-sm-none "
+#~ "oe_span_small_icon\" title=\"Lot S/N\"/>"
+
+#~ msgid ""
+#~ "<strong class=\"d-none d-sm-block\">Package</strong>\n"
+#~ "                    <span class=\"fa fa-inbox d-sm-none "
+#~ "oe_span_small_icon\" title=\"package\"/>"
+#~ msgstr ""
+#~ "<strong class=\"d-none d-sm-block\">Paket</strong>\n"
+#~ "                    <span class=\"fa fa-inbox d-sm-none "
+#~ "oe_span_small_icon\" title=\"paket\"/>"
+
+#~ msgid ""
+#~ "<strong class=\"d-none d-sm-block\">Product</strong>\n"
+#~ "                                    <span class=\"fa fa-th-list d-sm-none "
+#~ "oe_span_small_icon\" title=\"Product\"/>"
+#~ msgstr ""
+#~ "<strong class=\"d-none d-sm-block\">Ürün</strong>\n"
+#~ "                                    <span class=\"fa fa-th-list d-sm-none "
+#~ "oe_span_small_icon\" title=\"Ürün\"/>"
+
+#~ msgid ""
+#~ "<strong class=\"d-none d-sm-block\">Source Package -&gt; Result Package</"
+#~ "strong>\n"
+#~ "                                    <span class=\"fa fa-cubes d-sm-none "
+#~ "oe_span_small_icon\" title=\"Source Package to Result Package\"/>"
+#~ msgstr ""
+#~ "<strong class=\"d-none d-sm-block\">Kaynak Paket -&gt; Son Paket</"
+#~ "strong>\n"
+#~ "                                    <span class=\"fa fa-cubes d-sm-none "
+#~ "oe_span_small_icon\" title=\"Kaynak paketten son pakete\"/>"
+
+#~ msgid "Back"
+#~ msgstr "Geri"
+
+#~ msgid "Clean message"
+#~ msgstr "Mesajı Temizle"
+
+#~ msgid "Edit"
+#~ msgstr "Düzenle"
+
+#~ msgid "Fill from pending line"
+#~ msgstr "Bekleyen satırdan doldur"
+
+#~ msgid "Loc:"
+#~ msgstr "Konum:"
+
+#~ msgid "Open"
+#~ msgstr "Aç"
+
+#~ msgid "Options"
+#~ msgstr "Seçenekler"
+
+#~ msgid "Remove detailed operation"
+#~ msgstr "Detaylı işlemi kaldır"
+
+#~ msgid "Remove quant"
+#~ msgstr "Miktarı kaldır"
+
+#~ msgid "Reset inventory quantity"
+#~ msgstr "Envanter miktarını sıfırla"
+
+#~ msgid "Validate"
+#~ msgstr "Doğrula"
