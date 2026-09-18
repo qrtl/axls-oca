@@ -1,0 +1,32 @@
+# Configuration for scripts/sync_oca_modules.py — see README-oca-upstream-sync.md
+#
+# Every module vendored into this repo may be listed here. A module is only ever
+# written to automatically when its recorded baseline proves the local copy is an
+# untouched copy of upstream; anything else is reported for a human to decide.
+
+series: "16.0"
+
+# Paths compared but reported separately, so translation and generated-file churn
+# does not drown out real code changes. Globs are relative to the module root.
+noise:
+  - "i18n/*.po"
+  - "i18n/*.pot"
+  - "README.rst"
+  - "static/description/index.html"
+
+sources:
+  - repo: OCA/server-tools
+    modules:
+      # Locally patched: qrtl #172 (res.groups write-override test patch) and
+      # tests/test_multi_company.py, which does not exist upstream. Deliberately
+      # left without a baseline so it can never be auto-synced.
+      - name: auditlog
+        overlays: []
+
+  - repo: OCA/purchase-workflow
+    modules:
+      - name: purchase_exception
+        overlays: []
+      # Carries a local i18n/ja.po that upstream does not have.
+      - name: purchase_invoice_plan
+        overlays: []
