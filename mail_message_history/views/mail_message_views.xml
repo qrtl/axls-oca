@@ -68,9 +68,11 @@
         <field name="mode">primary</field>
         <field name="priority">100</field>
         <field name="arch" type="xml">
-            <field name="parent_id" position="after">
+            <field name="body" position="after">
                 <field name="model_description" />
                 <field name="record_name" string="Document" />
+            </field>
+            <field name="parent_id" position="after">
                 <field name="subtype_id" />
             </field>
             <filter name="message_needaction" position="after">
@@ -78,11 +80,11 @@
                 <filter
                     name="filter_user_message"
                     string="User Messages"
-                    domain="[('message_type', 'in', ['comment', 'email'])]"
+                    domain="[('message_type', 'in', ['comment', 'email']), ('subtype_id', '!=', False)]"
                 />
                 <filter
                     name="filter_system_log"
-                    string="System Logs"
+                    string="System Messages"
                     domain="[('message_type', 'not in', ['comment', 'email'])]"
                 />
                 <separator />

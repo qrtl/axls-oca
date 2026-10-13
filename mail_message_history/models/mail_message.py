@@ -56,7 +56,6 @@ class MailMessage(models.Model):
             and (values.get("body") or values.get("attachment_ids"))
             and values.get("model")
             and values.get("res_id")
-            and values["model"] in self.env
         ]
         res_ids_per_model = defaultdict(list)
         for values in todo:

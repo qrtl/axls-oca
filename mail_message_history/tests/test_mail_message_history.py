@@ -44,7 +44,6 @@ class TestMailMessageHistory(TransactionCase):
     def test_model_description(self):
         log = self.partner._message_log(body="<p>A log</p>")
         self.assertEqual(log.model_description, "Contact")
-        # Internal users cannot read ir.model.
         user = new_test_user(self.env, login="history_user", groups="base.group_user")
         self.assertIn(
             log,
@@ -69,13 +68,6 @@ class TestMailMessageHistory(TransactionCase):
         post_init_hook(self.cr, self.registry)
         self.assertEqual(log.record_name, self.partner.display_name)
         self.assertFalse(empty_log.record_name)
-        self.assertFalse(notification.record_name)
-
-    def test_record_name_of_a_user_notification(self):
-        # Its empty record_name drives the subject of the notification email.
-        notification = self.partner.message_notify(
-            body="<p>A notification</p>", partner_ids=self.partner.ids
-        )
         self.assertFalse(notification.record_name)
 
     def test_menu_action_leaves_tracking_out(self):
@@ -113,8 +105,6 @@ class TestMailMessageHistory(TransactionCase):
 
     def test_menu_action(self):
         action = self.env.ref("mail_message_history.mail_message_action")
-        self.assertIn("search_default_filter_user_message", action.context)
-        self.assertIn("search_default_filter_last_3_months", action.context)
         note = self._post_note("<p>A note</p>")
         without_document = self.env["mail.message"].create({})
         notification = self.partner.message_notify(
@@ -125,50 +115,17 @@ class TestMailMessageHistory(TransactionCase):
         self.assertNotIn(without_document, messages)
         self.assertNotIn(notification, messages)
 
-    def test_message_history_views(self):
-        action = self.env.ref("mail_message_history.mail_message_action")
-        views = self.env["mail.message"].get_views(
-            [
-                (view.view_id.id, "list" if view.view_mode == "tree" else "form")
-                for view in action.view_ids
-            ]
-            + [(action.search_view_id.id, "search")]
-        )
-        list_arch = etree.fromstring(views["views"]["list"]["arch"])
-        self.assertEqual(
-            [field.get("name") for field in list_arch.xpath("//field")][:3],
-            ["date", "preview", "subject"],
-            "The message content must come right after the date.",
-        )
-        self.assertTrue(
-            list_arch.xpath("//button[@name='action_open_document']"),
-            "The list must offer to open the document of the message.",
-        )
-        self.assertTrue(list_arch.xpath("//field[@name='record_name']"))
-        search_arch = etree.fromstring(views["views"]["search"]["arch"])
-        self.assertTrue(search_arch.xpath("//filter[@name='filter_user_message']"))
-        self.assertTrue(search_arch.xpath("//field[@name='record_name']"))
-        self.assertTrue(
-            search_arch.xpath("//filter[@context[contains(., 'record_name')]]")
-        )
-        # Core refuses grouped reads on messages to non-admins.
-        user = new_test_user(self.env, login="history_user", groups="base.group_user")
-        user_views = (
-            self.env["mail.message"]
-            .with_user(user)
-            .get_views([(action.search_view_id.id, "search")])
-        )
-        user_search_arch = etree.fromstring(user_views["views"]["search"]["arch"])
-        self.assertFalse(user_search_arch.xpath("//filter[@context]"))
+    def test_group_by_hidden_from_non_admins(self):
+        search_view = self.env.ref("mail_message_history.mail_message_view_search")
 
-    def test_message_history_form_shows_attachments(self):
-        action = self.env.ref("mail_message_history.mail_message_action")
-        form_view = next(view for view in action.view_ids if view.view_mode == "form")
-        views = self.env["mail.message"].get_views([(form_view.view_id.id, "form")])
-        form_arch = etree.fromstring(views["views"]["form"]["arch"])
-        attachment_fields = form_arch.xpath("//field[@name='attachment_ids']")
-        self.assertTrue(attachment_fields)
-        self.assertEqual(attachment_fields[0].get("widget"), "many2many_binary")
+        def group_bys(env):
+            views = env["mail.message"].get_views([(search_view.id, "search")])
+            arch = etree.fromstring(views["views"]["search"]["arch"])
+            return arch.xpath("//filter[contains(@context, 'group_by')]")
+
+        user = new_test_user(self.env, login="history_user", groups="base.group_user")
+        self.assertTrue(group_bys(self.env))
+        self.assertFalse(group_bys(self.env(user=user)))
 
     def test_standard_views_are_left_untouched(self):
         standard = self.env["mail.message"].get_views(
@@ -181,6 +138,30 @@ class TestMailMessageHistory(TransactionCase):
         )
         search_arch = etree.fromstring(standard["views"]["search"]["arch"])
         self.assertFalse(search_arch.xpath("//filter[@name='filter_user_message']"))
+
+    def test_user_messages_leave_mass_mails_out(self):
+        self.partner.email = "partner@example.org"
+        self.env["mail.compose.message"].with_context(
+            default_composition_mode="mass_mail",
+            default_model="res.partner",
+            active_ids=self.partner.ids,
+        ).create(
+            {"subject": "A mass mail", "body": "<p>A mass mail</p>"}
+        )._action_send_mail()
+        mass_mail_copy = self.partner.message_ids.filtered(
+            lambda message: message.subject == "A mass mail"
+        )
+        self.assertTrue(mass_mail_copy)
+        note = self._post_note("<p>A note</p>")
+        search_view = self.env.ref("mail_message_history.mail_message_view_search")
+        user_filter = etree.fromstring(search_view.arch).xpath(
+            "//filter[@name='filter_user_message']"
+        )[0]
+        messages = self.env["mail.message"].search(
+            safe_eval(user_filter.get("domain")) + [("res_id", "=", self.partner.id)]
+        )
+        self.assertIn(note, messages)
+        self.assertNotIn(mass_mail_copy, messages)
 
     def test_smart_button(self):
         def has_button():

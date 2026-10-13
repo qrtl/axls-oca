@@ -3,7 +3,7 @@
 {
     "name": "Mail Message History",
     "summary": "Browse chatter messages in a dedicated list view, "
-    "separating user messages from system logs",
+    "separating user messages from system messages",
     "version": "16.0.1.0.0",
     "category": "Productivity/Discuss",
     "website": "https://github.com/OCA/mail",
