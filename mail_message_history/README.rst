@@ -33,7 +33,7 @@ Mail Message History
 |badge1| |badge2| |badge3| |badge4| |badge5|
 
 This module adds a *Discuss > Message History* menu listing the chatter messages
-of all the documents the user can access, to search, filter and group them.
+of all the documents the user can access, to search and filter them.
 
 The list shows the message body as plain text, and filters tell the messages
 posted by users apart from the ones logged by the system. The field tracking
@@ -41,7 +41,7 @@ messages, which have no body, are not listed.
 
 Core leaves the document name empty on the messages logged by the system. The
 module fills it on the listed messages, including the ones existing at its
-installation, so that they can be searched and grouped by document.
+installation, so that they can be searched by document.
 
 A smart button on the form views opens the same list for a single record.
 
@@ -56,6 +56,12 @@ Configuration
 To get a button opening the messages of a record on its form view, set the
 ``mail_message_history.button_models`` system parameter to the comma separated list
 of the wanted models, e.g. ``purchase.order,sale.order``.
+
+Known issues / Roadmap
+======================
+
+Grouping is available to administrators only, as core refuses grouped reads on
+messages to other users. They can filter by *Document Type*, then by *Document*.
 
 Bug Tracker
 ===========

@@ -1,5 +1,5 @@
 This module adds a *Discuss > Message History* menu listing the chatter messages
-of all the documents the user can access, to search, filter and group them.
+of all the documents the user can access, to search and filter them.
 
 The list shows the message body as plain text, and filters tell the messages
 posted by users apart from the ones logged by the system. The field tracking
@@ -7,6 +7,6 @@ messages, which have no body, are not listed.
 
 Core leaves the document name empty on the messages logged by the system. The
 module fills it on the listed messages, including the ones existing at its
-installation, so that they can be searched and grouped by document.
+installation, so that they can be searched by document.
 
 A smart button on the form views opens the same list for a single record.

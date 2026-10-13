@@ -1,4 +1,4 @@
-# Copyright 2026 Quartile (https://quartile.co)
+# Copyright 2026 Quartile (https://www.quartile.co)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 from collections import defaultdict
@@ -18,7 +18,7 @@ def post_init_hook(cr, registry):
          WHERE (message.record_name IS NULL OR message.record_name = '')
            AND message.model IS NOT NULL
            AND message.res_id != 0
-           AND message.message_type != 'user_notification'
+           AND message.message_type = 'notification'
            AND (
                message.body != ''
                OR EXISTS (

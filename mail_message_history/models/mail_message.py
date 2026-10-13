@@ -1,29 +1,35 @@
-# Copyright 2026 Quartile (https://quartile.co)
+# Copyright 2026 Quartile (https://www.quartile.co)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 from collections import defaultdict
 
-from odoo import api, models
+from odoo import api, fields, models
 
 
 class MailMessage(models.Model):
     _inherit = "mail.message"
 
+    model_description = fields.Char(
+        string="Document Type",
+        compute="_compute_model_description",
+        search="_search_model_description",
+    )
+
+    @api.depends("model")
+    def _compute_model_description(self):
+        for message in self:
+            message.model_description = (
+                message.model and self.env["ir.model"]._get(message.model).name
+            )
+
+    def _search_model_description(self, operator, value):
+        models = self.env["ir.model"].sudo().search([("name", operator, value)])
+        return [("model", "in", models.mapped("model"))]
+
     @api.model_create_multi
     def create(self, values_list):
         self._fill_record_name(values_list)
         return super().create(values_list)
-
-    @api.model
-    def _read_group_raw(self, domain, *args, **kwargs):
-        """Core refuses grouped reads on messages to non-admins, as their access is
-        checked in _search, which a grouped read skips: group the messages that
-        _search lets the user read, as superuser.
-        """
-        if self.env.is_admin():
-            return super()._read_group_raw(domain, *args, **kwargs)
-        domain = [("id", "in", self._search(domain))]
-        return super(MailMessage, self.sudo())._read_group_raw(domain, *args, **kwargs)
 
     @api.model
     def _get_record_names(self, model_name, res_ids):
@@ -39,15 +45,14 @@ class MailMessage(models.Model):
     @api.model
     def _fill_record_name(self, values_list):
         """Fill record_name on the messages logged by _message_log, which passes
-        it as False, so that the logs show their document in the message history
-        and can be searched and grouped by it.
+        it as False, so that the logs can be searched by document.
         """
         todo = [
             values
             for values in values_list
             if "record_name" in values
             and not values["record_name"]
-            and values.get("message_type") != "user_notification"
+            and values.get("message_type") == "notification"
             and (values.get("body") or values.get("attachment_ids"))
             and values.get("model")
             and values.get("res_id")

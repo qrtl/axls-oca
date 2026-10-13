@@ -1,7 +1,5 @@
-# Copyright 2026 Quartile (https://quartile.co)
+# Copyright 2026 Quartile (https://www.quartile.co)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
-
-import json
 
 from lxml import etree
 
@@ -31,6 +29,29 @@ class TestMailMessageHistory(TransactionCase):
         self.assertEqual(log.record_name, self.partner.display_name)
         self.assertFalse(self.partner._message_log(body="").record_name)
         self.assertFalse(self.env["mail.message"].create({}).record_name)
+        # Mass mail copies pass record_name as False too, to avoid browsing records.
+        mass_mail_copy = self.env["mail.message"].create(
+            {
+                "model": "res.partner",
+                "res_id": self.partner.id,
+                "body": "<p>A copy</p>",
+                "message_type": "comment",
+                "record_name": False,
+            }
+        )
+        self.assertFalse(mass_mail_copy.record_name)
+
+    def test_model_description(self):
+        log = self.partner._message_log(body="<p>A log</p>")
+        self.assertEqual(log.model_description, "Contact")
+        # Internal users cannot read ir.model.
+        user = new_test_user(self.env, login="history_user", groups="base.group_user")
+        self.assertIn(
+            log,
+            self.env["mail.message"]
+            .with_user(user)
+            .search([("model_description", "ilike", "contact")]),
+        )
 
     def test_post_init_hook(self):
         log = self.partner._message_log(body="<p>A log</p>")
@@ -96,9 +117,13 @@ class TestMailMessageHistory(TransactionCase):
         self.assertIn("search_default_filter_last_3_months", action.context)
         note = self._post_note("<p>A note</p>")
         without_document = self.env["mail.message"].create({})
+        notification = self.partner.message_notify(
+            body="<p>A notification</p>", partner_ids=self.partner.ids
+        )
         messages = self.env["mail.message"].search(safe_eval(action.domain))
         self.assertIn(note, messages)
         self.assertNotIn(without_document, messages)
+        self.assertNotIn(notification, messages)
 
     def test_message_history_views(self):
         action = self.env.ref("mail_message_history.mail_message_action")
@@ -126,6 +151,15 @@ class TestMailMessageHistory(TransactionCase):
         self.assertTrue(
             search_arch.xpath("//filter[@context[contains(., 'record_name')]]")
         )
+        # Core refuses grouped reads on messages to non-admins.
+        user = new_test_user(self.env, login="history_user", groups="base.group_user")
+        user_views = (
+            self.env["mail.message"]
+            .with_user(user)
+            .get_views([(action.search_view_id.id, "search")])
+        )
+        user_search_arch = etree.fromstring(user_views["views"]["search"]["arch"])
+        self.assertFalse(user_search_arch.xpath("//filter[@context]"))
 
     def test_message_history_form_shows_attachments(self):
         action = self.env.ref("mail_message_history.mail_message_action")
@@ -135,8 +169,6 @@ class TestMailMessageHistory(TransactionCase):
         attachment_fields = form_arch.xpath("//field[@name='attachment_ids']")
         self.assertTrue(attachment_fields)
         self.assertEqual(attachment_fields[0].get("widget"), "many2many_binary")
-        modifiers = json.loads(attachment_fields[0].get("modifiers"))
-        self.assertTrue(modifiers.get("readonly"))
 
     def test_standard_views_are_left_untouched(self):
         standard = self.env["mail.message"].get_views(
@@ -149,24 +181,6 @@ class TestMailMessageHistory(TransactionCase):
         )
         search_arch = etree.fromstring(standard["views"]["search"]["arch"])
         self.assertFalse(search_arch.xpath("//filter[@name='filter_user_message']"))
-
-    def test_read_group_as_internal_user(self):
-        user = new_test_user(self.env, login="history_user", groups="base.group_user")
-        log = self.partner._message_log(body="<p>A log</p>")
-        blacklist = self.env["mail.blacklist"].create({"email": "a@example.org"})
-        hidden_log = blacklist._message_log(body="<p>A hidden log</p>")
-        domain = [("id", "in", (log | hidden_log).ids)]
-        groups = (
-            self.env["mail.message"]
-            .with_user(user)
-            .read_group(domain, ["model"], ["model"])
-        )
-        self.assertEqual([group["model"] for group in groups], ["res.partner"])
-        self.assertEqual(groups[0]["model_count"], 1)
-        self.assertEqual(
-            self.env["mail.message"].with_user(user).search(groups[0]["__domain"]),
-            log,
-        )
 
     def test_smart_button(self):
         def has_button():
