@@ -2,9 +2,9 @@
    :target: https://odoo-community.org/get-involved?utm_source=readme
    :alt: Odoo Community Association
 
-=================
-Mail Message View
-=================
+====================
+Mail Message History
+====================
 
 .. 
    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -21,10 +21,10 @@ Mail Message View
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-OCA%2Fmail-lightgray.png?logo=github
-    :target: https://github.com/OCA/mail/tree/16.0/mail_message_view
+    :target: https://github.com/OCA/mail/tree/16.0/mail_message_history
     :alt: OCA/mail
 .. |badge4| image:: https://img.shields.io/badge/weblate-Translate%20me-F47D42.png
-    :target: https://translation.odoo-community.org/projects/mail-16-0/mail-16-0-mail_message_view
+    :target: https://translation.odoo-community.org/projects/mail-16-0/mail-16-0-mail_message_history
     :alt: Translate me on Weblate
 .. |badge5| image:: https://img.shields.io/badge/runboat-Try%20me-875A7B.png
     :target: https://runboat.odoo-community.org/builds?repo=OCA/mail&target_branch=16.0
@@ -33,13 +33,15 @@ Mail Message View
 |badge1| |badge2| |badge3| |badge4| |badge5|
 
 This module adds a *Discuss > Message History* menu listing the chatter messages
-(``mail.message``) of all the documents, to search them and group them, e.g. by
-model. Only the messages the user is allowed to see are listed.
+of all the documents the user can access, to search, filter and group them.
 
-The list tells the messages posted by users apart from the ones logged by the
-system, and shows as plain text the message body and the tracked field changes,
-e.g. ``Status: RFQ → Purchase Order``. A filter narrows the list to the messages
-that have an attachment, and opening a message shows its attachments.
+The list shows the message body as plain text, and filters tell the messages
+posted by users apart from the ones logged by the system. The field tracking
+messages, which have no body, are not listed.
+
+Core leaves the document name empty on the messages logged by the system. The
+module fills it on the listed messages, including the ones existing at its
+installation, so that they can be searched and grouped by document.
 
 A smart button on the form views opens the same list for a single record.
 
@@ -52,7 +54,7 @@ Configuration
 =============
 
 To get a button opening the messages of a record on its form view, set the
-``mail_message_view.button_models`` system parameter to the comma separated list
+``mail_message_history.button_models`` system parameter to the comma separated list
 of the wanted models, e.g. ``purchase.order,sale.order``.
 
 Bug Tracker
@@ -61,12 +63,17 @@ Bug Tracker
 Bugs are tracked on `GitHub Issues <https://github.com/OCA/mail/issues>`_.
 In case of trouble, please check there if your issue has already been reported.
 If you spotted it first, help us to smash it by providing a detailed and welcomed
-`feedback <https://github.com/OCA/mail/issues/new?body=module:%20mail_message_view%0Aversion:%2016.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
+`feedback <https://github.com/OCA/mail/issues/new?body=module:%20mail_message_history%0Aversion:%2016.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
 
 Do not contact contributors directly about support or help with technical issues.
 
 Credits
 =======
+
+Authors
+~~~~~~~
+
+* Quartile
 
 Maintainers
 ~~~~~~~~~~~
@@ -81,6 +88,14 @@ OCA, or the Odoo Community Association, is a nonprofit organization whose
 mission is to support the collaborative development of Odoo features and
 promote its widespread use.
 
-This module is part of the `OCA/mail <https://github.com/OCA/mail/tree/16.0/mail_message_view>`_ project on GitHub.
+.. |maintainer-smorita7749| image:: https://github.com/smorita7749.png?size=40px
+    :target: https://github.com/smorita7749
+    :alt: smorita7749
+
+Current `maintainer <https://odoo-community.org/page/maintainer-role>`__:
+
+|maintainer-smorita7749| 
+
+This module is part of the `OCA/mail <https://github.com/OCA/mail/tree/16.0/mail_message_history>`_ project on GitHub.
 
 You are welcome to contribute. To learn how please visit https://odoo-community.org/page/Contribute.

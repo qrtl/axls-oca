@@ -2,7 +2,7 @@
 <odoo noupdate="1">
 
     <record id="button_models_parameter" model="ir.config_parameter">
-        <field name="key">mail_message_view.button_models</field>
+        <field name="key">mail_message_history.button_models</field>
         <field name="value" />
     </record>
 
