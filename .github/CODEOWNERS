@@ -1,0 +1,12 @@
+# High-tier paths: a PR touching any of these needs an approving review from a member of
+# @qrtl/high-risk-reviewers who did not write it, before GitHub lets it merge. Everything
+# else merges on green CI. Policy: qrtl-handbook-private, engineering/pr-risk-tiers.md.
+/.github/            @qrtl/high-risk-reviewers
+**/security/         @qrtl/high-risk-reviewers
+**/migrations/       @qrtl/high-risk-reviewers
+/account_*/          @qrtl/high-risk-reviewers
+/stock_account*/     @qrtl/high-risk-reviewers
+/stock_valuation*/   @qrtl/high-risk-reviewers
+/*payment*/          @qrtl/high-risk-reviewers
+/*payroll*/          @qrtl/high-risk-reviewers
+/*tax*/              @qrtl/high-risk-reviewers
