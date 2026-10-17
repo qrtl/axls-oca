@@ -1,7 +1,15 @@
 # High-tier paths: a PR touching any of these needs an approving review from a member of
 # @qrtl/high-risk-reviewers who did not write it, before GitHub lets it merge. Everything
 # else merges on green CI. Policy: qrtl-handbook-private, engineering/pr-risk-tiers.md.
-/.github/            @qrtl/high-risk-reviewers
+# .github/ is owned, so a new or renamed workflow (a deploy.yml, say) is High by default.
+# The files the OCA template generates are then released again: a later pattern with no
+# owner leaves them unowned, so a copier update merges on green. What those files run is
+# not guarded by the required checks (a job can keep its name and lose its steps), so a
+# hand edit to them that is not a copier update gets a look before merging.
+/.github/                              @qrtl/high-risk-reviewers
+/.github/workflows/pre-commit.yml
+/.github/workflows/test.yml
+/.github/workflows/stale.yml
 **/security/         @qrtl/high-risk-reviewers
 **/migrations/       @qrtl/high-risk-reviewers
 /account_*/          @qrtl/high-risk-reviewers
