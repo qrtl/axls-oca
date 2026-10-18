@@ -1,0 +1,175 @@
+<odoo>
+  <!-- Product Revision Form View -->
+  <record id="view_product_revision_form" model="ir.ui.view">
+    <field name="name">product.revision.form</field>
+    <field name="model">product.revision</field>
+    <field name="arch" type="xml">
+      <form string="Product Revision">
+        <sheet>
+          <div class="oe_button_box" name="button_box">
+            <!-- Placeholder for action buttons -->
+          </div>
+          <div class="oe_title">
+            <h1>
+              <field name="name" placeholder="Revision Name" />
+            </h1>
+            <h2>
+              <field name="revision_number" placeholder="Revision Number" />
+            </h2>
+          </div>
+          <group>
+            <group>
+              <field name="change_date" />
+              <field name="active" />
+            </group>
+            <group>
+              <field name="product_tmpl_id" />
+              <field name="product_id" />
+              <field name="internal_product_id" />
+            </group>
+          </group>
+          <notebook>
+            <page string="Notes">
+              <field name="notes" nolabel="1" />
+            </page>
+            <page string="Revision History">
+              <p class="text-muted">
+                This section shows the history of this revision. All revisions for a product are preserved in the system,
+                with only one being active at a time. When a new revision is created, previous revisions are automatically
+                set to inactive but remain in the system for historical reference.
+              </p>
+            </page>
+          </notebook>
+        </sheet>
+        <div class="oe_chatter">
+          <field name="message_follower_ids" widget="mail_followers" />
+          <field name="activity_ids" widget="mail_activity" />
+          <field name="message_ids" widget="mail_thread" />
+        </div>
+      </form>
+    </field>
+  </record>
+
+  <!-- Product Revision Tree View -->
+  <record id="view_product_revision_tree" model="ir.ui.view">
+    <field name="name">product.revision.tree</field>
+    <field name="model">product.revision</field>
+    <field name="arch" type="xml">
+      <tree decoration-muted="active == False">
+        <field name="name" />
+        <field name="revision_number" />
+        <field name="change_date" />
+        <field name="product_tmpl_id" />
+        <field name="product_id" />
+        <field name="internal_product_id" />
+        <field name="active" widget="boolean_toggle" />
+      </tree>
+    </field>
+  </record>
+
+  <!-- Product Revision Search View -->
+  <record id="view_product_revision_search" model="ir.ui.view">
+    <field name="name">product.revision.search</field>
+    <field name="model">product.revision</field>
+    <field name="arch" type="xml">
+      <search string="Search Product Revisions">
+        <field name="name" />
+        <field name="revision_number" />
+        <field name="product_tmpl_id" />
+        <field name="product_id" />
+        <field name="internal_product_id" />
+        <filter string="Active" name="active" domain="[('active', '=', True)]" />
+        <filter string="Inactive" name="inactive" domain="[('active', '=', False)]" />
+        <group expand="0" string="Group By">
+          <filter
+                        string="Product Template"
+                        name="group_by_product_tmpl"
+                        context="{'group_by': 'product_tmpl_id'}"
+                    />
+          <filter
+                        string="Product Variant"
+                        name="group_by_product"
+                        context="{'group_by': 'product_id'}"
+                    />
+          <filter
+                        string="Change Date"
+                        name="group_by_date"
+                        context="{'group_by': 'change_date'}"
+                    />
+        </group>
+      </search>
+    </field>
+  </record>
+
+  <!-- Product Template Form View Inheritance -->
+  <record id="view_product_template_form_inherit" model="ir.ui.view">
+    <field name="name">product.template.form.inherit</field>
+    <field name="model">product.template</field>
+    <field name="inherit_id" ref="product.product_template_form_view" />
+    <field name="arch" type="xml">
+      <xpath expr="//div[@name='options']" position="inside">
+        <div>
+          <field name="revision_count" invisible="1" />
+          <label for="current_revision_id" />
+          <field name="current_revision_id" class="oe_inline" />
+          <button
+                        name="action_view_revisions"
+                        type="object"
+                        class="oe_link"
+                        icon="fa-list"
+                        attrs="{'invisible': [('revision_count', '=', 0)]}"
+                    >
+            <span>View All</span>
+          </button>
+          <button
+                        name="action_create_revision"
+                        type="object"
+                        class="oe_link"
+                        icon="fa-plus"
+                    >
+            <span>Add Revision</span>
+          </button>
+        </div>
+      </xpath>
+    </field>
+  </record>
+
+  <!-- Product Template Tree View Inheritance -->
+  <record id="view_product_template_tree_inherit" model="ir.ui.view">
+    <field name="name">product.template.tree.inherit</field>
+    <field name="model">product.template</field>
+    <field name="inherit_id" ref="product.product_template_tree_view" />
+    <field name="arch" type="xml">
+      <field name="default_code" position="after">
+        <field name="current_revision_number" optional="show" />
+      </field>
+    </field>
+  </record>
+
+  <!-- Product Revision Action Window -->
+  <record id="action_product_revision" model="ir.actions.act_window">
+    <field name="name">Product Revisions</field>
+    <field name="res_model">product.revision</field>
+    <field name="view_mode">tree,form</field>
+    <field
+            name="context"
+        >{'search_default_active': 1, 'search_default_inactive': 1}</field>
+    <field name="help" type="html">
+      <p class="o_view_nocontent_smiling_face">
+        Create your first product revision
+      </p>
+      <p>
+        Product revisions allow you to track changes to your products over time.
+      </p>
+    </field>
+  </record>
+
+  <!-- Menu Items -->
+  <menuitem
+        id="menu_product_revision"
+        name="Revisions"
+        parent="stock.menu_stock_inventory_control"
+        action="action_product_revision"
+        sequence="20"
+    />
+</odoo>

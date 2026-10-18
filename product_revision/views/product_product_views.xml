@@ -1,0 +1,46 @@
+<odoo>
+  <!-- product.template フォームにだけ差し込む -->
+  <record id="view_product_template_form_inherit_variant" model="ir.ui.view">
+      <field name="name">product.template.form.inherit.variant</field>
+      <field name="model">product.template</field>
+      <field name="inherit_id" ref="product.product_template_form_view" />
+      <field name="arch" type="xml">
+          <xpath expr="//div[@name='options']" position="inside">
+            <div>
+              <field name="revision_count" invisible="1" />
+              <label for="current_revision_id" />
+              <field name="current_revision_id" class="oe_inline" />
+              <button
+                        name="action_view_revisions"
+                        type="object"
+                        class="oe_link"
+                        icon="fa-list"
+                        attrs="{'invisible': [('revision_count', '=', 0)]}"
+                    >
+                <span>View All</span>
+              </button>
+              <button
+                        name="action_create_revision"
+                        type="object"
+                        class="oe_link"
+                        icon="fa-plus"
+                    >
+                <span>Add Revision</span>
+              </button>
+            </div>
+          </xpath>
+      </field>
+  </record>
+
+  <!-- Product Variant Tree View Inheritance -->
+  <record id="view_product_product_tree_inherit" model="ir.ui.view">
+    <field name="name">product.product.tree.inherit</field>
+    <field name="model">product.product</field>
+    <field name="inherit_id" ref="product.product_product_tree_view" />
+    <field name="arch" type="xml">
+      <field name="default_code" position="after">
+        <field name="current_revision_number" optional="show" />
+      </field>
+    </field>
+  </record>
+</odoo>

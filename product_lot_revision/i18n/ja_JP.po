@@ -1,0 +1,158 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* product_lot_revision
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 16.0-20230701\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-05-02 07:00+0000\n"
+"PO-Revision-Date: 2025-05-02 07:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: product_lot_revision
+#: model_terms:ir.ui.view,arch_db:product_lot_revision.view_stock_lot_form_inherit
+msgid "<span>Create Revision</span>"
+msgstr "<span>リビジョンを作成</span>"
+
+#. module: product_lot_revision
+#: model_terms:ir.ui.view,arch_db:product_lot_revision.view_stock_lot_form_inherit
+msgid "<span>View Revision</span>"
+msgstr "<span>リビジョンを見る</span>"
+
+#. module: product_lot_revision
+#: model_terms:ir.ui.view,arch_db:product_lot_revision.view_assign_revision_wizard_form
+msgid "Assign"
+msgstr "割り当て"
+
+#. module: product_lot_revision
+#: model:ir.actions.act_window,name:product_lot_revision.action_assign_revision_wizard
+#: model_terms:ir.ui.view,arch_db:product_lot_revision.view_assign_revision_wizard_form
+msgid "Assign Revision"
+msgstr "リビジョンを割り当て"
+
+#. module: product_lot_revision
+#: model:ir.model,name:product_lot_revision.model_assign_revision_wizard
+msgid "Assign Revision to Lot/Serial Number"
+msgstr "ロット/シリアル番号にリビジョンを割り当て"
+
+#. module: product_lot_revision
+#: model_terms:ir.ui.view,arch_db:product_lot_revision.view_assign_revision_wizard_form
+msgid "Cancel"
+msgstr "キャンセル"
+
+#. module: product_lot_revision
+#. odoo-python
+#: code:addons/product_lot_revision/models/stock_lot.py:0
+#: code:addons/product_lot_revision/models/stock_lot.py:0
+#, python-format
+msgid "Create Revision"
+msgstr "リビジョンを作成"
+
+#. module: product_lot_revision
+#: model:ir.model.fields,field_description:product_lot_revision.field_assign_revision_wizard__create_uid
+msgid "Created by"
+msgstr "作成者"
+
+#. module: product_lot_revision
+#: model:ir.model.fields,field_description:product_lot_revision.field_assign_revision_wizard__create_date
+msgid "Created on"
+msgstr "作成日時"
+
+#. module: product_lot_revision
+#: model:ir.model.fields,field_description:product_lot_revision.field_assign_revision_wizard__display_name
+msgid "Display Name"
+msgstr "表示名"
+
+#. module: product_lot_revision
+#: model:ir.model.fields,field_description:product_lot_revision.field_assign_revision_wizard__id
+msgid "ID"
+msgstr "ID"
+
+#. module: product_lot_revision
+#: model:ir.model.fields,field_description:product_lot_revision.field_assign_revision_wizard____last_update
+msgid "Last Modified on"
+msgstr "最終更新日時"
+
+#. module: product_lot_revision
+#: model:ir.model.fields,field_description:product_lot_revision.field_assign_revision_wizard__write_uid
+msgid "Last Updated by"
+msgstr "最終更新者"
+
+#. module: product_lot_revision
+#: model:ir.model.fields,field_description:product_lot_revision.field_assign_revision_wizard__write_date
+msgid "Last Updated on"
+msgstr "最終更新日時"
+
+#. module: product_lot_revision
+#: model:ir.model,name:product_lot_revision.model_stock_lot
+msgid "Lot/Serial"
+msgstr "ロット/シリアル"
+
+#. module: product_lot_revision
+#: model:ir.model.fields,field_description:product_lot_revision.field_assign_revision_wizard__lot_id
+msgid "Lot/Serial Number"
+msgstr "ロット/シリアル番号"
+
+#. module: product_lot_revision
+#: model:ir.model.fields,field_description:product_lot_revision.field_assign_revision_wizard__product_id
+msgid "Product"
+msgstr "製品"
+
+#. module: product_lot_revision
+#: model:ir.model,name:product_lot_revision.model_product_revision
+msgid "Product Revision"
+msgstr "製品リビジョン"
+
+#. module: product_lot_revision
+#. odoo-python
+#: code:addons/product_lot_revision/models/stock_lot.py:0
+#: model:ir.model.fields,field_description:product_lot_revision.field_assign_revision_wizard__revision_id
+#: model:ir.model.fields,field_description:product_lot_revision.field_stock_lot__revision_id
+#: model_terms:ir.ui.view,arch_db:product_lot_revision.view_stock_lot_search_inherit
+#, python-format
+msgid "Revision"
+msgstr "リビジョン"
+
+#. module: product_lot_revision
+#: model:ir.model.fields,field_description:product_lot_revision.field_assign_revision_wizard__revision_number
+#: model:ir.model.fields,field_description:product_lot_revision.field_stock_lot__revision_number
+msgid "Revision Number"
+msgstr "リビジョン番号"
+
+#. module: product_lot_revision
+#: model:ir.model.fields,help:product_lot_revision.field_assign_revision_wizard__lot_id
+msgid "The lot/serial number to assign a revision to"
+msgstr "リビジョンを割り当てるロット/シリアル番号"
+
+#. module: product_lot_revision
+#: model:ir.model.fields,help:product_lot_revision.field_assign_revision_wizard__product_id
+msgid "The product associated with this lot/serial number"
+msgstr "このロット/シリアル番号に紐付く製品"
+
+#. module: product_lot_revision
+#: model:ir.model.fields,help:product_lot_revision.field_stock_lot__revision_number
+msgid ""
+"The revision number of the product associated with this lot/serial number"
+msgstr ""
+"このロット/シリアル番号に紐付く製品のリビジョン番号"
+
+#. module: product_lot_revision
+#: model:ir.model.fields,help:product_lot_revision.field_assign_revision_wizard__revision_number
+msgid "The revision number of the selected revision"
+msgstr "選択されたリビジョンのリビジョン番号"
+
+#. module: product_lot_revision
+#: model:ir.model.fields,help:product_lot_revision.field_stock_lot__revision_id
+msgid "The revision of the product associated with this lot/serial number"
+msgstr "このロット/シリアル番号に紐付く製品のリビジョン"
+
+#. module: product_lot_revision
+#: model:ir.model.fields,help:product_lot_revision.field_assign_revision_wizard__revision_id
+msgid "The revision to assign to this lot/serial number"
+msgstr "このロット/シリアル番号に割り当てるリビジョン"
