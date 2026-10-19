@@ -28,6 +28,16 @@
                             context="{'search_default_statement_id': id}"
                             string="Transactions"
                         />
+                        <button
+                            name="open_entries"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-bars"
+                        >
+                            <div class="o_stat_info">
+                                <span class="o_stat_text">Journal Items</span>
+                            </div>
+                        </button>
                         </div>
                         <div class="oe_title oe_inline">
                             <label for="name" />
@@ -84,6 +94,28 @@
     <record id="account.action_bank_statement_tree" model="ir.actions.act_window">
          <field name="res_model">account.bank.statement</field>
          <field name="view_mode">tree,form,pivot,graph</field>
+    </record>
+    <record id="account.action_view_bank_statement_tree" model="ir.actions.act_window">
+        <field name="view_mode">tree,form,pivot,graph</field>
+    </record>
+
+    <record id="view_bank_statement_tree" model="ir.ui.view">
+        <field name="name">account.bank.statement.tree</field>
+        <field name="model">account.bank.statement</field>
+        <field name="inherit_id" ref="account.view_bank_statement_tree" />
+        <field name="arch" type="xml">
+            <tree position="attributes">
+                <attribute name="create">true</attribute>
+            </tree>
+            <field name="balance_end_real" position="after">
+                <button
+                    name="action_open_statement_lines"
+                    type="object"
+                    title="Open Statement Lines"
+                    icon="fa-folder-open-o"
+                />
+            </field>
+        </field>
     </record>
 
 </odoo>
