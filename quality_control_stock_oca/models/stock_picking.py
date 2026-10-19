@@ -4,7 +4,7 @@
 # Copyright 2024 Quartile
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
-from odoo import api, fields, models
+from odoo import _, api, fields, models
 
 
 class StockPicking(models.Model):
@@ -29,6 +29,22 @@ class StockPicking(models.Model):
     failed_inspections = fields.Integer(
         compute="_compute_count_inspections", string="Inspections failed"
     )
+
+    inspection_required_message = fields.Html(
+        readonly=True, compute="_compute_inspection_required_message"
+    )
+
+    @api.depends("qc_inspections_ids")
+    def _compute_inspection_required_message(self):
+        message = _("Control quality is required to validate this Transfert.")
+        for rec in self.sudo():
+            if rec.qc_inspections_ids and rec.qc_inspections_ids.filtered(
+                lambda x: x.state not in ["success", "failed"]
+                and x.is_mandatory_to_validate
+            ):
+                rec.inspection_required_message = message
+            else:
+                rec.inspection_required_message = False
 
     @api.depends("qc_inspections_ids", "qc_inspections_ids.state")
     def _compute_count_inspections(self):
@@ -73,12 +89,27 @@ class StockPicking(models.Model):
 
     def action_cancel(self):
         res = super().action_cancel()
-        self.qc_inspections_ids.filtered(lambda x: x.state == "plan").action_cancel()
+        self.sudo().qc_inspections_ids.filtered(
+            lambda x: x.state == "plan"
+        ).action_cancel()
         return res
 
     def _action_done(self):
+        for picking in self:
+            picking_names = ""
+            if picking.inspection_required_message:
+                picking_names += f"- {picking.name}\n"
+            if picking_names:
+                raise models.UserError(
+                    _(
+                        "You must validate the following inspections "
+                        "before validating the picking:\n" + picking_names
+                    )
+                )
         res = super()._action_done()
-        plan_inspections = self.qc_inspections_ids.filtered(lambda x: x.state == "plan")
+        plan_inspections = self.sudo().qc_inspections_ids.filtered(
+            lambda x: x.state == "plan"
+        )
         plan_inspections.write({"state": "ready", "date": fields.Datetime.now()})
         for picking in self:
             picking.trigger_inspections(["after"])
@@ -87,5 +118,5 @@ class StockPicking(models.Model):
     def _create_backorder(self):
         res = super()._create_backorder()
         # To re-allocate backorder moves to the new backorder picking
-        self.qc_inspections_ids._compute_picking()
+        self.sudo().qc_inspections_ids._compute_picking()
         return res

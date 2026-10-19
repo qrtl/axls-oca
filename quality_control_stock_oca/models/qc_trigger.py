@@ -11,3 +11,4 @@ class QcTrigger(models.Model):
     picking_type_id = fields.Many2one(
         comodel_name="stock.picking.type", readonly=True, ondelete="cascade"
     )
+    is_mandatory_to_validate = fields.Boolean()
