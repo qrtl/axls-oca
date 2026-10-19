@@ -10,3 +10,6 @@ class ResConfigSettings(models.TransientModel):
     stock_inventory_auto_complete = fields.Boolean(
         related="company_id.stock_inventory_auto_complete", readonly=False
     )
+    stock_inventory_batch_size = fields.Integer(
+        related="company_id.stock_inventory_batch_size", readonly=False
+    )

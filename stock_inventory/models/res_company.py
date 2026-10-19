@@ -13,3 +13,8 @@ class ResCompany(models.Model):
         "are done, the adjustment is automatically set to done.",
         default=False,
     )
+    stock_inventory_batch_size = fields.Integer(
+        help="Number of quants to process per batch during inventory adjustments. "
+        "Lower this value if you experience memory issues.",
+        default=1000,
+    )

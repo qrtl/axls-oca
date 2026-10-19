@@ -1,6 +1,7 @@
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError, ValidationError
 from odoo.osv import expression
+from odoo.tools import split_every
 
 READONLY_STATES = {
     "draft": [("readonly", False)],
@@ -181,7 +182,7 @@ class InventoryAdjustmentsGroup(models.Model):
             quants = rec.stock_quant_ids
             quants_to_do = quants.filtered(lambda q: q.to_do)
             quants_pending_to_review = quants_to_do.filtered(
-                lambda q: q.current_inventory_id.id == rec.id
+                lambda q, rec=rec: q.current_inventory_id.id == rec.id
             )
             count_pending_to_review = len(quants_pending_to_review)
             rec.count_stock_quants = len(quants)
@@ -229,11 +230,11 @@ class InventoryAdjustmentsGroup(models.Model):
     def _get_base_domain(self, locations):
         return (
             [
-                ("location_id", "in", locations.mapped("id")),
+                ("location_id", "in", locations.ids),
             ]
             if self.exclude_sublocation
             else [
-                ("location_id", "child_of", locations.child_internal_location_ids.ids),
+                ("location_id", "child_of", locations.ids),
             ]
         )
 
@@ -334,29 +335,34 @@ class InventoryAdjustmentsGroup(models.Model):
                 "stock_quant_ids": [(6, 0, quants.ids)],
             }
         )
-        quants.write(
-            {
-                "to_do": True,
-                "user_id": self.responsible_id,
-                "inventory_date": self.date,
-                "current_inventory_id": self.id,
-            }
-        )
+        batch_size = self.company_id.stock_inventory_batch_size or 1000
+        for quant_batch in split_every(batch_size, quants):
+            self.env["stock.quant"].concat(*quant_batch).write(
+                {
+                    "to_do": True,
+                    "user_id": self.responsible_id,
+                    "inventory_date": self.date,
+                    "current_inventory_id": self.id,
+                }
+            )
         return
 
     def action_state_to_done(self):
         self.ensure_one()
         self.state = "done"
-        self.stock_quant_ids.filtered(
+        quants = self.stock_quant_ids.filtered(
             lambda q: q.current_inventory_id.id == self.id
-        ).update(
-            {
-                "to_do": False,
-                "user_id": False,
-                "inventory_date": False,
-                "current_inventory_id": False,
-            }
         )
+        batch_size = self.company_id.stock_inventory_batch_size or 1000
+        for quant_batch in split_every(batch_size, quants):
+            self.env["stock.quant"].concat(*quant_batch).write(
+                {
+                    "to_do": False,
+                    "user_id": False,
+                    "inventory_date": False,
+                    "current_inventory_id": False,
+                }
+            )
         return
 
     def action_auto_state_to_done(self):
@@ -368,16 +374,19 @@ class InventoryAdjustmentsGroup(models.Model):
     def action_state_to_draft(self):
         self.ensure_one()
         self.state = "draft"
-        self.stock_quant_ids.filtered(
+        quants = self.stock_quant_ids.filtered(
             lambda q: q.current_inventory_id.id == self.id
-        ).update(
-            {
-                "to_do": False,
-                "user_id": False,
-                "inventory_date": False,
-                "current_inventory_id": False,
-            }
         )
+        batch_size = self.company_id.stock_inventory_batch_size or 1000
+        for quant_batch in split_every(batch_size, quants):
+            self.env["stock.quant"].concat(*quant_batch).write(
+                {
+                    "to_do": False,
+                    "user_id": False,
+                    "inventory_date": False,
+                    "current_inventory_id": False,
+                }
+            )
         self.stock_quant_ids = None
         return
 
@@ -460,8 +469,9 @@ class InventoryAdjustmentsGroup(models.Model):
                     ):
                         raise ValidationError(
                             _(
-                                "Cannot have more than one in-progress inventory adjustment "
-                                "affecting the same location or product at the same time."
+                                "Cannot have more than one in-progress "
+                                "inventory adjustment affecting the same "
+                                "location or product at the same time."
                             )
                         )
 
@@ -483,3 +493,14 @@ class InventoryAdjustmentsGroup(models.Model):
                             " you are only able to add one product."
                         )
                     )
+
+    def unlink(self):
+        for adjustment in self:
+            if adjustment.state != "draft":
+                raise UserError(
+                    _(
+                        "You can only delete inventory adjustments groups in"
+                        " draft state."
+                    )
+                )
+        return super().unlink()

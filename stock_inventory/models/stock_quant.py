@@ -34,14 +34,15 @@ class StockQuant(models.Model):
                 ],
                 order="create_date asc",
             ).filtered(
-                lambda x: not x.company_id.id
-                or not rec.company_id.id
-                or rec.company_id.id == x.company_id.id
+                lambda x, rec=rec: (
+                    not x.company_id.id
+                    or not rec.company_id.id
+                    or rec.company_id.id == x.company_id.id
+                )
             )
             if len(moves) == 0:
                 raise ValueError(_("No move lines have been created"))
             move = moves[len(moves) - 1]
-            adjustment.stock_move_ids |= move
             reference = move.reference
             if adjustment.name and move.reference:
                 reference = adjustment.name + ": " + move.reference
@@ -53,8 +54,7 @@ class StockQuant(models.Model):
                     "reference": reference,
                 }
             )
-            rec.to_do = False
-            rec.current_inventory_id = False
+        self.write({"to_do": False, "current_inventory_id": False})
         if adjustment and self.env.company.stock_inventory_auto_complete:
             adjustment.action_auto_state_to_done()
         return res

@@ -7,7 +7,7 @@ from odoo.tests.common import TransactionCase
 
 class TestStockInventory(TransactionCase):
     def setUp(self):
-        super(TestStockInventory, self).setUp()
+        super().setUp()
         self.env.company.stock_inventory_auto_complete = False
         self.quant_model = self.env["stock.quant"]
         self.move_model = self.env["stock.move.line"]
@@ -589,3 +589,42 @@ class TestStockInventory(TransactionCase):
             ).current_inventory_id,
             inventory2,
         )
+
+    def test_14_apply_many_quants_links_all_move_lines(self):
+        location = self.location_model.create(
+            {
+                "name": "Location Batch",
+                "usage": "internal",
+                "location_id": self.location_src.id,
+            }
+        )
+        products = self.env["product.product"].create(
+            [{"name": "Batch Product %s" % i, "type": "product"} for i in range(10)]
+        )
+        quants = self.quant_model.create(
+            [
+                {
+                    "product_id": product.id,
+                    "location_id": location.id,
+                    "quantity": 10.0,
+                }
+                for product in products
+            ]
+        )
+        inventory = self.inventory_model.create(
+            {
+                "name": "Inventory_Batch",
+                "product_selection": "all",
+                "location_ids": [location.id],
+            }
+        )
+        inventory.action_state_to_in_progress()
+        quants.inventory_quantity = 7.0
+        quants.action_apply_inventory()
+
+        self.assertEqual(len(inventory.stock_move_ids), 10)
+        self.assertEqual(inventory.stock_move_ids.product_id, products)
+        for move_line in inventory.stock_move_ids:
+            self.assertTrue(move_line.reference.startswith("Inventory_Batch: "))
+        self.assertFalse(any(quants.mapped("to_do")))
+        self.assertFalse(quants.current_inventory_id)
