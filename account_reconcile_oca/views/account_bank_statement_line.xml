@@ -56,7 +56,7 @@
 
                             </div>
                             <div>
-                                <field name="partner_id" />
+                                <field name="partner_id" widget="badge" />
                             </div>
                             <div class="row">
                                 <div class="col-8">
@@ -136,6 +136,20 @@
         </field>
     </record>
 
+        <record id="account_bank_statement_line_search" model="ir.ui.view">
+        <field name="name">account.bank.statement.line.search</field>
+        <field name="model">account.bank.statement.line</field>
+        <field
+            name="inherit_id"
+            ref="account_statement_base.account_bank_statement_line_search"
+        />
+        <field name="arch" type="xml">
+            <field name="journal_id" position="after">
+                <field name="move_id" />
+            </field>
+        </field>
+    </record>
+
     <record id="bank_statement_line_form_reconcile_view" model="ir.ui.view">
         <field name="name">account.bank.statement.line.reconcile</field>
         <field name="model">account.bank.statement.line</field>
@@ -212,6 +226,7 @@
                 <field name="is_reconciled" invisible="1" />
                 <field name="foreign_currency_id" invisible="1" />
                 <field name="company_currency_id" invisible="1" />
+                <field name="previous_manual_amount_in_currency" invisible="1" />
                 <field name="currency_id" invisible="1" />
                 <field
                     name="reconcile_data_info"
@@ -244,16 +259,22 @@
                         <group>
                             <group>
                                 <field name="manual_line_id" invisible="1" />
+                                <field
+                                    name="manual_exchange_counterpart"
+                                    invisible="1"
+                                />
+                                <field name="manual_in_currency_id" invisible="1" />
+                                <field name="manual_in_currency" invisible="1" />
                                 <field name="manual_kind" invisible="1" />
                                 <field
                                     name="manual_account_id"
                                     string="Account"
-                                    attrs="{'readonly': ['|', '|', ('manual_reference', '=', False), ('is_reconciled', '=', True), ('manual_line_id', '!=', False)]}"
+                                    attrs="{'readonly': ['|', '|', '|', ('manual_exchange_counterpart', '=', True),('manual_reference', '=', False), ('is_reconciled', '=', True), ('manual_line_id', '!=', False)]}"
                                 />
                                 <field
                                     name="manual_partner_id"
                                     string="Partner"
-                                    attrs="{'readonly': ['|', '|', ('manual_reference', '=', False), ('is_reconciled', '=', True), '&amp;', ('manual_line_id', '!=', False), ('manual_kind', '!=', 'liquidity')]}"
+                                    attrs="{'readonly': ['|', '|', '|', ('manual_exchange_counterpart', '=', True),('manual_reference', '=', False), ('is_reconciled', '=', True), '&amp;', ('manual_line_id', '!=', False), ('manual_kind', '!=', 'liquidity')]}"
                                 />
                                 <field
                                     name="analytic_distribution"
@@ -267,12 +288,17 @@
                                 <field
                                     name="manual_name"
                                     string="Name"
-                                    attrs="{'readonly': ['|', '|', ('manual_reference', '=', False), ('is_reconciled', '=', True), '&amp;', ('manual_line_id', '!=', False), ('manual_kind', '!=', 'liquidity')]}"
+                                    attrs="{'readonly': ['|', '|', '|', ('manual_exchange_counterpart', '=', True), ('manual_reference', '=', False), ('is_reconciled', '=', True), '&amp;', ('manual_line_id', '!=', False), ('manual_kind', '!=', 'liquidity')]}"
+                                />
+                                <field
+                                    name="manual_amount_in_currency"
+                                    string="Amount in Currency"
+                                    attrs="{'invisible': [('manual_in_currency', '=', False)], 'readonly': ['|', '|', ('manual_exchange_counterpart', '=', True), ('manual_reference', '=', False), ('is_reconciled', '=', True)]}"
                                 />
                                 <field
                                     name="manual_amount"
                                     string="Amount"
-                                    attrs="{'readonly': ['|', ('manual_reference', '=', False), ('is_reconciled', '=', True)]}"
+                                    attrs="{'readonly': ['|', '|', ('manual_exchange_counterpart', '=', True), ('manual_reference', '=', False), ('is_reconciled', '=', True)]}"
                                 />
                                 <field name="manual_currency_id" invisible="1" />
                                 <field name="manual_original_amount" invisible="1" />
@@ -307,9 +333,43 @@
                             </group>
                         </group>
                     </page>
-                    <page name="narration" string="Narration">
-                        <field name="payment_ref" />
-                        <field name="narration" />
+                    <page name="narration" string="Statement Details">
+                        <group>
+                            <group string="Transaction">
+                                <field
+                                    name="payment_ref"
+                                    string="Label"
+                                    attrs="{'readonly': [('is_reconciled', '=', True)]}"
+                                />
+                                <field
+                                    name="transaction_type"
+                                    string="Type"
+                                    attrs="{'readonly': [('is_reconciled', '=', True)]}"
+                                />
+                                <field
+                                    name="ref"
+                                    string="Reference"
+                                    attrs="{'readonly': [('is_reconciled', '=', True)]}"
+                                />
+                                <field
+                                    name="narration"
+                                    string="Note"
+                                    attrs="{'readonly': [('is_reconciled', '=', True)]}"
+                                />
+                            </group>
+                            <group string="Source">
+                                <field
+                                    name="partner_name"
+                                    string="Partner Name (raw)"
+                                    attrs="{'readonly': [('is_reconciled', '=', True)]}"
+                                />
+                                <field
+                                    name="account_number"
+                                    string="Account Number"
+                                    attrs="{'readonly': [('is_reconciled', '=', True)]}"
+                                />
+                            </group>
+                        </group>
                     </page>
                     <page name="chatter" string="Chatter">
                         <field name="move_id" widget="account_reconcile_oca_chatter" />
@@ -345,12 +405,12 @@
         <field
             name="context"
         >{'default_journal_id': active_id, 'view_ref': 'account_reconcile_oca.bank_statement_line_form_reconcile_view'}</field>
-        <field name="view_mode">tree,kanban</field>
+        <field name="view_mode">kanban,tree</field>
         <field
             name="view_ids"
             eval="[(5, 0, 0),
-            (0, 0, {'view_mode': 'tree', 'view_id': ref('account_statement_base.account_bank_statement_line_tree')}),
-            (0, 0, {'view_mode': 'kanban', 'view_id': ref('bank_statement_line_reconcile_view')})]"
+            (0, 0, {'view_mode': 'kanban', 'view_id': ref('bank_statement_line_reconcile_view')}),
+            (0, 0, {'view_mode': 'tree', 'view_id': ref('account_statement_base.account_bank_statement_line_tree')})]"
         />
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
@@ -387,7 +447,9 @@
     >
         <field name="name">Reconcile bank statement lines</field>
         <field name="res_model">account.bank.statement.line</field>
-        <field name="context">{'search_default_move_id': active_id}</field>
+        <field
+            name="context"
+        >{'search_default_move_id': active_id, 'view_ref': 'account_reconcile_oca.bank_statement_line_form_reconcile_view'}</field>
         <field name="view_mode">tree</field>
         <field
             name="view_ids"

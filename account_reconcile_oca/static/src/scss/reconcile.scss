@@ -11,14 +11,18 @@
                 opacity: 100;
             }
         }
+        .row {
+            // We need to add this in order to make remove horizontal scroll
+            margin: 0;
+        }
         margin: 0 0 0;
         min-width: fit-content;
         width: 100%;
         .o_reconcile_create_statement {
             position: absolute;
-            height: 4px;
+            height: 0px;
             margin: 0;
-            padding: 2px 0 0 0;
+            padding: 0 0 0 0;
             border: 0;
             top: -14px;
             opacity: 0;
@@ -36,10 +40,12 @@
         padding: 0;
         position: relative;
         border-right: 1px solid $o-gray-300;
+        overflow: auto;
     }
     .o_account_reconcile_oca_info {
         width: 70%;
         height: 100%;
+        overflow: auto;
     }
     .o_form_view {
         .btn-info:not(.dropdown-toggle):not(.dropdown-item) {
@@ -81,6 +87,9 @@
                 }
                 &.selected {
                     background-color: rgba($o-brand-primary, 0.2);
+                }
+                &.suspense {
+                    color: $o-gray-500;
                 }
             }
         }

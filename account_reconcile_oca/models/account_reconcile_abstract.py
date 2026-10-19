@@ -30,54 +30,79 @@ class AccountReconcileAbstract(models.AbstractModel):
     currency_id = fields.Many2one("res.currency", readonly=True)
     foreign_currency_id = fields.Many2one("res.currency")
     company_currency_id = fields.Many2one(
-        "res.currency", related="company_id.currency_id"
+        related="company_id.currency_id", string="Company Currency"
     )
 
+    def _get_reconcile_currency(self):
+        return self.currency_id or self.company_id._currency_id
+
     def _get_reconcile_line(
-        self, line, kind, is_counterpart=False, max_amount=False, from_unreconcile=False
+        self,
+        line,
+        kind,
+        is_counterpart=False,
+        max_amount=False,
+        from_unreconcile=False,
+        move=False,
+        is_reconciled=False,
     ):
         date = self.date if "date" in self._fields else line.date
         original_amount = amount = net_amount = line.debit - line.credit
-        amount_currency = self.company_id.currency_id
+        line_currency = line.currency_id
         if is_counterpart:
-            amount = line.amount_residual_currency or line.amount_residual
-            amount_currency = line.currency_id or self.company_id.currency_id
-            original_amount = net_amount = line.amount_residual
+            currency_amount = -line.amount_residual_currency or line.amount_residual
+            amount = -line.amount_residual
+            currency = line.currency_id or line.company_id.currency_id
+            original_amount = net_amount = -line.amount_residual
             if max_amount:
-                currency_max_amount = self.company_id.currency_id._convert(
-                    max_amount, amount_currency, self.company_id, line.date
-                )
-                if amount > currency_max_amount > 0:
+                dest_currency = self._get_reconcile_currency()
+                if currency == dest_currency:
+                    real_currency_amount = currency_amount
+                elif self.company_id.currency_id == dest_currency:
+                    real_currency_amount = amount
+                else:
+                    real_currency_amount = self.company_id.currency_id._convert(
+                        amount,
+                        dest_currency,
+                        self.company_id,
+                        date,
+                    )
+                if (
+                    -real_currency_amount > max_amount > 0
+                    or -real_currency_amount < max_amount < 0
+                ):
+                    currency_max_amount = self._get_reconcile_currency()._convert(
+                        max_amount, currency, self.company_id, date
+                    )
                     amount = currency_max_amount
-                    net_amount = max_amount
-                if amount < currency_max_amount < 0:
-                    amount = currency_max_amount
-                    net_amount = max_amount
-            amount = -amount
-            original_amount = -original_amount
-            net_amount = -net_amount
+                    net_amount = -max_amount
+                    currency_amount = -amount
+                    amount = currency._convert(
+                        currency_amount,
+                        self.company_id.currency_id,
+                        self.company_id,
+                        date,
+                    )
+        elif is_reconciled:
+            currency_amount = line.amount_currency
         else:
-            amount_currency = line.currency_id
-            amount = self.company_id.currency_id._convert(
-                amount, amount_currency, self.company_id, date
-            )
-        currency_amount = amount
-        amount = amount_currency._convert(
-            amount, self.company_id.currency_id, self.company_id, date
-        )
+            currency_amount = self.amount_currency or self.amount
+            line_currency = self._get_reconcile_currency()
         vals = {
+            "move_id": move and line.move_id.id,
+            "move": move and line.move_id.name,
             "reference": "account.move.line;%s" % line.id,
             "id": line.id,
             "account_id": line.account_id.name_get()[0],
             "partner_id": line.partner_id and line.partner_id.name_get()[0] or False,
             "date": fields.Date.to_string(line.date),
-            "name": line.name,
+            "name": line.name or line.move_id.name,
             "debit": amount if amount > 0 else 0.0,
             "credit": -amount if amount < 0 else 0.0,
             "amount": amount,
             "net_amount": amount - net_amount,
             "currency_id": self.company_id.currency_id.id,
-            "line_currency_id": line.currency_id.id,
+            "line_currency_id": line_currency.id,
             "currency_amount": currency_amount,
             "analytic_distribution": line.analytic_distribution,
             "kind": kind,
@@ -85,11 +110,11 @@ class AccountReconcileAbstract(models.AbstractModel):
         if from_unreconcile:
             vals.update(
                 {
-                    "id": False,
-                    "counterpart_line_ids": (
-                        line.matched_debit_ids.mapped("debit_move_id")
-                        | line.matched_credit_ids.mapped("credit_move_id")
-                    ).ids,
+                    "credit": vals["debit"] and from_unreconcile["debit"],
+                    "debit": vals["credit"] and from_unreconcile["credit"],
+                    "amount": from_unreconcile["amount"],
+                    "net_amount": from_unreconcile["amount"],
+                    "currency_amount": from_unreconcile["currency_amount"],
                 }
             )
         if not float_is_zero(
@@ -99,4 +124,7 @@ class AccountReconcileAbstract(models.AbstractModel):
             vals["original_amount_unsigned"] = original_amount
         if is_counterpart:
             vals["counterpart_line_ids"] = line.ids
-        return vals
+        return [vals]
+
+    def add_multiple_lines(self, domain):
+        self.ensure_one()

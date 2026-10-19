@@ -12,7 +12,9 @@ class AccountJournal(models.Model):
         default="edit",
         required=True,
     )
-    company_currency_id = fields.Many2one(related="company_id.currency_id")
+    company_currency_id = fields.Many2one(
+        related="company_id.currency_id", string="Company Currency"
+    )
     reconcile_aggregate = fields.Selection(
         [
             ("statement", "Statement"),
@@ -29,3 +31,15 @@ class AccountJournal(models.Model):
         if self.get_journal_dashboard_datas()["number_to_reconcile"] > 0:
             return False
         return _("Well done! Everything has been reconciled")
+
+    def open_action(self):
+        """
+        Return OCA *Reconcile All* when core *Bank Statements* tree is requested;
+        leave other actions unchanged.
+        """
+        action = super().open_action()
+        if action.get("xml_id") == "account.action_bank_statement_tree":
+            action = self.env["ir.actions.actions"]._for_xml_id(
+                "account_reconcile_oca.action_bank_statement_line_reconcile_all"
+            )
+        return action

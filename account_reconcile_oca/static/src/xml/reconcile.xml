@@ -106,9 +106,10 @@
                 <th class="text-end">Credit</th>
                 <th t-if="! props.record.data.is_reconciled" />
             </thead>
+            <t t-set="rec" t-value="getReconcileLines()" />
             <tbody>
                 <t
-                    t-foreach="getReconcileLines()"
+                    t-foreach="rec.lines"
                     t-as="reconcile_line"
                     t-key="reconcile_line_index"
                 >
@@ -116,7 +117,18 @@
                         t-on-click="(ev) => this.selectReconcileLine(ev, reconcile_line)"
                         t-att-class="'o_reconcile_widget_line ' + reconcile_line.kind + (props.record.data.manual_reference == reconcile_line.reference ? ' selected ' :  ' ')"
                     >
-                        <td t-esc="reconcile_line.account_id[1]" />
+                        <td>
+                            <div t-esc="reconcile_line.account_id[1]" />
+                            <div t-if="reconcile_line.move_id">
+                                <a
+                                    t-att-href="'/web#id=' + reconcile_line.move_id + '&amp;view_type=form&amp;model=account.move'"
+                                    class="o_form_uri"
+                                    t-on-click="(ev) => this.openMove(ev, reconcile_line.move_id)"
+                                >
+                                    <small t-esc="reconcile_line.move" />
+                                </a>
+                            </div>
+                        </td>
                         <td>
                             <span
                                 t-esc="reconcile_line.partner_id[1]"
@@ -172,6 +184,12 @@
                         </td>
                     </tr>
                 </t>
+                <tr class="text-muted" t-if="rec.hasOpenBalance">
+                    <td colspan="5">Open Balance</td>
+                    <td class="text-end" t-esc="rec.openDebitFmt" />
+                    <td class="text-end" t-esc="rec.openCreditFmt" />
+                    <td />
+                </tr>
             </tbody>
         </table>
     </t>
@@ -190,6 +208,16 @@
         <xpath expr="//t[@list='model.root']" position="attributes">
             <attribute name="parentRecord">props.parentRecord</attribute>
             <attribute name="parentField">props.parentField</attribute>
+        </xpath>
+    </t>
+    <t
+        t-name="reconcile_move_line.ListView.Buttons"
+        t-inherit="web.ListView.Buttons"
+        t-inherit-mode="primary"
+        owl="1"
+    >
+        <xpath expr="//div[hasclass('o_list_buttons')]" position="inside">
+            <button class="btn btn-primary" t-on-click="clickAddAll">Add all</button>
         </xpath>
     </t>
 </templates>

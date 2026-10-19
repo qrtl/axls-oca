@@ -21,7 +21,7 @@ export class AccountReconcileMatchWidget extends Component {
                 controlPanel: {
                     // Hiding the control panel buttons
                     "top-left": false,
-                    "bottom-left": false,
+                    "bottom-left": true,
                 },
             },
             resModel: this.props.record.fields[this.props.name].relation,
@@ -36,6 +36,7 @@ export class AccountReconcileMatchWidget extends Component {
             searchViewId: false,
             parentRecord: this.props.record,
             parentField: this.props.name,
+            showButtons: false,
         };
     }
 }

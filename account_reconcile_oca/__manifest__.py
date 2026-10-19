@@ -2,10 +2,10 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 {
-    "name": "Account Reconcile Oca",
+    "name": "Account Reconcile OCA",
     "summary": """
         Reconcile addons for Odoo CE accounting""",
-    "version": "16.0.1.2.15",
+    "version": "16.0.2.5.1",
     "license": "AGPL-3",
     "author": "CreuBlanca,Dixmit,Odoo Community Association (OCA)",
     "maintainers": ["etobella"],
@@ -17,6 +17,7 @@
     "data": [
         "views/res_config_settings.xml",
         "security/ir.model.access.csv",
+        "security/security.xml",
         "views/account_account_reconcile.xml",
         "views/account_bank_statement_line.xml",
         "views/account_move_line.xml",
