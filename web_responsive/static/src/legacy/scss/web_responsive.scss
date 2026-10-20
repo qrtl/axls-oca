@@ -5,15 +5,6 @@
 
 $chatter_zone_width: 35% !important;
 
-// Support for long titles
-@include media-breakpoint-up(md) {
-    .o_form_view .oe_button_box + .oe_title,
-    .o_form_view .oe_button_box + .oe_avatar + .oe_title {
-        /* Button-box has a hardcoded width of 132px per button and have three columns */
-        width: calc(100% - 450px);
-    }
-}
-
 // Scroll all but top bar
 html .o_web_client .o_action_manager .o_action {
     @include media-breakpoint-down(sm) {
@@ -35,12 +26,6 @@ html .o_web_client .o_action_manager .o_action {
         .fc-timeGridDay-view .fc-axis,
         .fc-timeGridWeek-view .fc-axis {
             padding-left: 0px;
-        }
-        .fc-dayGridMonth-view {
-            padding-left: 0px;
-            .fc-week-number {
-                display: none;
-            }
         }
         .fc-dayGridYear-view {
             padding-left: 0px;
@@ -167,8 +152,7 @@ html .o_web_client .o_action_manager .o_action {
         // Support for long title (with ellipsis)
         .oe_title {
             .o_field_widget:not(.oe_inline) {
-                display: block;
-                span:not(.o_field_translate) {
+                span:not(.o_field_translate):not(.o_status) {
                     display: block;
                     max-width: 100%;
                     text-overflow: ellipsis;
@@ -259,7 +243,6 @@ html .o_web_client .o_action_manager .o_action {
 // Sticky Header & Footer in List View
 .o_list_view {
     .table-responsive {
-        overflow: visible;
         .o_list_table {
             // th & td are here for compatibility with chrome
             thead tr:nth-child(1) th {
@@ -372,7 +355,7 @@ html .o_web_client .o_action_manager .o_action {
 
 body:not(.o_statusbar_buttons) {
     .oe-toolbar {
-        z-index: 0 !important;
+        z-index: 0;
     }
 }
 
@@ -382,4 +365,18 @@ body:not(.o_statusbar_buttons) {
 
 .w-26 {
     width: 26%;
+}
+
+// Color clue to tell the difference between a note and a public message
+.o_Chatter_composer {
+    // HACK: has() pseudo class is broadly supported in desktop, even FF will deploy
+    // full support soon (now it's available behind a config flag)
+    // https://caniuse.com/css-has
+    &:has(div.o_Composer_coreHeader) {
+        background-color: lighten($o-brand-primary, 40%);
+    }
+}
+
+.o_searchview_autocomplete {
+    z-index: 999;
 }
