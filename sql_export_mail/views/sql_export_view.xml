@@ -31,6 +31,14 @@
                             colspan="2"
                         />
                         </group>
+                        <group string="Partners Notified by e-mail">
+                            <field
+                            name="mail_partner_ids"
+                            nolabel="1"
+                            widget="many2many_tags"
+                            colspan="2"
+                        />
+                        </group>
                         <group string="Crons" groups="base.group_system">
                             <field
                             name="cron_ids"
