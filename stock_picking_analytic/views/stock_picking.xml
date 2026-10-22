@@ -9,10 +9,12 @@
         <field name="inherit_id" ref="stock.view_picking_form" />
         <field name="arch" type="xml">
             <xpath expr="//group/group/field[@name='picking_type_id']" position="after">
-                <!-- groups="analytic.group_analytic_accounting" has been removed from
-                the field for now, since it would throw an error in subsequent context
-                update in 16.0 -->
-                <field name="analytic_distribution" widget="analytic_distribution" />
+                <field
+                    name="analytic_distribution"
+                    widget="analytic_distribution"
+                    groups="analytic.group_analytic_accounting"
+                />
+                <field name="analytic_distribution" invisible="1" />
             </xpath>
             <xpath
                 expr="//notebook/page[@name='operations']
@@ -35,9 +37,7 @@
         </field>
     </record>
 
-    <!-- This view is disabled for now since search on json field does not work in a
-    meaningful manner as of January 2023 -->
-    <!-- <record model="ir.ui.view" id="stock_picking_search_view">
+    <record model="ir.ui.view" id="stock_picking_search_view">
         <field name="name">stock.picking.search (in stock_picking_analytic)</field>
         <field name="model">stock.picking</field>
         <field name="inherit_id" ref="stock.view_picking_internal_search" />
@@ -46,7 +46,7 @@
                 <field name="analytic_distribution" />
             </xpath>
         </field>
-    </record> -->
+    </record>
 
     <record model="ir.ui.view" id="stock_picking_tree_view">
         <field name="name">stock.picking.tree (in stock_picking_analytic)</field>
