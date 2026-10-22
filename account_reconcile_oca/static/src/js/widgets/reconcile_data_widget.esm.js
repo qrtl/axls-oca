@@ -1,0 +1,126 @@
+/** @odoo-module **/
+
+import fieldUtils from "web.field_utils";
+import {float_is_zero} from "web.utils";
+import {registry} from "@web/core/registry";
+import session from "web.session";
+import {useService} from "@web/core/utils/hooks";
+
+const {Component} = owl;
+
+export class AccountReconcileDataWidget extends Component {
+    setup() {
+        super.setup(...arguments);
+        this.orm = useService("orm");
+        this.action = useService("action");
+        this.foreignCurrency =
+            this.props &&
+            this.props.record &&
+            (this.props.record.data.foreign_currency_id ||
+                this.props.record.data.currency_id[0] !==
+                    this.props.record.data.company_currency_id[0] ||
+                this.props.record.data[this.props.name].data.some(
+                    (item) => item.line_currency_id !== item.currency_id
+                ));
+    }
+    getReconcileLines() {
+        var data = this.props.record.data[this.props.name].data;
+        const totals = {debit: 0, credit: 0};
+        if (!data || !data.length) {
+            return {lines: [], totals};
+        }
+        for (var line in data) {
+            data[line].amount_format = fieldUtils.format.monetary(
+                data[line].amount,
+                undefined,
+                {
+                    currency: session.get_currency(data[line].currency_id),
+                }
+            );
+            data[line].debit_format = fieldUtils.format.monetary(
+                data[line].debit,
+                undefined,
+                {
+                    currency: session.get_currency(data[line].currency_id),
+                }
+            );
+            data[line].credit_format = fieldUtils.format.monetary(
+                data[line].credit,
+                undefined,
+                {
+                    currency: session.get_currency(data[line].currency_id),
+                }
+            );
+            data[line].amount_currency_format = fieldUtils.format.monetary(
+                data[line].currency_amount,
+                undefined,
+                {
+                    currency: session.get_currency(data[line].line_currency_id),
+                }
+            );
+            if (data[line].original_amount) {
+                data[line].original_amount_format = fieldUtils.format.monetary(
+                    data[line].original_amount,
+                    {
+                        currency: session.get_currency(data[line].currency_id),
+                    }
+                );
+            }
+            data[line].date_format = fieldUtils.format.date(
+                fieldUtils.parse.date(data[line].date, undefined, {isUTC: true})
+            );
+            totals.debit += data[line].debit || 0;
+            totals.credit += data[line].credit || 0;
+        }
+        totals.balance = totals.debit - totals.credit;
+        const firstLine = Object.values(data)[0] || {};
+        const currency = session.get_currency(firstLine.currency_id);
+        const decimals = currency.digits[1];
+        const hasOpenBalance = !float_is_zero(totals.balance, decimals);
+        let openDebitFmt = null;
+        let openCreditFmt = null;
+        if (totals.balance < 0) {
+            openDebitFmt = fieldUtils.format.monetary(Math.abs(totals.balance), {
+                currency: currency,
+            });
+        } else {
+            openCreditFmt = fieldUtils.format.monetary(totals.balance, {
+                currency: currency,
+            });
+        }
+        return {lines: data, hasOpenBalance, openDebitFmt, openCreditFmt};
+    }
+    onTrashLine(ev, line) {
+        ev.stopPropagation();
+        this.props.record.update({
+            manual_reference: line.reference,
+            manual_delete: true,
+        });
+    }
+    selectReconcileLine(ev, line) {
+        this.props.record.update({
+            manual_reference: line.reference,
+        });
+        const triggerEv = new CustomEvent("reconcile-page-navigate", {
+            detail: {
+                name: "manual",
+                originalEv: ev,
+            },
+        });
+        this.env.bus.trigger("RECONCILE_PAGE_NAVIGATE", triggerEv);
+    }
+    async openMove(ev, moveId) {
+        ev.preventDefault();
+        ev.stopPropagation();
+        console.log(moveId);
+        const action = await this.orm.call("account.move", "get_formview_action", [
+            [moveId],
+        ]);
+        this.action.doAction(action);
+    }
+}
+AccountReconcileDataWidget.template = "account_reconcile_oca.ReconcileDataWidget";
+
+registry
+    .category("fields")
+    .add("account_reconcile_oca_data", AccountReconcileDataWidget);
