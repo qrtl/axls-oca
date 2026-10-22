@@ -3,11 +3,7 @@
 
 from odoo import api, fields, models
 
-READONLY_STATES = {
-    "purchase": [("readonly", True)],
-    "done": [("readonly", True)],
-    "cancel": [("readonly", True)],
-}
+from odoo.addons.purchase.models.purchase import PurchaseOrder as Purchase
 
 
 class PurchaseOrder(models.Model):
@@ -20,7 +16,7 @@ class PurchaseOrder(models.Model):
         store=True,
         readonly=False,
         precompute=True,
-        states=READONLY_STATES,
+        states=Purchase.READONLY_STATES,
         domain="['|', ('id', '=', company_partner_id), '&',"
         " ('id', 'child_of', company_partner_id), ('type', '=', 'invoice')]",
         help="Address of your own company to which the vendor should send the invoice.",

@@ -36,11 +36,12 @@ This module lets you select, on each purchase order, the address of your **own**
 company to which the vendor should send the invoice, and prints it on the
 purchase order and request for quotation reports.
 
-Odoo links a company to a single partner record, so a company operating from
-several locations has no standard place to hold more than one of its own
-addresses. This module reuses the child addresses of the company partner for
-that purpose: the head office (the company partner itself) and any of its
-address records can be selected per purchase order.
+A company can already hold several addresses as child addresses of its partner,
+for example one invoice address per location, but a purchase order has no field
+to tell the vendor which of them to invoice, and its reports only show the
+company address in the header. This module adds that field: the company partner
+itself (the head office) or any of its invoice addresses can be selected per
+purchase order.
 
 **Table of contents**
 
@@ -49,10 +50,6 @@ address records can be selected per purchase order.
 
 Configuration
 =============
-
-No configuration is needed to start using the module: as long as your company
-has no dedicated invoice address, purchase orders propose the address of the
-company itself.
 
 To offer additional locations:
 
@@ -64,6 +61,11 @@ Only the company itself and its invoice addresses can be selected on a purchase
 order. Once an invoice address exists it becomes the address proposed by default
 on new orders, while the company address stays selectable.
 
+To print an invoice address in the vendor's language, install
+`report_partner_address
+<https://github.com/OCA/reporting-engine/tree/16.0/report_partner_address>`__
+and set up the address as described in its readme.
+
 Usage
 =====
 
@@ -73,11 +75,6 @@ Usage
 #. Print the order or the request for quotation. The address is shown next to
    the vendor address, unless it is the company's own address, which the report
    header already carries.
-
-Known issues / Roadmap
-======================
-
-* The address is not carried over to the vendor bills created from the order.
 
 Bug Tracker
 ===========

@@ -378,31 +378,28 @@ ul.auto-toc {
 <p>This module lets you select, on each purchase order, the address of your <strong>own</strong>
 company to which the vendor should send the invoice, and prints it on the
 purchase order and request for quotation reports.</p>
-<p>Odoo links a company to a single partner record, so a company operating from
-several locations has no standard place to hold more than one of its own
-addresses. This module reuses the child addresses of the company partner for
-that purpose: the head office (the company partner itself) and any of its
-address records can be selected per purchase order.</p>
+<p>A company can already hold several addresses as child addresses of its partner,
+for example one invoice address per location, but a purchase order has no field
+to tell the vendor which of them to invoice, and its reports only show the
+company address in the header. This module adds that field: the company partner
+itself (the head office) or any of its invoice addresses can be selected per
+purchase order.</p>
 <p><strong>Table of contents</strong></p>
 <div class="contents local topic" id="contents">
 <ul class="simple">
 <li><a class="reference internal" href="#configuration" id="toc-entry-1">Configuration</a></li>
 <li><a class="reference internal" href="#usage" id="toc-entry-2">Usage</a></li>
-<li><a class="reference internal" href="#known-issues-roadmap" id="toc-entry-3">Known issues / Roadmap</a></li>
-<li><a class="reference internal" href="#bug-tracker" id="toc-entry-4">Bug Tracker</a></li>
-<li><a class="reference internal" href="#credits" id="toc-entry-5">Credits</a><ul>
-<li><a class="reference internal" href="#authors" id="toc-entry-6">Authors</a></li>
-<li><a class="reference internal" href="#contributors" id="toc-entry-7">Contributors</a></li>
-<li><a class="reference internal" href="#maintainers" id="toc-entry-8">Maintainers</a></li>
+<li><a class="reference internal" href="#bug-tracker" id="toc-entry-3">Bug Tracker</a></li>
+<li><a class="reference internal" href="#credits" id="toc-entry-4">Credits</a><ul>
+<li><a class="reference internal" href="#authors" id="toc-entry-5">Authors</a></li>
+<li><a class="reference internal" href="#contributors" id="toc-entry-6">Contributors</a></li>
+<li><a class="reference internal" href="#maintainers" id="toc-entry-7">Maintainers</a></li>
 </ul>
 </li>
 </ul>
 </div>
 <div class="section" id="configuration">
 <h2><a class="toc-backref" href="#toc-entry-1">Configuration</a></h2>
-<p>No configuration is needed to start using the module: as long as your company
-has no dedicated invoice address, purchase orders propose the address of the
-company itself.</p>
 <p>To offer additional locations:</p>
 <ol class="arabic simple">
 <li>Go to <em>Contacts</em> and open the contact of your company.</li>
@@ -412,6 +409,9 @@ set its <em>Address Type</em> to <em>Invoice Address</em>.</li>
 <p>Only the company itself and its invoice addresses can be selected on a purchase
 order. Once an invoice address exists it becomes the address proposed by default
 on new orders, while the company address stays selectable.</p>
+<p>To print an invoice address in the vendor’s language, install
+<a class="reference external" href="https://github.com/OCA/reporting-engine/tree/16.0/report_partner_address">report_partner_address</a>
+and set up the address as described in its readme.</p>
 </div>
 <div class="section" id="usage">
 <h2><a class="toc-backref" href="#toc-entry-2">Usage</a></h2>
@@ -424,14 +424,8 @@ the vendor address, unless it is the company’s own address, which the report
 header already carries.</li>
 </ol>
 </div>
-<div class="section" id="known-issues-roadmap">
-<h2><a class="toc-backref" href="#toc-entry-3">Known issues / Roadmap</a></h2>
-<ul class="simple">
-<li>The address is not carried over to the vendor bills created from the order.</li>
-</ul>
-</div>
 <div class="section" id="bug-tracker">
-<h2><a class="toc-backref" href="#toc-entry-4">Bug Tracker</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-3">Bug Tracker</a></h2>
 <p>Bugs are tracked on <a class="reference external" href="https://github.com/OCA/purchase-workflow/issues">GitHub Issues</a>.
 In case of trouble, please check there if your issue has already been reported.
 If you spotted it first, help us to smash it by providing a detailed and welcomed
@@ -439,15 +433,15 @@ If you spotted it first, help us to smash it by providing a detailed and welcome
 <p>Do not contact contributors directly about support or help with technical issues.</p>
 </div>
 <div class="section" id="credits">
-<h2><a class="toc-backref" href="#toc-entry-5">Credits</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-4">Credits</a></h2>
 <div class="section" id="authors">
-<h3><a class="toc-backref" href="#toc-entry-6">Authors</a></h3>
+<h3><a class="toc-backref" href="#toc-entry-5">Authors</a></h3>
 <ul class="simple">
 <li>Quartile</li>
 </ul>
 </div>
 <div class="section" id="contributors">
-<h3><a class="toc-backref" href="#toc-entry-7">Contributors</a></h3>
+<h3><a class="toc-backref" href="#toc-entry-6">Contributors</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://www.quartile.co">Quartile</a>:<ul>
 <li>Toshikimi Shigenobu</li>
@@ -456,7 +450,7 @@ If you spotted it first, help us to smash it by providing a detailed and welcome
 </ul>
 </div>
 <div class="section" id="maintainers">
-<h3><a class="toc-backref" href="#toc-entry-8">Maintainers</a></h3>
+<h3><a class="toc-backref" href="#toc-entry-7">Maintainers</a></h3>
 <p>This module is maintained by the OCA.</p>
 <a class="reference external image-reference" href="https://odoo-community.org">
 <img alt="Odoo Community Association" src="https://odoo-community.org/logo.png" />

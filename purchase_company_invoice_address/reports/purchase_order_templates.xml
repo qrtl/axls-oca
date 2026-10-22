@@ -2,14 +2,11 @@
 <odoo>
     <template id="report_company_invoice_address">
         <div class="mt-3">
-            <strong>Invoice address:</strong>
-            <div>
-                <span t-field="o.company_invoice_address_id.name" />
-                <div
-                    t-field="o.company_invoice_address_id"
-                    t-options='{"widget": "contact", "fields": ["address"], "no_marker": True}'
-                />
-            </div>
+            <strong>Invoicing address:</strong>
+            <div
+                t-field="o.company_invoice_address_id"
+                t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}'
+            />
         </div>
     </template>
     <template

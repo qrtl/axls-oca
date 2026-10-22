@@ -17,7 +17,7 @@ msgstr ""
 
 #. module: purchase_company_invoice_address
 #: model_terms:ir.ui.view,arch_db:purchase_company_invoice_address.report_company_invoice_address
-msgid "<strong>Invoice address:</strong>"
+msgid "<strong>Invoicing address:</strong>"
 msgstr "<strong>請求先住所:</strong>"
 
 #. module: purchase_company_invoice_address

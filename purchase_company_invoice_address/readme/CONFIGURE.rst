@@ -1,7 +1,3 @@
-No configuration is needed to start using the module: as long as your company
-has no dedicated invoice address, purchase orders propose the address of the
-company itself.
-
 To offer additional locations:
 
 #. Go to *Contacts* and open the contact of your company.
@@ -11,3 +7,8 @@ To offer additional locations:
 Only the company itself and its invoice addresses can be selected on a purchase
 order. Once an invoice address exists it becomes the address proposed by default
 on new orders, while the company address stays selectable.
+
+To print an invoice address in the vendor's language, install
+`report_partner_address
+<https://github.com/OCA/reporting-engine/tree/16.0/report_partner_address>`__
+and set up the address as described in its readme.
