@@ -8,13 +8,11 @@ from odoo.tests.common import TransactionCase
 class TestPurchaseMtoOwner(TransactionCase):
     @classmethod
     def setUpClass(cls):
-        super(TestPurchaseMtoOwner, cls).setUpClass()
-        # Get the MTO route and activate it if necessary
+        super().setUpClass()
         mto_route = cls.env.ref("stock.route_warehouse0_mto")
         purchase_route = cls.env.ref("purchase_stock.route_warehouse0_buy")
         if not mto_route.active:
             mto_route.write({"active": True})
-        # Create a product
         cls.product = cls.env["product.product"].create(
             {
                 "name": "Test",
@@ -22,9 +20,7 @@ class TestPurchaseMtoOwner(TransactionCase):
                 "route_ids": [Command.set([mto_route.id, purchase_route.id])],
             }
         )
-        # Create a vendor
-        cls.vendor = cls.env["res.partner"].create({"name": "Vendor"})
-        # Link the vendor to the product
+        cls.vendor = cls.env["res.partner"].create({"name": "Test"})
         cls.env["product.supplierinfo"].create(
             {
                 "partner_id": cls.vendor.id,
@@ -32,35 +28,33 @@ class TestPurchaseMtoOwner(TransactionCase):
             }
         )
         cls.owner_id = cls.env["res.partner"].create({"name": "Owner"})
+        cls.stock_location = cls.env.ref("stock.stock_location_stock")
+        cls.customer_location = cls.env.ref("stock.stock_location_customers")
+        cls.picking_type_out = cls.env.ref("stock.picking_type_out")
 
     def test_purchase_owner_id(self):
-        # Create an outgoing stock picking for the product
-        stock_location = self.env.ref("stock.stock_location_stock")
-        customer_location = self.env.ref("stock.stock_location_customers")
-        picking_type_out = self.env.ref("stock.picking_type_out")
-        stock_picking = self.env["stock.picking"].create(
+        picking = self.env["stock.picking"].create(
             {
-                "picking_type_id": picking_type_out.id,
-                "location_id": stock_location.id,
-                "location_dest_id": customer_location.id,
+                "picking_type_id": self.picking_type_out.id,
+                "location_id": self.stock_location.id,
+                "location_dest_id": self.customer_location.id,
                 "owner_id": self.owner_id.id,
                 "move_ids": [
                     Command.create(
                         {
-                            "name": "test: move out",
+                            "name": "Test: move out",
                             "product_id": self.product.id,
                             "product_uom_qty": 10,
                             "procure_method": "make_to_order",
                             "product_uom": self.product.uom_id.id,
-                            "location_id": stock_location.id,
-                            "location_dest_id": customer_location.id,
+                            "location_id": self.stock_location.id,
+                            "location_dest_id": self.customer_location.id,
                         }
                     )
                 ],
             }
         )
-        # Confirm the stock picking
-        stock_picking.action_confirm()
+        picking.action_confirm()
         purchase_order = self.env["purchase.order"].search(
             [("partner_id", "=", self.vendor.id)]
         )
