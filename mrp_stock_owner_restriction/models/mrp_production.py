@@ -1,4 +1,4 @@
-# Copyright 2023 Quartile Limited
+# Copyright 2023 Quartile
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 from odoo import fields, models
@@ -16,11 +16,3 @@ class MrpProduction(models.Model):
         help="Produced products will be assigned to this owner.",
     )
     owner_restriction = fields.Selection(related="picking_type_id.owner_restriction")
-
-    def write(self, vals):
-        if "owner_id" in vals:
-            for production in self:
-                owner_restriction = self.picking_type_id.owner_restriction
-                if owner_restriction in ("unassigned_owner", "picking_partner"):
-                    production.move_line_raw_ids.unlink()
-        return super().write(vals)
