@@ -249,6 +249,10 @@ class BiSQLViewField(models.Model):
             or False,
         }
 
+    def _prepare_form_field(self):
+        self.ensure_one()
+        return f"""<field name="{self.name}" context="{self.field_context}"/>\n"""
+
     def _prepare_tree_field(self):
         self.ensure_one()
         if self.tree_visibility == "unavailable":
@@ -261,8 +265,14 @@ class BiSQLViewField(models.Model):
         elif self.tree_visibility == "optional_show":
             visibility_text = 'optional="show"'
 
+        operator_text = ""
+        if self.group_operator == "sum":
+            operator_text = f'sum="{_("Total")}"'
+        elif self.group_operator == "avg":
+            operator_text = f'avg="{_("Average")}"'
+
         return (
-            f"""<field name="{self.name}" {visibility_text}"""
+            f"""<field name="{self.name}" {visibility_text} {operator_text}"""
             f""" context="{self.field_context}"/>\n"""
         )
 
@@ -292,10 +302,19 @@ class BiSQLViewField(models.Model):
 
     def _prepare_search_filter_field(self):
         self.ensure_one()
-        if not self.is_group_by:
-            return ""
-        return (
-            f"""<filter name="group_by_{self.name}" """
-            f"""string="{self.field_description}" """
-            f"""context="{{'group_by':'{self.name}'}}"/>\n"""
-        )
+        group_by_filter = ""
+        field_filter = ""
+        if self.is_group_by:
+            group_by_filter = (
+                f"""<filter name="group_by_{self.name}" """
+                f"""string="{self.field_description}" """
+                f"""context="{{'group_by':'{self.name}'}}"/>\n"""
+            )
+        if self.ttype in ["date", "datetime"]:
+            field_filter = (
+                f"""<filter name="filter_{self.name}" """
+                f"""string="{self.field_description}" """
+                f"""date="{self.name}"/>\n"""
+            )
+        res = "%s%s" % (field_filter, group_by_filter)
+        return res
