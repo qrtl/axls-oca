@@ -47,6 +47,20 @@ class TestReport(common.TransactionCase):
         dict_report = list(csv.DictReader(str_io, delimiter=";", quoting=csv.QUOTE_ALL))
         self.assertEqual(self.docs.name, dict(dict_report[0])["name"])
 
+    def test_attachment_use(self):
+        self.report.attachment = "object.name+'.csv'"
+        self.report.attachment_use = True
+        rep = self.report_object._render(self.report_name, self.docs.ids, {})
+        attachment = self.env["ir.attachment"].search(
+            [("name", "=", self.docs.name + ".csv")]
+        )
+        self.assertTrue(attachment)
+        self.assertEqual(attachment.raw.decode(), rep[0])
+        rep_from_attachment = self.report_object._render(
+            self.report_name, self.docs.ids, {}
+        )
+        self.assertTupleEqual(rep, rep_from_attachment)
+
     def test_id_retrieval(self):
 
         # Typical call from WebUI with wizard
@@ -82,6 +96,12 @@ class TestReport(common.TransactionCase):
         report.write({"encoding": "xyz"})
         with self.assertRaises(UserError):
             rep = report._render_csv(self.report_name, self.docs.ids, {})
+
+    def test_report_docids_is_none(self):
+        """
+        Test when docids is None (should not raise TypeError)
+        """
+        self.report_object._render_csv(self.report_name, None, {})
 
 
 class TestCsvReport(common.HttpCase):
