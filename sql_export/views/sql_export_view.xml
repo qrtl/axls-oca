@@ -43,6 +43,11 @@
                         attrs="{'readonly': [('state', '!=', 'draft')]}"
                     />
                     <field
+                        name="keep_generated_file"
+                        attrs="{'invisible': [('file_format', '!=', 'csv')], 'required': [('file_format', '=', 'csv')], 'readonly': [('state', '!=', 'draft')]}"
+                        groups="base.group_no_one"
+                    />
+                    <field
                         name="copy_options"
                         attrs="{'invisible': [('file_format', '!=', 'csv')], 'required': [('file_format', '=', 'csv')], 'readonly': [('state', '!=', 'draft')]}"
                     />
@@ -72,6 +77,8 @@
         <field name="mode">primary</field>
         <field name="arch" type="xml">
             <field name="state" position="after">
+                <field name="last_execution_date" optional="hide" />
+                <field name="last_execution_uid" optional="hide" />
                 <button
                     name="export_sql_query"
                     string="Execute Query"
