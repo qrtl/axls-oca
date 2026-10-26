@@ -152,13 +152,6 @@
             display: inline-block !important;
         }
 
-        .o_searchview_input_container > .o_searchview_autocomplete {
-            left: 0;
-            right: 0;
-            > li {
-                padding: 10px 0px;
-            }
-        }
         .o_searchview_quick {
             display: flex;
             flex: 1 1 auto;
