@@ -1,8 +1,9 @@
-# Copyright 2024 Quartile Limited
+# Copyright 2024 Quartile (https://www.quartile.co)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl)
 
 from odoo import _, fields, models
 from odoo.exceptions import UserError
+from odoo.tools.float_utils import float_compare
 
 
 class StockPicking(models.Model):
@@ -41,7 +42,16 @@ class StockPicking(models.Model):
                 if not getattr(line.move_id, "is_subcontract", False)
             ]
             pick._check_location_consistency(pick.location_id, line_source_locations)
-            pick._check_location_consistency(
-                pick.location_dest_id, pick.move_line_ids.location_dest_id
-            )
+            if pick._check_immediate():
+                line_dest_locations = pick.move_line_ids.location_dest_id
+            else:
+                line_dest_locations = pick.move_line_ids.filtered(
+                    lambda line: float_compare(
+                        line.qty_done,
+                        0.0,
+                        precision_rounding=line.product_uom_id.rounding,
+                    )
+                    > 0
+                ).mapped("location_dest_id")
+            pick._check_location_consistency(pick.location_dest_id, line_dest_locations)
         return super()._action_done()
