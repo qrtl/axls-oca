@@ -1,6 +1,8 @@
 # Copyright 2018 Tecnativa - Sergio Teruel
 # Copyright 2020 ACSONE SA/NV
+# Copyright 2025 Moduon Team
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
+from odoo.addons.base.tests.common import DISABLED_MAIL_CONTEXT
 
 
 class CommonStockPickingAutoCreateLot(object):
@@ -14,12 +16,15 @@ class CommonStockPickingAutoCreateLot(object):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.env = cls.env(context=dict(cls.env.context, tracking_disable=True))
+        cls.env = cls.env(context=dict(cls.env.context, **DISABLED_MAIL_CONTEXT))
         cls.lot_obj = cls.env["stock.lot"]
         cls.warehouse = cls.env.ref("stock.warehouse0")
         cls.picking_type_in = cls.env.ref("stock.picking_type_in")
         cls.supplier_location = cls.env.ref("stock.stock_location_suppliers")
         cls.supplier = cls.env["res.partner"].create({"name": "Supplier - test"})
+        cls.auto_lot_category = cls.env["product.category"].create(
+            {"name": "Test Auto Lot Category", "auto_create_lot": True}
+        )
 
     @classmethod
     def _create_product(cls, tracking="lot", auto=True):

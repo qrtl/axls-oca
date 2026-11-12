@@ -4,7 +4,7 @@
 {
     "name": "Stock Picking Auto Create Lot",
     "summary": "Auto create lots for incoming pickings",
-    "version": "16.0.3.0.0",
+    "version": "16.0.3.2.0",
     "development_status": "Production/Stable",
     "category": "stock",
     "website": "https://github.com/OCA/stock-logistics-workflow",
@@ -12,6 +12,10 @@
     "license": "AGPL-3",
     "installable": True,
     "depends": ["stock"],
-    "data": ["views/product_views.xml", "views/stock_picking_type_views.xml"],
+    "data": [
+        "views/product_views.xml",
+        "views/product_category_views.xml",
+        "views/stock_picking_type_views.xml",
+    ],
     "maintainers": ["sergio-teruel"],
 }

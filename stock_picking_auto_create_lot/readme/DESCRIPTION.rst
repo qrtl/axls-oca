@@ -1,2 +1,2 @@
 This module extends the functionality of stock module to allow auto create
-lots for incoming pickings.
+lots for selected picking types.
