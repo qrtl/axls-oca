@@ -6,7 +6,7 @@
 .o_web_client .o_DialogManager_dialog {
     /* Show sided viewer on large screens */
     @media (min-width: 1533px) {
-        &:not(:has(.o_AttachmentDeleteConfirm)) {
+        &:has(.o_AttachmentViewer) {
             position: static;
         }
         .o_AttachmentViewer_main {
@@ -14,7 +14,7 @@
         }
         .o_AttachmentViewer {
             // On-top of navbar
-            z-index: 10;
+            z-index: 1100;
             position: absolute;
             right: 0;
             top: 0;
@@ -37,7 +37,7 @@
                 display: none;
             }
             .o_AttachmentViewer_viewIframe {
-                width: 95%;
+                width: 100% !important;
             }
         }
     }
