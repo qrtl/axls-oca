@@ -3,6 +3,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from datetime import datetime
+from mimetypes import guess_type
 
 from odoo import _, fields, models
 from odoo.exceptions import UserError
@@ -63,11 +64,54 @@ class SqlFileWizard(models.TransientModel):
                 % {"name": sql_export.name, "date": date, "extension": extension},
             }
         )
-        return {
-            "view_mode": "form",
-            "res_model": "sql.file.wizard",
-            "res_id": self.id,
-            "type": "ir.actions.act_window",
-            "target": "new",
-            "context": self.env.context,
+        # Bypass ORM to avoid changing the write_date/uid from sql query on a simple
+        # execution. This also avoid error if user has no update right on the
+        # sql.export object.
+        self.env.cr.execute(
+            """
+            UPDATE sql_export
+            SET last_execution_date = %s, last_execution_uid = %s
+            WHERE id = %s
+        """,
+            (
+                fields.Datetime.to_string(fields.Datetime.now()),
+                self.env.user.id,
+                sql_export.id,
+            ),
+        )
+        self._get_field_attachment().sudo().write(
+            {
+                "name": self.file_name,
+                "mimetype": guess_type(self.file_name)[0],
+            }
+        )
+        action = {
+            "name": "SQL Export",
+            "type": "ir.actions.act_url",
+            "url": "web/content/?model=%s&id=%d&filename_field=filename&"
+            "field=binary_file&download=true&filename=%s"
+            % (self._name, self.id, self.file_name),
+            "target": "self",
         }
+        return action
+
+    def _get_field_attachment(self):
+        """Return the attachment of the binary_file field"""
+        return self.env["ir.attachment"].search(
+            [
+                ("res_model", "=", self._name),
+                ("res_id", "in", self.ids),
+                ("res_field", "=", "binary_file"),
+            ],
+        )
+
+    def unlink(self):
+        for this in self.filtered("sql_export_id.keep_generated_file"):
+            this._get_field_attachment().write(
+                {
+                    "res_model": this.sql_export_id._name,
+                    "res_id": this.sql_export_id.id,
+                    "res_field": None,
+                }
+            )
+        return super().unlink()
