@@ -6,3 +6,5 @@
 * `Quartile <https://www.quartile.co>`__:
 
   * Aung Ko Ko Lin
+
+* Eduardo de Miguel <info@moduon.team>
