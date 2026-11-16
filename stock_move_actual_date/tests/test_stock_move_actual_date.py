@@ -1,11 +1,11 @@
 # Copyright 2025 Quartile (https://www.quartile.co)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
-from datetime import date
+from datetime import date, datetime
 
 from freezegun import freeze_time
 
-from odoo import Command
+from odoo import Command, fields
 from odoo.tests.common import TransactionCase
 
 
@@ -157,11 +157,15 @@ class TestStockMoveActualDate(TransactionCase):
     def test_svl_actual_date_manual_periodic(self):
         # Not using freeze_time() in this test since it cannot be applied to create_date
         # without a hack.
+        self.env.user.tz = "Asia/Tokyo"
         self.product_1.product_tmpl_id.categ_id.property_valuation = "manual_periodic"
         _, move = self.create_picking()
         valuation_layer = move.stock_valuation_layer_ids
         self.assertEqual(
-            valuation_layer.actual_date, valuation_layer.create_date.date()
+            valuation_layer.actual_date,
+            fields.Datetime.context_timestamp(
+                valuation_layer, valuation_layer.create_date
+            ).date(),
         )
 
     def test_fifo_svl_actual_date(self):
@@ -195,3 +199,33 @@ class TestStockMoveActualDate(TransactionCase):
         self.assertTrue(backorder, "Backorder picking should be created.")
         self.assertFalse(backorder.actual_date)
         self.assertFalse(backorder.move_ids.actual_date_source)
+
+    def test_open_qty_at_actual_date(self):
+        self.env.user.tz = "Asia/Tokyo"
+        _, _ = self.create_picking(date(2025, 7, 1))
+        wizard = self.env["stock.quantity.history"].create(
+            # 2025-06-30 23:00:00 JST
+            {"inventory_datetime": datetime(2025, 6, 30, 14, 0, 0)}
+        )
+        action = wizard.open_at_date()
+        self.assertEqual(
+            self.product_1.with_context(**action["context"]).qty_available, 0.0
+        )
+        self.product_1.invalidate_recordset()
+        action = wizard.open_qty_at_actual_date()
+        self.assertEqual(
+            self.product_1.with_context(**action["context"]).qty_available, 0.0
+        )
+        wizard = self.env["stock.quantity.history"].create(
+            # 2025-07-01 00:00:00 JST
+            {"inventory_datetime": datetime(2025, 6, 30, 15, 0, 0)}
+        )
+        action = wizard.open_at_date()
+        self.assertEqual(
+            self.product_1.with_context(**action["context"]).qty_available, 0.0
+        )
+        self.product_1.invalidate_recordset()
+        action = wizard.open_qty_at_actual_date()
+        self.assertEqual(
+            self.product_1.with_context(**action["context"]).qty_available, 10.0
+        )

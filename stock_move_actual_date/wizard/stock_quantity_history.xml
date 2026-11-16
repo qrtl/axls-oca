@@ -13,6 +13,13 @@
                     class="btn-primary"
                     invisible="context.get('active_model') != 'stock.valuation.layer'"
                 />
+                <button
+                    name="open_qty_at_actual_date"
+                    string="Inventory as of Actual Date"
+                    type="object"
+                    class="btn-primary"
+                    invisible="context.get('active_model') != 'stock.quant'"
+                />
             </xpath>
         </field>
     </record>
