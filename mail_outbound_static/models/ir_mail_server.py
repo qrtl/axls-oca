@@ -45,7 +45,7 @@ class IrMailServer(models.Model):
         if self.smtp_from:
             match = re.match(
                 r"^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\."
-                r"[a-z]{2,4})$",
+                r"[a-z]{2,63})$",
                 self.smtp_from,
             )
             if match is None:
@@ -137,10 +137,10 @@ class IrMailServer(models.Model):
             mail_server_id = self.sudo().search([], order="sequence", limit=1).id
         return mail_server_id
 
-    @api.model
-    def create(self, values):
+    @api.model_create_multi
+    def create(self, vals_list):
         self.clear_caches()
-        return super().create(values)
+        return super().create(vals_list)
 
     def write(self, values):
         self.clear_caches()
