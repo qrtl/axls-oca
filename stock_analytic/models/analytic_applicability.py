@@ -18,13 +18,8 @@ class AccountAnalyticApplicability(models.Model):
 
     def _get_score(self, **kwargs):
         score = super()._get_score(**kwargs)
-        if score == -1:
-            return -1
-        picking_type = self.env["stock.picking.type"].browse(
-            kwargs.get("picking_type", None)
-        )
-        if picking_type and self.stock_picking_type_id:
-            if picking_type == self.stock_picking_type_id:
+        if score >= 0 and self.stock_picking_type_id:
+            if kwargs.get("picking_type") == self.stock_picking_type_id.id:
                 score += 1
             else:
                 return -1

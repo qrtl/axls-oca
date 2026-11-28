@@ -33,11 +33,12 @@ class StockMove(models.Model):
         )
         if not self.analytic_distribution:
             return res
+        accounts = self.product_id.product_tmpl_id.get_product_accounts()
+        account_valuation_id = (
+            accounts.get("stock_valuation") and accounts["stock_valuation"].id
+        )
         for line in res:
-            if (
-                line[2]["account_id"]
-                != self.product_id.categ_id.property_stock_valuation_account_id.id
-            ):
+            if line[2]["account_id"] != account_valuation_id:
                 # Add analytic account in debit line
                 line[2].update({"analytic_distribution": self.analytic_distribution})
         return res
@@ -84,6 +85,7 @@ class StockMove(models.Model):
 
     def _action_done(self, cancel_backorder=False):
         for move in self:
+            move.move_line_ids.analytic_distribution = move.analytic_distribution
             if not move._need_validate_distribution():
                 continue
             move._validate_distribution(
@@ -111,3 +113,8 @@ class StockMoveLine(models.Model):
         if self.analytic_distribution:
             res.update({"analytic_distribution": self.analytic_distribution})
         return res
+
+    def write(self, vals):
+        if "analytic_distribution" in vals:
+            self.move_id.analytic_distribution = vals["analytic_distribution"]
+        return super().write(vals)
