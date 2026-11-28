@@ -1,0 +1,163 @@
+name: OCA upstream sync
+
+# Weekly drift check against the upstream OCA repos the vendored modules came
+# from. The scheduled run only ever reports -- it opens or updates one issue and
+# changes no code. Writing is a deliberate act: run the workflow by hand with
+# mode=apply (safe fast-forwards) or mode=merge (a named patched module).
+
+on:
+  schedule:
+    # Mondays, 02:20 UTC = 09:20 Bangkok.
+    - cron: "20 2 * * 1"
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "What to do"
+        required: true
+        default: check
+        type: choice
+        options:
+          - check
+          - discover-baselines
+          - apply
+          - merge
+      modules:
+        description: "Module(s) for apply/merge — space separated; blank = all syncable"
+        required: false
+        type: string
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
+concurrency:
+  group: oca-upstream-sync
+  cancel-in-progress: false
+
+env:
+  SERIES: "16.0"
+  MODE: ${{ inputs.mode || 'check' }}
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ env.SERIES }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - run: pip install --quiet pyyaml
+
+      # Upstream clones are blobless and reused across runs; a stale cache only
+      # costs a fetch, never correctness, since every ref is resolved by sha.
+      - uses: actions/cache@v4
+        with:
+          path: .oca-sync-cache
+          key: oca-sync-${{ env.SERIES }}-${{ hashFiles('.oca-sync.yml') }}
+          restore-keys: oca-sync-${{ env.SERIES }}-
+
+      - name: Report drift
+        if: env.MODE == 'check'
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          python3 scripts/sync_oca_modules.py --check \
+            --workdir .oca-sync-cache \
+            --report-file drift.md
+
+      # One issue, reused week to week, so the drift lives at a stable URL
+      # instead of accumulating a pile of near-identical issues.
+      - name: Open or update the drift issue
+        if: env.MODE == 'check'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          title="OCA upstream drift — ${SERIES}"
+          existing=$(gh issue list --state open --label oca-upstream-sync \
+            --search "$title in:title" --json number --jq '.[0].number // empty')
+          gh label create oca-upstream-sync --color ededed \
+            --description "Weekly OCA upstream drift report" 2>/dev/null || true
+          if [ -n "$existing" ]; then
+            gh issue edit "$existing" --body-file drift.md
+            echo "updated issue #$existing"
+          else
+            gh issue create --title "$title" --body-file drift.md \
+              --label oca-upstream-sync
+          fi
+
+      - name: Discover baselines
+        if: env.MODE == 'discover-baselines'
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          python3 scripts/sync_oca_modules.py --discover-baselines \
+            --workdir .oca-sync-cache
+
+      - name: Apply safe syncs
+        if: env.MODE == 'apply'
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          # Via env, not interpolated into the script: a dispatch input is
+          # attacker-controlled text as far as the shell is concerned.
+          MODULES: ${{ inputs.modules }}
+        run: |
+          # shellcheck disable=SC2086
+          python3 scripts/sync_oca_modules.py --apply $MODULES \
+            --workdir .oca-sync-cache
+
+      - name: Merge upstream into a patched module
+        if: env.MODE == 'merge'
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          MODULES: ${{ inputs.modules }}
+        # Conflicts are the expected outcome often enough that they must not
+        # fail the job: the half-merged tree with its markers is the deliverable,
+        # and the PR is where someone resolves it.
+        continue-on-error: true
+        run: |
+          python3 scripts/sync_oca_modules.py --merge "$MODULES" \
+            --workdir .oca-sync-cache
+
+      - name: Open a draft PR with whatever changed
+        if: env.MODE == 'apply' || env.MODE == 'merge' || env.MODE == 'discover-baselines'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          rm -rf .oca-sync-cache
+          if [ -z "$(git status --porcelain)" ]; then
+            echo "nothing changed."
+            exit 0
+          fi
+          branch="bot/oca-sync-${MODE}-$(date -u +%Y%m%d-%H%M)"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$branch"
+          git add -A
+          git commit -m "[IMP] oca-sync: ${MODE}"
+          git push -u origin "$branch"
+          {
+            echo "Opened by the \`OCA upstream sync\` workflow (mode: \`${MODE}\`)."
+            echo
+            if [ "$MODE" = "merge" ]; then
+              echo "**This is a three-way merge into a locally patched module.**"
+              echo "Check for conflict markers before reviewing anything else:"
+              echo
+              echo '```'
+              git grep -n '^<<<<<<< ' -- . || echo "none"
+              echo '```'
+              echo
+            fi
+            echo "Review the diff as a normal upstream sync. CI does not run on"
+            echo "branches pushed with \`GITHUB_TOKEN\`, so close and reopen the PR"
+            echo "(or push a commit) if you need the test workflow to fire."
+          } > body.md
+          gh pr create --draft --base "$SERIES" --head "$branch" \
+            --title "[IMP] oca-sync: ${MODE}" --body-file body.md
+          rm -f body.md
