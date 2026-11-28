@@ -1,0 +1,430 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* product_revision
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 16.0-20230701\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-05-02 06:39+0000\n"
+"PO-Revision-Date: 2025-05-02 06:39+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: product_revision
+#: model_terms:ir.ui.view,arch_db:product_revision.product_kanban_view_inherit
+#: model_terms:ir.ui.view,arch_db:product_revision.product_template_kanban_view_inherit
+msgid "<span class=\"text-muted ml-1\">- Rev:</span>"
+msgstr "<span class=\"text-muted ml-1\">- リビジョン:</span>"
+
+#. module: product_revision
+#: model_terms:ir.ui.view,arch_db:product_revision.product_kanban_view_inherit
+#: model_terms:ir.ui.view,arch_db:product_revision.product_template_kanban_view_inherit
+msgid "<span class=\"text-muted mr-1\">Ref:</span>"
+msgstr "<span class=\"text-muted mr-1\">参照:</span>"
+
+#. module: product_revision
+#: model_terms:ir.ui.view,arch_db:product_revision.view_product_template_form_inherit
+msgid "<span>Add Revision</span>"
+msgstr "<span>リビジョンを追加</span>"
+
+#. module: product_revision
+#: model_terms:ir.ui.view,arch_db:product_revision.view_product_template_form_inherit
+msgid "<span>View All</span>"
+msgstr "<span>すべて表示</span>"
+
+#. module: product_revision
+#. odoo-python
+#: code:addons/product_revision/models/product_revision.py:0
+#, python-format
+msgid ""
+"A revision cannot be linked to both a producttemplate and a product variant "
+"at the same time."
+msgstr "リビジョンは、製品テンプレートと製品バリアントの両方に同時にリンクすることはできません。"
+
+#. module: product_revision
+#. odoo-python
+#: code:addons/product_revision/models/product_revision.py:0
+#, python-format
+msgid ""
+"A revision must be linked to eithera product template or a product variant."
+msgstr "リビジョンは、製品テンプレートまたは製品バリアントのいずれかにリンクする必要があります。"
+
+#. module: product_revision
+#: model:ir.model.fields,field_description:product_revision.field_product_revision__message_needaction
+msgid "Action Needed"
+msgstr "アクションが必要"
+
+#. module: product_revision
+#: model:ir.model.fields,field_description:product_revision.field_product_revision__active
+#: model_terms:ir.ui.view,arch_db:product_revision.view_product_revision_search
+msgid "Active"
+msgstr "アクティブ"
+
+#. module: product_revision
+#: model:ir.model.fields,field_description:product_revision.field_product_revision__activity_ids
+msgid "Activities"
+msgstr "アクティビティ"
+
+#. module: product_revision
+#: model:ir.model.fields,field_description:product_revision.field_product_revision__activity_exception_decoration
+msgid "Activity Exception Decoration"
+msgstr "アクティビティ例外の装飾"
+
+#. module: product_revision
+#: model:ir.model.fields,field_description:product_revision.field_product_revision__activity_state
+msgid "Activity State"
+msgstr "アクティビティ状態"
+
+#. module: product_revision
+#: model:ir.model.fields,field_description:product_revision.field_product_revision__activity_type_icon
+msgid "Activity Type Icon"
+msgstr "アクティビティタイプのアイコン"
+
+#. module: product_revision
+#: model:ir.model.fields,help:product_revision.field_product_revision__notes
+msgid "Additional information about this revision"
+msgstr "このリビジョンに関する追加情報"
+
+#. module: product_revision
+#: model:ir.model.fields,field_description:product_revision.field_product_revision__message_attachment_count
+msgid "Attachment Count"
+msgstr "添付ファイルの数"
+
+#. module: product_revision
+#: model:ir.model.fields,field_description:product_revision.field_product_revision__change_date
+#: model_terms:ir.ui.view,arch_db:product_revision.view_product_revision_search
+msgid "Change Date"
+msgstr "変更日"
+
+#. module: product_revision
+#. odoo-python
+#: code:addons/product_revision/models/product_product.py:0
+#: code:addons/product_revision/models/product_template.py:0
+#, python-format
+msgid "Create Revision"
+msgstr "リビジョンを作成"
+
+#. module: product_revision
+#: model_terms:ir.actions.act_window,help:product_revision.action_product_revision
+msgid "Create your first product revision"
+msgstr "最初の製品リビジョンを作成してください"
+
+#. module: product_revision
+#: model:ir.model.fields,field_description:product_revision.field_product_revision__create_uid
+msgid "Created by"
+msgstr "作成者"
+
+#. module: product_revision
+#: model:ir.model.fields,field_description:product_revision.field_product_revision__create_date
+msgid "Created on"
+msgstr "作成日"
+
+#. module: product_revision
+#: model:ir.model.fields,field_description:product_revision.field_product_product__current_revision_id
+#: model:ir.model.fields,field_description:product_revision.field_product_product__current_revision_number
+#: model:ir.model.fields,field_description:product_revision.field_product_template__current_revision_id
+#: model:ir.model.fields,field_description:product_revision.field_product_template__current_revision_number
+msgid "Current Revision"
+msgstr "現在のリビジョン"
+
+#. module: product_revision
+#: model:ir.model.fields,help:product_revision.field_product_revision__change_date
+msgid "Date when the revision was made"
+msgstr "リビジョンが行われた日付"
+
+#. module: product_revision
+#: model:ir.model.fields,help:product_revision.field_product_revision__name
+msgid "Designation for the revision"
+msgstr "リビジョンの名称"
+
+#. module: product_revision
+#: model:ir.model.fields,field_description:product_revision.field_product_revision__display_name
+msgid "Display Name"
+msgstr "表示名"
+
+#. module: product_revision
+#: model:ir.model.fields,field_description:product_revision.field_product_revision__message_follower_ids
+msgid "Followers"
+msgstr "フォロワー"
+
+#. module: product_revision
+#: model:ir.model.fields,field_description:product_revision.field_product_revision__message_partner_ids
+msgid "Followers (Partners)"
+msgstr "フォロワー（パートナー）"
+
+#. module: product_revision
+#: model:ir.model.fields,help:product_revision.field_product_revision__activity_type_icon
+msgid "Font awesome icon e.g. fa-tasks"
+msgstr "Font Awesome アイコン例: fa-tasks"
+
+#. module: product_revision
+#: model_terms:ir.ui.view,arch_db:product_revision.view_product_revision_search
+msgid "Group By"
+msgstr "グループ化"
+
+#. module: product_revision
+#: model:ir.model.fields,field_description:product_revision.field_product_revision__has_message
+msgid "Has Message"
+msgstr "メッセージあり"
+
+#. module: product_revision
+#: model:ir.model.fields,field_description:product_revision.field_product_revision__id
+msgid "ID"
+msgstr "ID"
+
+#. module: product_revision
+#: model:ir.model.fields,field_description:product_revision.field_product_revision__activity_exception_icon
+msgid "Icon"
+msgstr "アイコン"
+
+#. module: product_revision
+#: model:ir.model.fields,help:product_revision.field_product_revision__activity_exception_icon
+msgid "Icon to indicate an exception activity."
+msgstr "例外アクティビティを示すアイコン"
+
+#. module: product_revision
+#: model:ir.model.fields,help:product_revision.field_product_revision__message_needaction
+msgid "If checked, new messages require your attention."
+msgstr "チェックされた場合、新しいメッセージに注意が必要です。"
+
+#. module: product_revision
+#: model:ir.model.fields,help:product_revision.field_product_revision__message_has_error
+#: model:ir.model.fields,help:product_revision.field_product_revision__message_has_sms_error
+msgid "If checked, some messages have a delivery error."
+msgstr "チェックされた場合、一部のメッセージに配送エラーがあります。"
+
+#. module: product_revision
+#: model_terms:ir.ui.view,arch_db:product_revision.view_product_revision_search
+msgid "Inactive"
+msgstr "非アクティブ"
+
+#. module: product_revision
+#: model:ir.model.fields,help:product_revision.field_product_revision__active
+msgid "Indicates if this is the active revision"
+msgstr "これがアクティブなリビジョンであるかを示します。"
+
+#. module: product_revision
+#: model:ir.model.fields,field_description:product_revision.field_product_revision__internal_product_id
+msgid "Internal Product"
+msgstr "内部製品"
+
+#. module: product_revision
+#: model:ir.model.fields,field_description:product_revision.field_product_revision__message_is_follower
+msgid "Is Follower"
+msgstr "フォロワーである"
+
+#. module: product_revision
+#: model:ir.model.fields,field_description:product_revision.field_product_revision____last_update
+msgid "Last Modified on"
+msgstr "最終変更日"
+
+#. module: product_revision
+#: model:ir.model.fields,field_description:product_revision.field_product_revision__write_uid
+msgid "Last Updated by"
+msgstr "最終更新者"
+
+#. module: product_revision
+#: model:ir.model.fields,field_description:product_revision.field_product_revision__write_date
+msgid "Last Updated on"
+msgstr "最終更新日"
+
+#. module: product_revision
+#: model:ir.model.fields,help:product_revision.field_product_template__revision_ids
+msgid "List of revisions for this product"
+msgstr "この製品のリビジョン一覧"
+
+#. module: product_revision
+#: model:ir.model.fields,help:product_revision.field_product_product__revision_ids
+msgid "List of revisions for this product variant"
+msgstr "この製品バリアントのリビジョン一覧"
+
+#. module: product_revision
+#: model:ir.model.fields,field_description:product_revision.field_product_revision__message_main_attachment_id
+msgid "Main Attachment"
+msgstr "メイン添付ファイル"
+
+#. module: product_revision
+#: model:ir.model.fields,field_description:product_revision.field_product_revision__message_has_error
+msgid "Message Delivery error"
+msgstr "メッセージ配送エラー"
+
+#. module: product_revision
+#: model:ir.model.fields,field_description:product_revision.field_product_revision__message_ids
+msgid "Messages"
+msgstr "メッセージ"
+
+#. module: product_revision
+#: model:ir.model.fields,field_description:product_revision.field_product_revision__my_activity_date_deadline
+msgid "My Activity Deadline"
+msgstr "自分のアクティビティ期限"
+
+#. module: product_revision
+#: model:ir.model.fields,field_description:product_revision.field_product_revision__name
+msgid "Name"
+msgstr "名前"
+
+#. module: product_revision
+#: model:ir.model.fields,field_description:product_revision.field_product_revision__activity_date_deadline
+msgid "Next Activity Deadline"
+msgstr "次のアクティビティ期限"
+
+#. module: product_revision
+#: model:ir.model.fields,field_description:product_revision.field_product_revision__activity_summary
+msgid "Next Activity Summary"
+msgstr "次のアクティビティの概要"
+
+#. module: product_revision
+#: model:ir.model.fields,field_description:product_revision.field_product_revision__activity_type_id
+msgid "Next Activity Type"
+msgstr "次のアクティビティタイプ"
+
+#. module: product_revision
+#: model:ir.model.fields,field_description:product_revision.field_product_revision__notes
+#: model_terms:ir.ui.view,arch_db:product_revision.view_product_revision_form
+msgid "Notes"
+msgstr "ノート"
+
+#. module: product_revision
+#: model:ir.model.fields,field_description:product_revision.field_product_revision__message_needaction_counter
+msgid "Number of Actions"
+msgstr "アクション数"
+
+#. module: product_revision
+#: model:ir.model.fields,field_description:product_revision.field_product_revision__message_has_error_counter
+msgid "Number of errors"
+msgstr "エラー数"
+
+#. module: product_revision
+#: model:ir.model.fields,help:product_revision.field_product_revision__message_needaction_counter
+msgid "Number of messages which requires an action"
+msgstr "アクションが必要なメッセージ数"
+
+#. module: product_revision
+#: model:ir.model.fields,help:product_revision.field_product_revision__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr "配送エラーのあるメッセージ数"
+
+#. module: product_revision
+#: model:ir.model.fields,help:product_revision.field_product_template__revision_count
+msgid "Number of revisions for this product"
+msgstr "この製品のリビジョン数"
+
+#. module: product_revision
+#: model:ir.model.fields,help:product_revision.field_product_product__revision_count
+msgid "Number of revisions for this product variant"
+msgstr "この製品バリアントのリビジョン数"
+
+#. module: product_revision
+#: model:ir.model,name:product_revision.model_product_template
+msgid "Product"
+msgstr "プロダクト"
+
+#. module: product_revision
+#: model:ir.model,name:product_revision.model_product_revision
+#: model_terms:ir.ui.view,arch_db:product_revision.view_product_revision_form
+msgid "Product Revision"
+msgstr "製品リビジョン"
+
+#. module: product_revision
+#: model:ir.actions.act_window,name:product_revision.action_product_revision
+msgid "Product Revisions"
+msgstr "製品リビジョン"
+
+#. module: product_revision
+#: model:ir.model.fields,field_description:product_revision.field_product_revision__product_tmpl_id
+#: model_terms:ir.ui.view,arch_db:product_revision.view_product_revision_search
+msgid "Product Template"
+msgstr "製品テンプレート"
+
+#. module: product_revision
+#: model:ir.model,name:product_revision.model_product_product
+#: model:ir.model.fields,field_description:product_revision.field_product_revision__product_id
+#: model_terms:ir.ui.view,arch_db:product_revision.view_product_revision_search
+msgid "Product Variant"
+msgstr "プロダクトバリアント"
+
+#. module: product_revision
+#: model_terms:ir.actions.act_window,help:product_revision.action_product_revision
+msgid ""
+"Product revisions allow you to track changes to your products over time."
+msgstr "製品のリビジョンを使用すると、製品の変更を時間の経過とともに追跡できます。"
+
+#. module: product_revision
+#: model:ir.model.fields,help:product_revision.field_product_revision__product_tmpl_id
+msgid "Product template this revision belongs to"
+msgstr "このリビジョンが属する製品テンプレート"
+
+#. module: product_revision
+#: model:ir.model.fields,help:product_revision.field_product_revision__product_id
+msgid "Product variant this revision belongs to"
+msgstr "このリビジョンが属する製品バリアント"
+
+#. module: product_revision
+#: model:ir.model.fields,field_description:product_revision.field_product_revision__activity_user_id
+msgid "Responsible User"
+msgstr "担当ユーザー"
+
+#. module: product_revision
+#: model:ir.model.fields,field_description:product_revision.field_product_product__revision_count
+#: model:ir.model.fields,field_description:product_revision.field_product_template__revision_count
+msgid "Revision Count"
+msgstr "リビジョン数"
+
+#. module: product_revision
+#: model_terms:ir.ui.view,arch_db:product_revision.view_product_revision_form
+msgid "Revision History"
+msgstr "リビジョン履歴"
+
+#. module: product_revision
+#: model_terms:ir.ui.view,arch_db:product_revision.view_product_revision_form
+msgid "Revision Name"
+msgstr "リビジョン名"
+
+#. module: product_revision
+#: model:ir.model.fields,field_description:product_revision.field_product_revision__revision_number
+#: model_terms:ir.ui.view,arch_db:product_revision.view_product_revision_form
+msgid "Revision Number"
+msgstr "リビジョン番号"
+
+#. module: product_revision
+#: model:ir.model.constraint,message:product_revision.constraint_product_revision_product_revision_unique
+msgid "Revision number must be unique per product or product variant!"
+msgstr "リビジョン番号は、製品または製品バリアントごとに一意である必要があります！"
+
+#. module: product_revision
+#: model:ir.model.fields,help:product_revision.field_product_revision__revision_number
+msgid "Version or iterative identifier"
+msgstr "バージョンまたは反復識別子"
+
+#. module: product_revision
+#: model_terms:ir.ui.view,arch_db:product_revision.view_product_revision_form
+msgid ""
+"This section shows the history of this revision. All revisions for a product are preserved in the system,\n"
+"                with only one being active at a time. When a new revision is created, previous revisions are automatically\n"
+"                set to inactive but remain in the system for historical reference."
+msgstr "このセクションは、このリビジョンの履歴を表示します。製品の全てのリビジョンはシステムに保存され、同時に一つだけがアクティブとなります。新しいリビジョンが作成されると、以前のリビジョンは自動的に非アクティブに設定され、履歴として残ります。"
+
+#. module: product_revision
+#: model:ir.model.fields,help:product_revision.field_product_revision__activity_exception_decoration
+msgid "Type of the exception activity on record."
+msgstr "レコード上の例外アクティビティの種類"
+
+#. module: product_revision
+#: model:ir.model.fields,help:product_revision.field_product_revision__internal_product_id
+msgid "Unique internal identifier of the product"
+msgstr "製品の内部一意識別子"
+
+#. module: product_revision
+#: model:ir.model.fields,field_description:product_revision.field_product_revision__website_message_ids
+msgid "Website Messages"
+msgstr "ウェブサイトメッセージ"
+
+#. module: product_revision
+#: model:ir.model.fields,help:product_revision.field_product_revision__website_message_ids
+msgid "Website communication history"
+msgstr "ウェブサイトの通信履歴"

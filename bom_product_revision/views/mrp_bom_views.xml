@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <!-- Extend the BOM form view to add revision field for the BOM product -->
+    <record id="mrp_bom_form_view_inherit" model="ir.ui.view">
+        <field name="name">mrp.bom.form.inherit.revision</field>
+        <field name="model">mrp.bom</field>
+        <field name="inherit_id" ref="mrp.mrp_bom_form_view" />
+        <field name="arch" type="xml">
+            <!-- Add warning banner at the top of the form -->
+            <xpath expr="//sheet" position="before">
+                <field
+                    name="inactive_revision_warning"
+                    widget="html"
+                    nolabel="1"
+                    attrs="{'invisible': [('inactive_revision_warning', '=', False)]}"
+                />
+            </xpath>
+
+            <!-- Add revision field after product_id field for the BOM product -->
+            <xpath expr="//field[@name='product_id']" position="after">
+                <field name="revision_active" invisible="1" />
+                <field
+                    name="revision_id"
+                    options="{'no_create': True}"
+                    context="{'product_id': product_id, 'product_tmpl_id': product_tmpl_id}"
+                    decoration-danger="revision_id and not revision_active"
+                />
+                <field name="revision_number" />
+            </xpath>
+
+            <!-- Add revision field after product_id field in BOM lines -->
+            <xpath
+                expr="//field[@name='bom_line_ids']/tree//field[@name='product_id']"
+                position="after"
+            >
+                <field name="revision_active" invisible="1" />
+                <field
+                    name="revision_id"
+                    optional="show"
+                    options="{'no_create': True}"
+                    context="{'product_id': product_id, 'default_product_id': product_id}"
+                    decoration-danger="revision_id and not revision_active"
+                />
+                <field name="revision_number" optional="show" />
+            </xpath>
+
+            <!-- BOM line form view is handled differently in Odoo 16 -->
+        </field>
+    </record>
+
+    <!-- Extend the BOM tree view to add revision field -->
+    <record id="mrp_bom_tree_view_inherit" model="ir.ui.view">
+        <field name="name">mrp.bom.tree.inherit.revision</field>
+        <field name="model">mrp.bom</field>
+        <field name="inherit_id" ref="mrp.mrp_bom_tree_view" />
+        <field name="arch" type="xml">
+            <!-- Add revision field after product_id field -->
+            <xpath expr="//field[@name='product_id']" position="after">
+                <field name="revision_active" invisible="1" />
+                <field
+                    name="revision_id"
+                    optional="show"
+                    decoration-danger="revision_id and not revision_active"
+                />
+                <field name="revision_number" optional="show" />
+            </xpath>
+        </field>
+    </record>
+
+    <!-- BOM line tree view is handled through the BOM form view -->
+
+    <!-- Extend the BOM line form view -->
+    <record id="mrp_bom_line_form_view_inherit" model="ir.ui.view">
+        <field name="name">mrp.bom.line.form.inherit.revision</field>
+        <field name="model">mrp.bom.line</field>
+        <field name="inherit_id" ref="mrp.mrp_bom_line_view_form" />
+        <field name="arch" type="xml">
+            <!-- Add warning banner at the top of the form -->
+            <xpath expr="//sheet" position="before">
+                <field
+                    name="inactive_revision_warning"
+                    widget="html"
+                    nolabel="1"
+                    attrs="{'invisible': [('inactive_revision_warning', '=', False)]}"
+                />
+            </xpath>
+
+            <!-- Add revision field after product_id field -->
+            <xpath expr="//field[@name='product_id']" position="after">
+                <field name="revision_active" invisible="1" />
+                <field
+                    name="revision_id"
+                    options="{'no_create': True}"
+                    context="{'product_id': product_id, 'default_product_id': product_id}"
+                    decoration-danger="revision_id and not revision_active"
+                />
+                <field name="revision_number" />
+            </xpath>
+        </field>
+    </record>
+</odoo>

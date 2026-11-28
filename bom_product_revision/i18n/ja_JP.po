@@ -1,0 +1,127 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* bom_product_revision
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 16.0-20230701\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-05-06 23:02+0000\n"
+"PO-Revision-Date: 2025-05-06 23:02+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: bom_product_revision
+#: model:ir.model,name:bom_product_revision.model_mrp_bom
+msgid "Bill of Material"
+msgstr "部品表"
+
+#. module: bom_product_revision
+#: model:ir.model,name:bom_product_revision.model_mrp_bom_line
+msgid "Bill of Material Line"
+msgstr "部品表明細"
+
+#. module: bom_product_revision
+#. odoo-python
+#: code:addons/bom_product_revision/models/mrp_bom.py:0
+#: code:addons/bom_product_revision/models/mrp_bom_line.py:0
+#, python-format
+msgid "Inactive Revision Selected"
+msgstr "無効なリビジョンが選択されました"
+
+#. module: bom_product_revision
+#: model:ir.model.fields,field_description:bom_product_revision.field_mrp_bom__inactive_revision_warning
+#: model:ir.model.fields,field_description:bom_product_revision.field_mrp_bom_line__inactive_revision_warning
+msgid "Inactive Revision Warning"
+msgstr "旧リビジョン使用警告"
+
+#. module: bom_product_revision
+#: model:ir.model,name:bom_product_revision.model_product_revision
+#: model:ir.model.fields,field_description:bom_product_revision.field_mrp_bom__revision_id
+msgid "Product Revision"
+msgstr "製品リビジョン"
+
+#. module: bom_product_revision
+#: model:ir.model.fields,field_description:bom_product_revision.field_mrp_bom_line__revision_id
+msgid "Revision"
+msgstr "リビジョン"
+
+#. module: bom_product_revision
+#: model:ir.model.fields,field_description:bom_product_revision.field_mrp_bom__revision_active
+#: model:ir.model.fields,field_description:bom_product_revision.field_mrp_bom_line__revision_active
+msgid "Revision Active"
+msgstr "有効なリビジョン"
+
+#. module: bom_product_revision
+#: model:ir.model.fields,field_description:bom_product_revision.field_mrp_bom__revision_number
+#: model:ir.model.fields,field_description:bom_product_revision.field_mrp_bom_line__revision_number
+msgid "Revision Number"
+msgstr "リビジョン番号"
+
+#. module: bom_product_revision
+#: model:ir.model.fields,help:bom_product_revision.field_mrp_bom__revision_active
+#: model:ir.model.fields,help:bom_product_revision.field_mrp_bom_line__revision_active
+msgid "Technical field to indicate if the revision is active"
+msgstr "リビジョンが有効かどうかを示す技術フィールド"
+
+#. module: bom_product_revision
+#: model:ir.model.fields,help:bom_product_revision.field_mrp_bom_line__revision_number
+msgid "The revision number of the product in this BOM line"
+msgstr "この部品表明細の製品のリビジョン番号"
+
+#. module: bom_product_revision
+#: model:ir.model.fields,help:bom_product_revision.field_mrp_bom__revision_number
+msgid "The revision number of the product this BOM is for"
+msgstr "この部品表用製品のリビジョン番号"
+
+#. module: bom_product_revision
+#: model:ir.model.fields,help:bom_product_revision.field_mrp_bom_line__revision_id
+msgid "The revision of the product in this BOM line"
+msgstr "この部品表明細の製品のリビジョン"
+
+#. module: bom_product_revision
+#: model:ir.model.fields,help:bom_product_revision.field_mrp_bom__revision_id
+msgid "The revision of the product this BOM is for"
+msgstr "この部品表用製品のリビジョン"
+
+#. module: bom_product_revision
+#. odoo-python
+#: code:addons/bom_product_revision/models/mrp_bom.py:0
+#: code:addons/bom_product_revision/models/mrp_bom_line.py:0
+#, python-format
+msgid ""
+"The selected revision '%(revision)s' is not active. This may affect "
+"manufacturing processes."
+msgstr "選択されたリビジョン '%(revision)s' は無効です。これにより製造プロセスに影響が出る可能性があります。"
+
+#. module: bom_product_revision
+#. odoo-python
+#: code:addons/bom_product_revision/models/mrp_bom.py:0
+#, python-format
+msgid ""
+"This BOM is using inactive revision \"%(revision)s\". This may affect "
+"manufacturing processes."
+msgstr "この部品表は無効なリビジョン \"%(revision)s\" を使用しています。これにより製造プロセスに影響が出る可能性があります。"
+
+#. module: bom_product_revision
+#. odoo-python
+#: code:addons/bom_product_revision/models/mrp_bom_line.py:0
+#, python-format
+msgid ""
+"This BOM line is using inactive revision \"%(revision)s\". This may affect "
+"manufacturing processes."
+msgstr "この部品表明細は無効なリビジョン \"%(revision)s\" を使用しています。これにより製造プロセスに影響が出る可能性があります。"
+
+#. module: bom_product_revision
+#: model:ir.model.fields,help:bom_product_revision.field_mrp_bom_line__inactive_revision_warning
+msgid "Warning displayed when the BOM line uses an inactive revision"
+msgstr "部品表明細が無効なリビジョンを使用している場合に表示される警告"
+
+#. module: bom_product_revision
+#: model:ir.model.fields,help:bom_product_revision.field_mrp_bom__inactive_revision_warning
+msgid "Warning displayed when the BOM uses an inactive revision"
+msgstr "部品表が無効なリビジョンを使用している場合に表示される警告"

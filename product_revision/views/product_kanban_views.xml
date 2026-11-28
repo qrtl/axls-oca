@@ -1,0 +1,45 @@
+<odoo>
+    <!-- Product Template Kanban View Inheritance -->
+    <record id="product_template_kanban_view_inherit" model="ir.ui.view">
+        <field name="name">product.template.kanban.inherit</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_kanban_view" />
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('oe_kanban_details')]" position="inside">
+                <div
+                    t-if="record.default_code.value"
+                    class="mt-2 d-flex align-items-center"
+                >
+                    <span class="text-muted mr-1">Ref:</span>
+                    <field name="default_code" />
+                    <t t-if="record.current_revision_number.value">
+                        <span class="text-muted ml-1">- Rev:</span>
+                        <field name="current_revision_number" />
+                    </t>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Product Variant Kanban View Inheritance -->
+    <record id="product_kanban_view_inherit" model="ir.ui.view">
+        <field name="name">product.product.kanban.inherit</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_kanban_view" />
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('oe_kanban_details')]" position="inside">
+                <div
+                    t-if="record.default_code.value"
+                    class="mt-2 d-flex align-items-center"
+                >
+                    <span class="text-muted mr-1">Ref:</span>
+                    <field name="default_code" />
+                    <t t-if="record.current_revision_number.value">
+                        <span class="text-muted ml-1">- Rev:</span>
+                        <field name="current_revision_number" />
+                    </t>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>
