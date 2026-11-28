@@ -1,4 +1,4 @@
-# Copyright 2023 Quartile Limited
+# Copyright 2023 Quartile
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 from odoo import api, models
@@ -38,5 +38,5 @@ class StockMove(models.Model):
         self.ensure_one()
         mo_to_unbuild = self._get_mo_to_unbuild()
         if mo_to_unbuild:
-            return mo_to_unbuild.picking_type_id.owner_restriction
+            return mo_to_unbuild.owner_restriction
         return super()._get_owner_restriction()

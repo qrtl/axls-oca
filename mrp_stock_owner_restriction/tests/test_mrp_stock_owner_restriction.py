@@ -1,52 +1,54 @@
 # Copyright 2023 Quartile Limited
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
-from odoo.tests import Form
+from odoo.tests import Form, tagged
 from odoo.tests.common import TransactionCase
 
 
+@tagged("post_install", "-at_install")
 class TestMrpStockOwnerRestriction(TransactionCase):
-    def setUp(self):
-        super(TestMrpStockOwnerRestriction, self).setUp()
-        self.company = self.env.ref("base.main_company")
-        self.manufacture_route = self.env.ref("mrp.route_warehouse0_manufacture")
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.company = cls.env.ref("base.main_company")
+        cls.manufacture_route = cls.env.ref("mrp.route_warehouse0_manufacture")
 
-        self.finished_product = self.env["product.product"].create(
+        cls.finished_product = cls.env["product.product"].create(
             {"name": "test product", "type": "product"}
         )
-        self.component = self.env["product.product"].create(
+        cls.component = cls.env["product.product"].create(
             {"name": "test component", "type": "product"}
         )
-        self.bom = self.env["mrp.bom"].create(
+        cls.bom = cls.env["mrp.bom"].create(
             {
-                "product_id": self.finished_product.id,
-                "product_tmpl_id": self.finished_product.product_tmpl_id.id,
-                "product_uom_id": self.finished_product.uom_id.id,
+                "product_id": cls.finished_product.id,
+                "product_tmpl_id": cls.finished_product.product_tmpl_id.id,
+                "product_uom_id": cls.finished_product.uom_id.id,
                 "product_qty": 1.0,
                 "type": "normal",
             }
         )
-        self.env["mrp.bom.line"].create(
-            {"bom_id": self.bom.id, "product_id": self.component.id, "product_qty": 1}
+        cls.env["mrp.bom.line"].create(
+            {"bom_id": cls.bom.id, "product_id": cls.component.id, "product_qty": 1}
         )
-        self.owner = self.env["res.partner"].create({"name": "Owner test"})
-        self.finished_product.route_ids = [(6, 0, self.manufacture_route.ids)]
-        self.picking_type = self.env["stock.picking.type"].search(
+        cls.owner = cls.env["res.partner"].create({"name": "Owner test"})
+        cls.finished_product.route_ids = [(6, 0, cls.manufacture_route.ids)]
+        cls.picking_type = cls.env["stock.picking.type"].search(
             [
                 ("code", "=", "mrp_operation"),
-                ("warehouse_id.company_id", "=", self.company.id),
+                ("warehouse_id.company_id", "=", cls.company.id),
             ],
             limit=1,
         )
-        self.picking_type.write({"owner_restriction": "picking_partner"})
+        cls.picking_type.write({"owner_restriction": "picking_partner"})
         quant_vals = {
-            "product_id": self.component.id,
-            "location_id": self.picking_type.default_location_src_id.id,
+            "product_id": cls.component.id,
+            "location_id": cls.picking_type.default_location_src_id.id,
             "quantity": 250.00,
         }
         # Create quants without owner
-        self.env["stock.quant"].create(quant_vals)
+        cls.env["stock.quant"].create(quant_vals)
         # Create quants with owner
-        self.env["stock.quant"].create(dict(quant_vals, owner_id=self.owner.id))
+        cls.env["stock.quant"].create(dict(quant_vals, owner_id=cls.owner.id))
 
     def test_mrp_quant_assign_owner(self):
         self.assertEqual(self.component.qty_available, 250)
